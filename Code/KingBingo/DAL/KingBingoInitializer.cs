@@ -1,0 +1,152 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Data.Entity;
+using KingBingo.Models;
+using System.Web.Security;
+
+using WebMatrix.WebData;
+
+namespace KingBingo.DAL
+{
+
+
+    //DropCreateDatabaseAlways
+    public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<KingBingoContext>
+    {
+
+
+        protected void createUser(string username, string password, bool admin)
+        {
+            var roles = (SimpleRoleProvider)Roles.Provider;
+            var membership = (SimpleMembershipProvider)Membership.Provider;
+
+            if (admin)
+            {
+                if (!roles.RoleExists("Admin"))
+                {
+                    roles.CreateRole("Admin");
+                }
+            }
+
+            if (membership.GetUser(username, false) == null)
+            {
+                membership.CreateUserAndAccount(username, password);
+            }
+            if (!roles.GetRolesForUser(username).Contains("Admin"))
+            {
+                roles.AddUsersToRoles(new[] { username }, new[] { "admin" });
+            }
+            
+        }
+
+        protected override void Seed(KingBingoContext context)
+        {
+
+          
+
+
+          
+            WebSecurity.InitializeDatabaseConnection("DefaultConnection",
+             "UserProfile", "UserId", "UserName", autoCreateTables: true);
+
+
+
+            //GAMECARD
+            var gameCards = new List<GameCard>
+            {
+                new GameCard{Numbers = new int[25] {
+                    11,13,4,2,3,
+                    22,27,30,28,20,
+                    33,31,-1,38,37,
+                    58,57,53,49,56,
+                    74,63,65,67,69},
+                    Hash = "0123456789ABCDEF"
+                },
+                new GameCard{Numbers = new int[25] {
+                    12,3,7,1,10,
+                    27,25,26,22,17,
+                    32,41,-1,33,43,
+                    55,58,59,54,48,
+                    73,75,70,62,67
+                },
+                    Hash = "0123456789ABCDEF"
+                }
+
+            };
+            gameCards.ForEach(g => context.GameCards.Add(g));
+            context.SaveChanges();
+
+            //USERS
+            createUser("test1", "test1", true);
+            var user1 = context.UserProfiles.SingleOrDefault(u => u.UserName == "test1");
+            user1.Name = "Test User 1";
+            user1.Email = "test@test.com";
+            user1.Created = DateTime.Now;
+            user1.DeviceToken = "0123456789ABCDEF";
+            user1.Zip = "54915";
+            user1.Birthdate = new DateTime(1977, 10, 25);
+            user1.ReceiveEmails = true;
+            user1.AuthenticationToken = "0123456789ABCDEF";
+            user1.AuthenticationTokenExpires = DateTime.Now.Add(new TimeSpan(7, 0, 0, 0));
+            user1.ProfileImage = null;
+            user1.ConfirmationKey = "0123456789ABCDEF";
+            user1.Active = true;
+            user1.Sex = Sex.Male;
+            user1.Confirmed = true;
+            user1.Location = new Decimal?[2] { 88, -120 };
+            user1.GameCard = gameCards[0];
+            //
+            createUser("test2", "test2", true);
+            var user2 = context.UserProfiles.SingleOrDefault(u => u.UserName == "test2");
+            user2.Name = "Test User 2";
+            user2.Email = "test2@test.com";
+            user2.Created = DateTime.Now;
+            user2.DeviceToken = "0123456789ABCDEF";
+            user2.Zip = "54915";
+            user2.Birthdate = new DateTime(1977, 10, 25);
+            user2.ReceiveEmails = true;
+            user2.AuthenticationToken = "0123456789ABCDEF";
+            user2.AuthenticationTokenExpires = DateTime.Now.Add(new TimeSpan(7, 0, 0, 0));
+            user2.ProfileImage = null;
+            user2.ConfirmationKey = "0123456789ABCDEF";
+            user2.Active = true;
+            user2.Sex = Sex.Female;
+            user2.Confirmed = true;
+            user2.Location = new Decimal?[2] { 88, -120 };
+            user2.GameCard = gameCards[1];
+
+            var players = new List<UserProfile>
+            {
+              user1,
+              user2
+            };
+            context.SaveChanges();
+
+            var friend = new Friend { FriendA = user1, FriendB = user2, Created = DateTime.Now };
+   
+            context.Friends.Add(friend);
+            context.SaveChanges();
+           
+            
+
+            //GAMES
+            var games = new List<Game>
+            {
+                new Game{Description="New Game 1", WinLimit=1,UserLimit=3,   Speed=50, Created=DateTime.Now, Private=false,NumbersIndex=0,Numbers = new List<int> {1, 2, 3, 4}, Players = players}
+            };
+            games.ForEach(g => context.Games.Add(g));
+            context.SaveChanges();
+
+
+         
+      
+        }
+    
+    
+    }
+
+
+ 
+}

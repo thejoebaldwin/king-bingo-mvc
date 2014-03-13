@@ -1,0 +1,74 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="846" measuredH="578" mockupW="683" mockupH="472">
+  <controls>
+    <control controlID="111" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="163" y="106" w="683" h="472" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>King%20Bingo%0Ahttp%3A//host.com/kingbingo</text>
+      </controlProperties>
+    </control>
+    <control controlID="158" controlTypeID="com.balsamiq.mockups::LinkBar" x="719" y="195" w="-1" h="-1" measuredW="109" measuredH="19" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Sign%20In%2C%20Sign%20Up</text>
+      </controlProperties>
+    </control>
+    <control controlID="161" controlTypeID="com.balsamiq.mockups::HRule" x="209" y="228" w="605" h="-1" measuredW="100" measuredH="10" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="168" controlTypeID="com.balsamiq.mockups::Link" x="470" y="518" w="-1" h="-1" measuredW="29" measuredH="16" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>10</size>
+        <text>Terms</text>
+      </controlProperties>
+    </control>
+    <control controlID="169" controlTypeID="com.balsamiq.mockups::Link" x="513" y="518" w="-1" h="-1" measuredW="33" measuredH="16" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>10</size>
+        <text>Privacy</text>
+      </controlProperties>
+    </control>
+    <control controlID="172" controlTypeID="com.balsamiq.mockups::HRule" x="209" y="498" w="605" h="-1" measuredW="100" measuredH="10" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="173" controlTypeID="com.balsamiq.mockups::Link" x="432" y="518" w="-1" h="-1" measuredW="27" measuredH="16" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>10</size>
+        <text>About</text>
+      </controlProperties>
+    </control>
+    <control controlID="174" controlTypeID="com.balsamiq.mockups::Link" x="561" y="518" w="-1" h="-1" measuredW="37" measuredH="16" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>10</size>
+        <text>Contact</text>
+      </controlProperties>
+    </control>
+    <control controlID="175" controlTypeID="com.balsamiq.mockups::SubTitle" x="355" y="289" w="348" h="-1" measuredW="242" measuredH="27" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>Play%20Bingo%20like%20Royalty</text>
+      </controlProperties>
+    </control>
+    <control controlID="176" controlTypeID="com.balsamiq.mockups::Button" x="459" y="378" w="138" h="30" measuredW="81" measuredH="27" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>Sign%20Up</text>
+      </controlProperties>
+    </control>
+    <control controlID="177" controlTypeID="com.balsamiq.mockups::Paragraph" x="374" y="323" w="302" h="55" measuredW="200" measuredH="80" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>Lorem%20ipsum%20dolor%20sit%20amet%2C%20consectetur%20adipisicing%20elit%2C%20sed%20do%20eiusmod%20tempor%20incididunt%20ut%20labore%20et%20dolore%20magna%20aliqua.%20Ut%20enim%20ad%20minim</text>
+      </controlProperties>
+    </control>
+    <control controlID="178" controlTypeID="com.balsamiq.mockups::SearchBox" x="178" y="192" w="-1" h="-1" measuredW="120" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>search</text>
+      </controlProperties>
+    </control>
+    <control controlID="179" controlTypeID="com.balsamiq.mockups::Image" x="471" y="181" w="-1" h="-1" measuredW="50" measuredH="47" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./crown_icon.png</src>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="180" controlTypeID="com.balsamiq.mockups::Label" x="526" y="194" w="-1" h="-1" measuredW="64" measuredH="21" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>King%20Bingo</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
