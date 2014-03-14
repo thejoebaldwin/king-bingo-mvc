@@ -1,17 +1,30 @@
-﻿@{
-    Layout = null;
+﻿
+@{
+  
+    ViewBag.Title = "Terms";
 }
 
-<!DOCTYPE html>
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>@ViewBag.Message</h2>
+</hgroup>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-</head>
-<body>
-    <div>
-      <h1>This is Terms</h1>
-    </div>
-</body>
-</html>
+<article>
+   
+    
+     
+       <h1>This is Terms</h1>
+
+</article>
+
+<aside>
+    <h3>Aside Title</h3>
+    <p>
+        Use this area to provide additional information.
+    </p>
+    <ul>
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    </ul>
+</aside>

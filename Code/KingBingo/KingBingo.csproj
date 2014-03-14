@@ -168,6 +168,7 @@
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\SecureController.cs" />
     <Compile Include="DAL\KingBingoContext.cs" />
     <Compile Include="DAL\KingBingoInitializer.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
