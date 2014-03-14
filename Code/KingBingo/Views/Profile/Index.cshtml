@@ -11,7 +11,10 @@
 </head>
 <body>
     <div>
-       <h1>Profile View Page for: @ViewBag.Username    </h1>
+        @{
+            var user = @ViewBag.User;
+        }
+       <h1>Profile View Page for: @user.UserName    </h1>
     </div>
 </body>
 </html>
