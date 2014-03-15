@@ -13,6 +13,18 @@ namespace KingBingo.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.Title = "King Bingo - Contact";
+            return View();
+        }
+
+        public void Create(string name, string email, string comments)
+        {
+            RedirectToAction("ThankYou");
+        }
+
+        public ActionResult ThankYou()
+        {
+            ViewBag.Title = "King Bingo - Contact";
             return View();
         }
 

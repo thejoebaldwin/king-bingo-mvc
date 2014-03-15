@@ -10,7 +10,8 @@ namespace KingBingo.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+            ViewBag.Title = "King Bingo";
+            ViewBag.Message = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim";
 
             return View();
         }
@@ -31,6 +32,7 @@ namespace KingBingo.Controllers
 
         public ActionResult Terms()
         {
+            ViewBag.Title = "King Bingo - Terms";
             ViewBag.Message = "Your app description page.";
 
             return View();
@@ -38,6 +40,7 @@ namespace KingBingo.Controllers
 
         public ActionResult Privacy()
         {
+            ViewBag.Title = "King Bingo - Privacy";
             ViewBag.Message = "Your app description page.";
 
             return View();

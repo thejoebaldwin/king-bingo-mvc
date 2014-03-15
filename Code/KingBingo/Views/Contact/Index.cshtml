@@ -1,17 +1,19 @@
-﻿@{
-    Layout = null;
+﻿@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>Contact</h1>
+              
+            </hgroup>
+           
+        </div>
+    </section>
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-</head>
-<body>
-    <div>
-     <h1>This is the Contact View</h1>
-    </div>
-</body>
-</html>
+<form action="/contacts/create" method="post">
+     Name:<input name="Name" id="Name" type="text" /><br />
+    Email:<input name="Email" id="Email" type="text" /><br />
+    Comments:<input name="Comments" id="Comments" type="text" /><br />
+    <input type="submit" value="save" />
+</form>

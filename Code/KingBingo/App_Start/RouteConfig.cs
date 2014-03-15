@@ -13,16 +13,14 @@ namespace KingBingo
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-           
-
-
-
-
             routes.MapRoute(
                 name: "Contact",
-                url: "contact",
+                url: "contact/{action}",
                 defaults: new { controller = "Contact", action = "Index", id = UrlParameter.Optional }
             );
+
+           
+
 
             routes.MapRoute(
               name: "Terms",

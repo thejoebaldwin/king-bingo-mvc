@@ -317,6 +317,7 @@
     <Content Include="Views\Home\Terms.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Contact\ThankYou.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
