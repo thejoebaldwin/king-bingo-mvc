@@ -23,5 +23,6 @@ namespace KingBingo.Models
 
         public virtual UserProfile User { get; set; }
         public virtual Game Game { get; set; }
+     
     }
 }

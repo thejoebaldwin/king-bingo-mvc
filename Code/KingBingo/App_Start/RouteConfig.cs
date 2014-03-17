@@ -35,7 +35,7 @@ namespace KingBingo
 
             routes.MapRoute(
              name: "Profile",
-             url: "{username}",
+             url: "{username}/{action}",
              defaults: new { controller = "Profile", action = "Index"}
          );
 

@@ -22,7 +22,7 @@ namespace KingBingo.DAL
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Badge> Badges { get; set; }
         public DbSet<Friend> Friends { get; set; }
-        public DbSet<FriendRequest> FriendRequests { get; set; }
+      
         public DbSet<Game> Games { get; set; }
         public DbSet<GameCard> GameCards { get; set; }
         public DbSet<Notification> Notifications { get; set; }

@@ -178,7 +178,6 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Badge.cs" />
     <Compile Include="Models\Friend.cs" />
-    <Compile Include="Models\FriendRequest.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GameCard.cs" />
     <Compile Include="Models\Notification.cs" />
@@ -255,6 +254,8 @@
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\Badges\badge1.png" />
+    <Content Include="Images\Badges\badge2.png" />
     <Content Include="Images\Profiles\test.jpeg" />
     <Content Include="Bootstrap\js\bootstrap.js" />
     <Content Include="Bootstrap\js\bootstrap.min.js" />
@@ -319,6 +320,8 @@
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Contact\ThankYou.cshtml" />
     <Content Include="Views\Contact\All.cshtml" />
+    <Content Include="Views\Home\Ranking.cshtml" />
+    <Content Include="Views\Profile\Friends.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

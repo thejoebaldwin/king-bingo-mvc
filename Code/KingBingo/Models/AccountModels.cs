@@ -54,10 +54,11 @@ namespace KingBingo.Models
         public virtual ICollection<Result> Players { get; set; }
         public virtual GameCard GameCard { get; set; }
         public virtual Game Game { get; set; }
-        public virtual ICollection<FriendRequest> FriendRequests { get; set; }
+      
         public virtual ICollection<Badge> Badges { get; set; }
         public virtual ICollection<Friend> Friends { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
+        public virtual ICollection<Result> Results { get; set; }
      
     }
 

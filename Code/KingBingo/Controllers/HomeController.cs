@@ -45,5 +45,16 @@ namespace KingBingo.Controllers
 
             return View();
         }
+
+
+        public ActionResult Ranking()
+        {
+            ViewBag.Title = "Ranking";
+            ViewBag.Message = "";
+
+            return View();
+        }
+
+
     }
 }

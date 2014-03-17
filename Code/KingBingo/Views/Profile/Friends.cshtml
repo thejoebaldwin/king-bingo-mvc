@@ -18,7 +18,7 @@
               <th>Games</th>
                <th>Wins</th>
                <th>Rank</th>
-                 <th>@Html.ActionLink("Friends", "Friends",new { controller = "Profile", username = ViewContext.RouteData.Values["username"] }, null)</th>
+               <th>@Html.ActionLink("Friends", "Friends",new { controller = "Profile", username = ViewContext.RouteData.Values["username"] }, null)</th>
                   </tr>
           </thead>
           <tbody>
@@ -31,12 +31,14 @@
           </tbody>
       </table>
      
-   Badges<br />
+   Friends<br />
     
-@foreach (var b in user.Badges)
+    
+@foreach (var f in user.Friends)
 {
+   <div> @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null)</div>
+  
    
-    <img src="@b.ImagePath" alt="@b.Name" />
 }
      
 

@@ -12,8 +12,9 @@ namespace KingBingo.DAL
 {
 
 
-    //DropCreateDatabaseAlways
-    public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<KingBingoContext>
+  
+    public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseAlways<KingBingoContext>
+    //public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<KingBingoContext>
     {
 
 
@@ -44,14 +45,29 @@ namespace KingBingo.DAL
         protected override void Seed(KingBingoContext context)
         {
 
-          
-
-
-          
-            WebSecurity.InitializeDatabaseConnection("DefaultConnection",
+          WebSecurity.InitializeDatabaseConnection("DefaultConnection",
              "UserProfile", "UserId", "UserName", autoCreateTables: true);
 
 
+            var badgesUser1 = new List<Badge>
+            {
+
+                new Badge{Name = "Badge1", ImagePath = "/Images/Badges/badge1.png", Description = "This is a description for badge1"},
+                new Badge{Name = "Badge2", ImagePath = "/Images/Badges/badge2.png", Description = "This is a description for badge2"}
+
+            };
+            badgesUser1.ForEach(b => context.Badges.Add(b));
+            context.SaveChanges();
+
+            var badgesUser2 = new List<Badge>
+            {
+
+                new Badge{Name = "Badge1", ImagePath = "/Images/Badges/badge1.png", Description = "This is a description for badge1"},
+                new Badge{Name = "Badge2", ImagePath = "/Images/Badges/badge2.png", Description = "This is a description for badge2"}
+
+            };
+            badgesUser2.ForEach(b => context.Badges.Add(b));
+            context.SaveChanges();
 
             //GAMECARD
             var gameCards = new List<GameCard>
@@ -83,6 +99,7 @@ namespace KingBingo.DAL
             var user1 = context.UserProfiles.SingleOrDefault(u => u.UserName == "test1");
             user1.Name = "Test User 1";
             user1.Email = "test@test.com";
+            user1.Bio = "This is the Bio for test user 1";
             user1.Created = DateTime.Now;
             user1.DeviceToken = "0123456789ABCDEF";
             user1.Zip = "54915";
@@ -97,10 +114,12 @@ namespace KingBingo.DAL
             user1.Confirmed = true;
             user1.Location = new Decimal?[2] { 88, -120 };
             user1.GameCard = gameCards[0];
+            user1.Badges = badgesUser1;
             //
             createUser("test2", "test2", true);
             var user2 = context.UserProfiles.SingleOrDefault(u => u.UserName == "test2");
             user2.Name = "Test User 2";
+            user2.Bio = "This is the Bio for test user 2";
             user2.Email = "test2@test.com";
             user2.Created = DateTime.Now;
             user2.DeviceToken = "0123456789ABCDEF";
@@ -116,6 +135,7 @@ namespace KingBingo.DAL
             user2.Confirmed = true;
             user2.Location = new Decimal?[2] { 88, -120 };
             user2.GameCard = gameCards[1];
+            user2.Badges = badgesUser2;
 
             var players = new List<UserProfile>
             {
@@ -124,9 +144,17 @@ namespace KingBingo.DAL
             };
             context.SaveChanges();
 
-            var friend = new Friend { FriendA = user1, FriendB = user2, Created = DateTime.Now };
-   
-            context.Friends.Add(friend);
+            var friend1 = new Friend { User = user1, FriendUser = user2, Created = DateTime.Now };
+            var friend2 = new Friend { User = user2, FriendUser = user1, Created = DateTime.Now };
+
+            context.Friends.Add(friend1);
+            context.Friends.Add(friend2);
+
+            context.SaveChanges();
+
+            user1.Friends.Add(friend1);
+            user2.Friends.Add(friend2);
+          
             context.SaveChanges();
            
             
@@ -139,9 +167,19 @@ namespace KingBingo.DAL
             games.ForEach(g => context.Games.Add(g));
             context.SaveChanges();
 
+        
+            var results = new List<Result>
+            {
+                new Result{Outcome = OutcomeType.Win, Points = 5, User = user1, Game = games[0], Created = DateTime.Now},
+                new Result{Outcome = OutcomeType.Loss, Points = -5, User = user2, Game = games[0], Created = DateTime.Now}
+            };
 
-         
-      
+            results.ForEach(r => context.Results.Add(r));
+            games[0].Results.Add(results[0]);
+            games[0].Results.Add(results[1]);
+            user1.Results.Add(results[0]);
+            user2.Results.Add(results[1]);
+            context.SaveChanges();
         }
     
     

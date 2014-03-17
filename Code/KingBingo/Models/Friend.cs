@@ -7,6 +7,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KingBingo.Models
 {
+
+    public enum RequestStatus
+    {
+        Pending, Rejected, Accepted
+    }
+
+
     public class Friend
     {
         [Key]
@@ -14,7 +21,8 @@ namespace KingBingo.Models
         public int FriendID { get; set; }
         public DateTime Created { get; set; }
 
-        public virtual UserProfile FriendA { get; set; }
-        public virtual UserProfile FriendB { get; set; }
+        public virtual UserProfile User { get; set; }
+        public virtual UserProfile FriendUser { get; set; }
+        
     }
 }
