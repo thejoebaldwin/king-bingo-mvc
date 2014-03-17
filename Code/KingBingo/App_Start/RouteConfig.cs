@@ -19,6 +19,11 @@ namespace KingBingo
                 defaults: new { controller = "Contact", action = "Index", id = UrlParameter.Optional }
             );
 
+            routes.MapRoute(
+               name: "Service",
+               url: "service/{action}",
+               defaults: new { controller = "Service", action = "Index", id = UrlParameter.Optional }
+           );
 
             routes.MapRoute(
               name: "Terms",
