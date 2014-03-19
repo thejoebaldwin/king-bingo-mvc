@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Security;
 
 namespace KingBingo
 {
@@ -42,21 +43,20 @@ namespace KingBingo
             name: "Account",
             url: "account/{action}",
             defaults: new { controller = "Account", action = "Index" }
-        );
+            );
+            
+            
+            routes.MapRoute(
+            name: "Secure",
+            url: "secure/{action}",
+            defaults: new { controller = "Secure", action = "Index" }
+            );
 
             routes.MapRoute(
-             name: "Profile",
-             url: "{username}/{action}",
-             defaults: new { controller = "Profile", action = "Index" }
-         );
-
-            /*
-             routes.MapRoute(
-                name: "Home",
-                url: "",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            name: "Profile",
+            url: "{username}/{action}",
+            defaults: new { controller = "Profile", action = "Index" }
             );
-             */
 
 
             routes.MapRoute(

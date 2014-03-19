@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Friends";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ 
+    var user = @ViewBag.User;
+  
+
+}
+
+<h2>Friends</h2>
+
+
+@foreach (var f in user.Friends)
+{
+   <div> @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null)</div>
+  
+   
+}
+     

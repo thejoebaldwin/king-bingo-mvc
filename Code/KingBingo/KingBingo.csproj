@@ -274,6 +274,9 @@
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Images\Badges\badge1.png" />
+    <Content Include="Images\Badges\badge2.png" />
+    <Content Include="Images\Profiles\test.jpeg" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -338,6 +341,11 @@
     <Content Include="Views\Service\Index.cshtml" />
     <Content Include="Views\Service\Something.cshtml" />
     <Content Include="Views\Service\v0.cshtml" />
+    <Content Include="Views\Secure\Index.cshtml" />
+    <Content Include="Views\Secure\Profile.cshtml" />
+    <Content Include="Views\Secure\Games.cshtml" />
+    <Content Include="Views\Secure\Notifications.cshtml" />
+    <Content Include="Views\Secure\Friends.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
