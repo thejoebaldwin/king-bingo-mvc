@@ -1,0 +1,23 @@
+﻿@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>All Support</h1>
+              
+            </hgroup>
+           
+        </div>
+    </section>
+}
+
+
+@{
+   var items = ViewBag.supports;
+}
+
+
+
+@foreach (var item in items)
+{
+    <div>@item.Name</div>
+}
