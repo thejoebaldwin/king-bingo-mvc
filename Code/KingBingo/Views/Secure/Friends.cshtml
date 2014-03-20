@@ -6,6 +6,10 @@
   
 
 }
+<ol class="breadcrumb">
+  <li>@Html.ActionLink("Home", "Index", "Secure")</li>
+  <li class="active">Friends</li>
+</ol>
 
 <h2>Friends</h2>
 
@@ -14,6 +18,9 @@
 {
    <div> @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null)</div>
   
+    
+    
+    
    
 }
      

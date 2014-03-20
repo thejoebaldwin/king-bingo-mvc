@@ -13,6 +13,7 @@ namespace KingBingo.Models
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int GameID { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public int WinLimit { get; set; }
         public int UserLimit { get; set; }

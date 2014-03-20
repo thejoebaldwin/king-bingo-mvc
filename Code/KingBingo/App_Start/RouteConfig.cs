@@ -44,13 +44,20 @@ namespace KingBingo
             url: "account/{action}",
             defaults: new { controller = "Account", action = "Index" }
             );
-            
+
+
+            routes.MapRoute(
+            name: "SecureGameDetail",
+            url: "secure/games/{id}",
+            defaults: new { controller = "Secure", action = "GameDetail" }
+            );
             
             routes.MapRoute(
             name: "Secure",
             url: "secure/{action}",
             defaults: new { controller = "Secure", action = "Index" }
             );
+
 
             routes.MapRoute(
             name: "Profile",

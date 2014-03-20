@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Game Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var game = ViewBag.Game;
+}
+
+<ol class="breadcrumb">
+  <li>@Html.ActionLink("Home", "Index", "Secure")</li>
+  <li>@Html.ActionLink("Games", "Games", "Secure")</li>
+  <li class="active">@game.Name</li>
+</ol>
+
+<h2>@game.Name</h2>
+
+
+

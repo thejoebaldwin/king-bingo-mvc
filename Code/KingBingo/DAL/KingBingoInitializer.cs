@@ -13,7 +13,7 @@ namespace KingBingo.DAL
 
 
   
-    public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseAlways<KingBingoContext>
+   public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseAlways<KingBingoContext>
     //public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<KingBingoContext>
     {
 
@@ -165,7 +165,7 @@ namespace KingBingo.DAL
             //GAMES
             var games = new List<Game>
             {
-                new Game{Description="New Game 1", WinLimit=1,UserLimit=3,   Speed=50, Created=DateTime.Now, Private=false,NumbersIndex=0,Numbers = new List<int> {1, 2, 3, 4}, Players = players}
+                new Game{Name = "New Game 1", Description="New game description", WinLimit=1,UserLimit=3,   Speed=50, Created=DateTime.Now, Private=false,NumbersIndex=0,Numbers = new List<int> {1, 2, 3, 4}, Players = players}
             };
             games[0].Results = new List<Result>();
             games.ForEach(g => context.Games.Add(g));

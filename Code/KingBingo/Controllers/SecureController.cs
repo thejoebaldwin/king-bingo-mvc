@@ -7,6 +7,7 @@ using KingBingo.DAL;
 using System.Web.Security;
 using WebMatrix.WebData;
 using KingBingo.Models;
+using System.Data.Entity;
 
 namespace KingBingo.Controllers
 {
@@ -48,9 +49,16 @@ namespace KingBingo.Controllers
         [Authorize]
         public ActionResult Games()
         {
+            DbSet<Game> games = db.Games;
+            ViewData["Games"] = games;
+            return View();
+        }
 
-         
-
+        [Authorize]
+        public ActionResult GameDetail(int id)
+        {
+            var game = db.Games.SingleOrDefault(g => g.GameID == id);
+            ViewData["Game"] = game;
             return View();
         }
         
