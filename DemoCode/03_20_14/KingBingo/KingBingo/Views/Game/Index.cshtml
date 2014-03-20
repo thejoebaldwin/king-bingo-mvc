@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var game = ViewBag.game;
+}
+
+<h2>@game.Name</h2>
+
+
+Description:@game.Description<br />
+UsersCount: @game.UserCount<br />
+
