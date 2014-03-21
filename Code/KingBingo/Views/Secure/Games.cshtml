@@ -14,28 +14,44 @@
 
     <!-- Button trigger modal -->
 <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#newGameModal">
-  New Game
+  Create Game
 </button>
 
 <!-- Modal -->
 <div class="modal fade" id="newGameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <!-- Step 1 -->
+        <div id="CreateGameStepOne">
+        <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">New Game</h4>
+        <h4 class="modal-title" id="myModalLabel">Create Game</h4>
       </div>
       <div class="modal-body">
         <p>Description: </p>
         Created: Players: Wins: Speed:
       </div>
       <div class="modal-footer">
-         
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary"  >Next</button>
-      
-         
+
+        <button type="button" class="btn btn-primary" id="NextButton"  >Next</button>
       </div>
+            </div>
+     <!-- Step 2 -->
+          <div id="CreateGameStepTwo" style="display:none">
+         <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">New Game</h4>
+      </div>
+      <div class="modal-body">
+        <p>Invite: </p>
+        
+      </div>
+      <div class="modal-footer">
+   
+        <button type="button" class="btn btn-primary" id="BackButton">Back</button>
+        <button type="button" class="btn btn-primary" >Start Game</button>
+      </div>
+                </div>
     </div>
   </div>
 </div>
@@ -95,3 +111,18 @@
     
 }
     </ul>
+
+
+<script type="text/javascript">
+
+    $("#NextButton").click(function () {
+        $("#CreateGameStepOne").hide();
+        $("#CreateGameStepTwo").show();
+    });
+
+    $("#BackButton").click(function () {
+        $("#CreateGameStepOne").show();
+        $("#CreateGameStepTwo").hide();
+    });
+
+</script>
