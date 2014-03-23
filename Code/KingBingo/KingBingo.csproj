@@ -347,6 +347,7 @@
     <Content Include="Views\Secure\Notifications.cshtml" />
     <Content Include="Views\Secure\Friends.cshtml" />
     <Content Include="Views\Secure\GameDetail.cshtml" />
+    <Content Include="Views\Service\Help.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

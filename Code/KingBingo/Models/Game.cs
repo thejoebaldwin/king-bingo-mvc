@@ -25,6 +25,15 @@ namespace KingBingo.Models
         
         public virtual ICollection<UserProfile> Players { get; set; }
         public virtual ICollection<Result> Results { get; set; }
+
+        public int WinCount()
+        {
+            return 0;
+        }
+        public int UserCount()
+        {
+            return 0;
+        }
     }
 
 

@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Help</title>
+</head>
+<body>
+   
+<h1>Bingo API v1 4/8/13</h1>
+
+<p>Supported Operations</p>
+
+<ul>
+<li><a href="http://bingo.humboldttechgroup.com:1111/?cmd=allgames" title="Get All Games">Get All Games</a></li>
+<li><a href="http://bingo.humboldttechgroup.com:1111/?cmd=allusers" title="Get All Users">Get All Users</a></li>
+<li><a href="http://bingo.humboldttechgroup.com:1111/?cmd=createuser" title="Create User">Create User</a></li>
+<li><a href="http://bingo.humboldttechgroup.com:1111/?cmd=joingame" title="Join Game">Join Game</a></li>
+<li><a href="http://bingo.humboldttechgroup.com:1111/?cmd=getnumber" title="Get Number">Get Number</a></li>
+<li><a href="http://bingo.humboldttechgroup.com:1111/?cmd=quitgame" title="Quit Game">Quit Game</a></li>
+</ul>
+
+<p>Usage  </p>
+
+<ul>
+<li>All json field names in the response will be lowercase only. All field names in request need to be lowercase as well.</li>
+<li>All responses will return a "command" parameter. This will allow you to standardize your json parsing depending on which request you are making.</li>
+<li>Get a list of all currently in progress games. Within each block of "game" data, there is a game_id.</li>
+<li>Create a user. This will give you a user_id that you can then join a game with. You can use "bingowizard" for login and/or "1" for user_id (see below) if you'd like to skip this step.</li>
+<li>Join a game using the user_id and game_id. This will return a "board" that you will use to construct your bingo card.</li>
+<li>Once you have your board, call use the get number operation to play the game!</li>
+<li>Be sure to check the response messages when getting errors to help troubleshoot your requests, and don't forget to validate your json.</li>
+<li>When initially working with any these services, use the "bingowizard" login or user_id of "1" if you do not want to create a user. This user has been joined to the game with game_id of "1".</li>
+<li>A monitoring service has been setup to send notifications in the event of outages, within 5 minutes. Error reports (specifically, what you were doing when it crashed) should be sent to <a href="mailto:joe@humboldttechgroup.com" title="email">joe@humboldttechgroup.com</a></li>
+</ul>
+</body>
+</html>
