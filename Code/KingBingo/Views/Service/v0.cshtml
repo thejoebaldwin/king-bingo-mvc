@@ -30,30 +30,30 @@
     @if (user != null)
     {
             @Html.Raw("\"user\":{")
-            @String.Format("\"user_id\": \"{0}\",", user.UserId)
-            @String.Format("\"username\": \"{0}\",", user.UserName)
-            @String.Format("\"name\": \"{0}\",", user.Name)
-            @String.Format("\"bio\": \"{0}\",", user.Bio)
-            @String.Format("\"Email\": \"{0}\",", user.Email)
-            @String.Format("\"created\": \"{0}\",", user.Created)
-            @String.Format("\"device_token\": \"{0}\",", user.DeviceToken)
-            @String.Format("\"zip\": \"{0}\",", user.Zip)
-            @String.Format("\"birthdate\": \"{0}\",", user.Birthdate)
-            @String.Format("\"receive_emails\": \"{0}\",", user.ReceiveEmails)
-            @String.Format("\"authentication_token\": \"{0}\",", user.AuthenticationToken)
-            @String.Format("\"authentication_token_expires\": \"{0}\",", user.AuthenticationTokenExpires)
+            @Html.Raw(String.Format("\"user_id\": \"{0}\",", user.UserId))
+             @Html.Raw(String.Format("\"username\": \"{0}\",", user.UserName))
+             @Html.Raw(String.Format("\"name\": \"{0}\",", user.Name))
+             @Html.Raw(String.Format("\"bio\": \"{0}\",", user.Bio))
+             @Html.Raw(String.Format("\"Email\": \"{0}\",", user.Email))
+             @Html.Raw(String.Format("\"created\": \"{0}\",", user.Created))
+             @Html.Raw(String.Format("\"device_token\": \"{0}\",", user.DeviceToken))
+             @Html.Raw(@String.Format("\"zip\": \"{0}\",", user.Zip))
+             @Html.Raw(String.Format("\"birthdate\": \"{0}\",", user.Birthdate))
+             @Html.Raw(String.Format("\"receive_emails\": \"{0}\",", user.ReceiveEmails))
+             @Html.Raw(String.Format("\"authentication_token\": \"{0}\",", user.AuthenticationToken))
+             @Html.Raw(String.Format("\"authentication_token_expires\": \"{0}\",", user.AuthenticationTokenExpires))
         if (user.ProfileImage != null)
         {
-            @String.Format("\"profile_image\": \"{0}\",", user.ProfileImage)
+             @Html.Raw(String.Format("\"profile_image\": \"{0}\",", user.ProfileImage))
     }
 
-            @String.Format("\"active\": \"{0}\",", user.Active)
-            @String.Format("\"sex\": \"{0}\",", user.Sex)
+             @Html.Raw(String.Format("\"active\": \"{0}\",", user.Active))
+             @Html.Raw(String.Format("\"sex\": \"{0}\",", user.Sex))
        
-            @String.Format("\"confirmed\": \"{0}\",", user.Confirmed)
+             @Html.Raw(String.Format("\"confirmed\": \"{0}\",", user.Confirmed))
         if (user.Location != null)
         {
-            @String.Format("\"location\": \"{0}\",", user.Location)
+             @Html.Raw(String.Format("\"location\": \"{0}\",", user.Location))
     }
             @Html.Raw("},")
     }
@@ -67,10 +67,10 @@
                 @Html.Raw(",")
             }
             @Html.Raw("{")
-            @String.Format("\"user_id\": \"{0}\",", u.UserId)
-            @String.Format("\"username\": \"{0}\",", u.UserName)
-            @String.Format("\"name\": \"{0}\",", u.Name)
-            @String.Format("\"bio\": \"{0}\",", u.Bio)
+               @Html.Raw(String.Format("\"user_id\": \"{0}\",", u.UserId))
+               @Html.Raw(String.Format("\"username\": \"{0}\",", u.UserName))
+               @Html.Raw(String.Format("\"name\": \"{0}\",", u.Name))
+               @Html.Raw(String.Format("\"bio\": \"{0}\",", u.Bio))
             userCount++;
             @Html.Raw("}")
         }
@@ -86,14 +86,14 @@
                 @Html.Raw(",")
             }
             @Html.Raw("{")
-            @String.Format("\"game_id\": \"{0}\",", g.GameID)
-            @String.Format("\"name\": \"{0}\",", g.Name)
-            @String.Format("\"description\": \"{0}\",", g.Description)
-            @String.Format("\"win_limit\": \"{0}\",", g.WinLimit)   
-            @String.Format("\"win_count\": \"{0}\",", g.WinCount())   
-            @String.Format(" \"user_limit\": \"{0}\",", g.UserLimit)   
-            @String.Format("\"user_count\":\"{0}\",", g.UserCount())   
-            @String.Format(" \"created_date\":\"{0}\"", g.Created.ToString("yyyy-MM-dd hh:mm:ss"))
+             @Html.Raw(String.Format("\"game_id\": \"{0}\",", g.GameID))
+             @Html.Raw(String.Format("\"name\": \"{0}\",", g.Name))
+             @Html.Raw(String.Format("\"description\": \"{0}\",", g.Description))
+            @Html.Raw(String.Format("\"win_limit\": \"{0}\",", g.WinLimit)  ) 
+            @Html.Raw(String.Format("\"win_count\": \"{0}\",", g.WinCount())  ) 
+             @Html.Raw(String.Format(" \"user_limit\": \"{0}\",", g.UserLimit)   )
+             @Html.Raw(String.Format("\"user_count\":\"{0}\",", g.UserCount())   )
+            @Html.Raw(String.Format(" \"created_date\":\"{0}\"", g.Created.ToString("yyyy-MM-dd hh:mm:ss")))
             @Html.Raw("}")  
             gameCount++;
         }
