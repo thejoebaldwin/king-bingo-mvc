@@ -9,11 +9,13 @@
     var number = ViewBag.Number;
     var timestamp = ViewBag.Timestamp;
     var user = ViewBag.User;
+    var friendships = ViewBag.Friendships;
+    var user_id = ViewBag.UserId;
 }
 
 {
     "status": "@ViewBag.Status",
-    "command": "@ViewBag.Command",
+    "operation": "@ViewBag.Operation",
     "message": "@ViewBag.Message",  
     @if (numbers != null)
     {

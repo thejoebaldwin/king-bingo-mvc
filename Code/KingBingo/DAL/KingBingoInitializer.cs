@@ -144,8 +144,8 @@ namespace KingBingo.DAL
             };
             context.SaveChanges();
 
-            var friend1 = new Friend { User = user1, FriendUser = user2, Created = DateTime.Now };
-            var friend2 = new Friend { User = user2, FriendUser = user1, Created = DateTime.Now };
+            var friend1 = new Friend { User = user1, FriendUser = user2, Created = DateTime.Now, Status = RequestStatus.Accepted };
+            var friend2 = new Friend { User = user2, FriendUser = user1, Created = DateTime.Now, Status = RequestStatus.Accepted };
 
             context.Friends.Add(friend1);
             context.Friends.Add(friend2);

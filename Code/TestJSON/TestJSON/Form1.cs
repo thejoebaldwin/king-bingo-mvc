@@ -26,7 +26,7 @@ namespace TestJSON
         {
             string host = AUTH_POST_URL;
             //build request
-            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}?cmd=allgames", host));
+            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}/allgames", host));
             //set http method
             request.Method = "POST";
             //content type
@@ -51,7 +51,7 @@ namespace TestJSON
         {
             string host = AUTH_POST_URL;
             //build request
-            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}?cmd=allusers", host));
+            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}/allusers", host));
             //set http method
             request.Method = "POST";
             //content type
@@ -76,7 +76,7 @@ namespace TestJSON
         {
             string host = AUTH_POST_URL;
             //build request
-            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}?cmd=getuser", host));
+            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}/getuser", host));
             //set http method
             request.Method = "POST";
             //content type

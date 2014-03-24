@@ -10,7 +10,7 @@ namespace KingBingo.Models
 
     public enum RequestStatus
     {
-        Pending, Rejected, Accepted
+        Pending, Rejected, Accepted, Requested
     }
 
 
@@ -20,6 +20,7 @@ namespace KingBingo.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int FriendID { get; set; }
         public DateTime Created { get; set; }
+        public RequestStatus Status { get; set; }
 
         public virtual UserProfile User { get; set; }
         public virtual UserProfile FriendUser { get; set; }
