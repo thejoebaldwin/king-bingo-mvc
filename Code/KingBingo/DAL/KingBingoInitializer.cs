@@ -13,8 +13,8 @@ namespace KingBingo.DAL
 
 
   
-   public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseAlways<KingBingoContext>
-    //public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<KingBingoContext>
+   //public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseAlways<KingBingoContext>
+    public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<KingBingoContext>
     {
 
 
@@ -99,6 +99,7 @@ namespace KingBingo.DAL
             var user1 = context.UserProfiles.SingleOrDefault(u => u.UserName == "test1");
             user1.Name = "Test User 1";
             user1.Email = "test@test.com";
+            user1.PasswordHash = UserProfile.createPasswordHash("test1");
             user1.Bio = "This is the Bio for test user 1";
             user1.Created = DateTime.Now;
             user1.DeviceToken = "0123456789ABCDEF";
@@ -121,6 +122,7 @@ namespace KingBingo.DAL
             user2.Name = "Test User 2";
             user2.Bio = "This is the Bio for test user 2";
             user2.Email = "test2@test.com";
+            user2.PasswordHash = UserProfile.createPasswordHash("test2");
             user2.Created = DateTime.Now;
             user2.DeviceToken = "0123456789ABCDEF";
             user2.Zip = "54915";

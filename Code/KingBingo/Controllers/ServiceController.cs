@@ -82,97 +82,163 @@ namespace KingBingo.Controllers
             ViewBag.Message = "";
             if (Request.HttpMethod == "POST")
             {
-                
-                   
                     string json = getPostBody(Request);
                     dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-                    if (operation == "allgames")
+
+                    if (operation == "auth")
                     {
-                        ViewData["Games"] = db.Games;
-                        ViewBag.Operation = "allgames";
-                        ViewBag.Message = "Successfully retrieved list of all games";
-                    }
-                    if (operation == "allusers")
-                    {
-                        ViewData["Users"] = db.UserProfiles;
-                        ViewBag.Operation = "allusers";
-                        ViewBag.Message = "Successfully retrieved list of all users";
-                    }
-                    else if (operation == "getuser")
-                    {
-                        ViewBag.Operation = "getuser";
-                        ViewBag.Message = "Successfully retrieved user";
-                        int user_id = data.user_id;
-                        ViewData["User"] = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
+                        //int user_id = data.user_id;
+                        string username = data.username;
+                        string hash = data.hash;
+
+                        //byte[] raw = UserProfile.GetBytes(hash);
+                      
+                        //back to string
+                       // hash = System.Text.Encoding.UTF8.GetString(raw);
+
+                        var user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
+                        ViewBag.Operation = "auth";
+                        if (hash == user.PasswordHash)
+                        {
+
+                            user.AuthenticationToken = Guid.NewGuid().ToString();
+                            user.AuthenticationTokenExpires = DateTime.Now.AddDays(7);
+                            db.SaveChanges();
+                            ViewData["User"] = user;
+                            ViewBag.Message = "Successfully authenticated";
+                        }
+                        else
+                        {
+                            ViewBag.Status = "error";
+                            ViewBag.Message = "Password hash did not match with given user_id";
+                        }
                     }
                     else if (operation == "createuser")
                     {
                         ViewBag.Operation = "createuser";
-                        ViewBag.Message = "Successfully created user";
-                        int timestamp = data.timestamp;
                         string username = data.username;
                         string password = data.password;
                         //need to have check for if username already exists!!
-                        createUser(username, password, false);
-                        ViewData["User"] = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
+                        var user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
+                        if (user == null)
+                        {
+                            createUser(username, password, false);
+                            user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
+                            user.PasswordHash = UserProfile.createPasswordHash(password);
+                            user.Created = DateTime.Now;
+                            db.SaveChanges();
+                            ViewData["User"] = user;
+                            ViewBag.Message = "Successfully created user";
+                        }
+                        else
+                        {
+                            ViewBag.Status = "error";
+                            ViewBag.Message = "user already exists";
+                        }
                     }
-                    else if (operation == "creategame")
+                    else
                     {
-                        ViewBag.Operation = "creategame";
-                        ViewBag.Message = "Successfully created game";
-                    }
-                    else if (operation == "inviteusers")
-                    {
-                        ViewBag.Operation = "inviteusers";
-                        ViewBag.Message = "Successfully invited users";
-                    }
-                    else if (operation == "addfriend")
-                    {
-                        ViewBag.Operation = "addfriend";
-                        ViewBag.Message = "Successfully added friend";
-                        int timestamp = data.timestamp;
+                        //NEED TO AUTHENTICATE
                         int user_id = data.user_id;
-                        int friend_id = data.friend_id;
+                        string authenticationToken = data.authentication_token;
                         var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
-                        var friend_user = db.UserProfiles.SingleOrDefault(u => u.UserId == friend_id);
-                        var friend1 = new Friend { User = user, FriendUser = friend_user, Created = DateTime.Now, Status = RequestStatus.Requested };
-                        var friend2 = new Friend { User = friend_user, FriendUser = user, Created = DateTime.Now, Status = RequestStatus.Pending };
-                        db.Friends.Add(friend1);
-                        db.Friends.Add(friend2);
-                        db.SaveChanges();
-                        user.Friends.Add(friend1);
-                        friend_user.Friends.Add(friend2);
-                        db.SaveChanges();
+                        if (user.AuthenticationToken != authenticationToken)
+                        {
+
+                            ViewBag.Message = "Authentication Token Expired";
+                            ViewBag.Status = "Error";
+                        }
+                        else
+                        {
+
+                            if (operation == "allgames")
+                            {
+
+                                ViewData["Games"] = db.Games;
+                                ViewBag.Operation = "allgames";
+                                ViewBag.Message = "Successfully retrieved list of all games";
+
+
+                            }
+                            if (operation == "allusers")
+                            {
+
+                                ViewData["Users"] = db.UserProfiles;
+                                ViewBag.Operation = "allusers";
+                                ViewBag.Message = "Successfully retrieved list of all users";
+
+
+                            }
+                            else if (operation == "getuser")
+                            {
+                                ViewBag.Operation = "getuser";
+
+                                ViewBag.Message = "Successfully retrieved user";
+                                int query_user_id = data.user_id;
+                                ViewData["User"] = db.UserProfiles.SingleOrDefault(u => u.UserId == query_user_id);
+
+                            }
+                            else if (operation == "creategame")
+                            {
+                                ViewBag.Operation = "creategame";
+                                ViewBag.Message = "Successfully created game";
+                            }
+                            else if (operation == "inviteusers")
+                            {
+                                ViewBag.Operation = "inviteusers";
+                                ViewBag.Message = "Successfully invited users";
+                            }
+                            else if (operation == "addfriend")
+                            {
+                                ViewBag.Operation = "addfriend";
+                                ViewBag.Message = "Successfully added friend";
+
+                               
+                                int friend_id = data.friend_id;
+                               
+                                var friend_user = db.UserProfiles.SingleOrDefault(u => u.UserId == friend_id);
+                                var friend1 = new Friend { User = user, FriendUser = friend_user, Created = DateTime.Now, Status = RequestStatus.Requested };
+                                var friend2 = new Friend { User = friend_user, FriendUser = user, Created = DateTime.Now, Status = RequestStatus.Pending };
+                                db.Friends.Add(friend1);
+                                db.Friends.Add(friend2);
+                                db.SaveChanges();
+                                user.Friends.Add(friend1);
+                                friend_user.Friends.Add(friend2);
+                                db.SaveChanges();
+                            }
+                            else if (operation == "acceptfriend")
+                            {
+                                ViewBag.Operation = "acceptfriend";
+                                ViewBag.Message = "Successfully accepted friend";
+                            }
+                            else if (operation == "rejectfriend")
+                            {
+                                ViewBag.Operation = "rejectfriend";
+                                ViewBag.Message = "Successfully added friend";
+                            }
+                            else if (operation == "getnumber")
+                            {
+                                ViewBag.Operation = "getnumber";
+                                ViewBag.Message = "Successfully retrieved number";
+                            }
+                            else if (operation == "joingame")
+                            {
+                                ViewBag.Operation = "joingame";
+                                ViewBag.Message = "Successfully joined game";
+
+                                int game_id = data.game_id;
+                               
+                                //create game here 
+                            }
+                            else if (operation == "quitgame")
+                            {
+                                ViewBag.Operation = "quitgame";
+                                ViewBag.Message = "Successfully quit game";
+                            }
+                        }
+
                     }
-                    else if (operation == "acceptfriend")
-                    {
-                        ViewBag.Operation = "acceptfriend";
-                        ViewBag.Message = "Successfully accepted friend";
-                    }
-                    else if (operation == "rejectfriend")
-                    {
-                        ViewBag.Operation = "rejectfriend";
-                        ViewBag.Message = "Successfully added friend";
-                    }
-                    else if (operation == "getnumber")
-                    {
-                        ViewBag.Operation = "getnumber";
-                        ViewBag.Message = "Successfully retrieved number";
-                    }
-                    else if (operation == "joingame")
-                    {
-                        ViewBag.Operation = "joingame";
-                        ViewBag.Message = "Successfully joined game";
-                        int timestamp = data.timestamp;
-                        int game_id = data.game_id;
-                        int user_id = data.user_id;
-                        //create game here 
-                    }
-                    else if (operation == "quitgame")
-                    {
-                        ViewBag.Operation = "quitgame";
-                        ViewBag.Message = "Successfully quit game";
-                    }
+                  
 
               
                 return View();

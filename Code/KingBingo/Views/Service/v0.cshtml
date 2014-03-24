@@ -31,8 +31,8 @@
     }
     @if (user != null)
     {
-            @Html.Raw("\"user\":{")
-            @Html.Raw(String.Format("\"user_id\": \"{0}\",", user.UserId))
+             @Html.Raw("\"user\":{")
+             @Html.Raw(String.Format("\"user_id\": \"{0}\",", user.UserId))
              @Html.Raw(String.Format("\"username\": \"{0}\",", user.UserName))
              @Html.Raw(String.Format("\"name\": \"{0}\",", user.Name))
              @Html.Raw(String.Format("\"bio\": \"{0}\",", user.Bio))

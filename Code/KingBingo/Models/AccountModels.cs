@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Globalization;
 using System.Web.Security;
+using System.Security.Cryptography;
 
 namespace KingBingo.Models
 {
@@ -55,10 +56,45 @@ namespace KingBingo.Models
         public virtual GameCard GameCard { get; set; }
         public virtual Game Game { get; set; }
 
+        
+
+
         public virtual ICollection<Badge> Badges { get; set; }
         public virtual ICollection<Friend> Friends { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Result> Results { get; set; }
+
+
+        static public byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        static public string createPasswordHash(string password)
+        {
+            SHA1 sha = new SHA1CryptoServiceProvider();
+            string hash = password;
+            byte[] data;
+            byte[] result;
+            //hash raw password once
+            data = GetBytes(hash);
+            result = sha.ComputeHash(data);
+            //back to string
+            hash = System.Text.Encoding.UTF8.GetString(result);
+            // hash = BitConverter.ToString(result);
+            //add today's date
+            hash = password + DateTime.Today.ToString("yyyy-MM-dd"); //YYYY-MM-dd
+            //hash it again
+            data = GetBytes(hash);
+            result = sha.ComputeHash(data);
+            //back to string
+            //hash = System.Text.Encoding.Default.GetString(result);
+            hash = System.Text.Encoding.UTF8.GetString(result);
+            //hash = BitConverter.ToString(result);
+            return hash;
+        }
 
     }
 
