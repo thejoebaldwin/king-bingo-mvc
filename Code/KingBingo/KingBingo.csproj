@@ -360,6 +360,7 @@
     <Content Include="Views\Service\docs\joingame.md" />
     <Content Include="Views\Service\docs\main.md" />
     <Content Include="Views\Service\docs\quitgame.md" />
+    <Content Include="Views\Service\docs\auth.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
