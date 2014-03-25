@@ -13,11 +13,13 @@ namespace KingBingo
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: "GameDetail",
-                url: "game/{id}",
-                defaults: new { controller = "Game", action = "Index", id = UrlParameter.Optional }
-            );
+            
+            //routes.MapRoute(
+            //    name: "GameDetail",
+            //    url: "game/{id}",
+            //    defaults: new { controller = "Game", action = "Index", id = UrlParameter.Optional }
+            //);
+             
 
             routes.MapRoute(
              name: "Default",

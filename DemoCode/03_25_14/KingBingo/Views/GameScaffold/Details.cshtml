@@ -1,0 +1,57 @@
+﻿@model KingBingo.Models.Game
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Game</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Description)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.WinCount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.WinCount)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.WinLimit)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.WinLimit)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UserCount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UserCount)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UserLimit)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UserLimit)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.GameID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
