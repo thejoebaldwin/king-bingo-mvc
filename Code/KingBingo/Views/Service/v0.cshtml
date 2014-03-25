@@ -11,6 +11,7 @@
     var user = ViewBag.User;
     var friendships = ViewBag.Friendships;
     var user_id = ViewBag.UserId;
+    var hash = ViewBag.Hash;
 }
 
 {
@@ -29,6 +30,11 @@
     {
          @String.Format("\"timestamp\": \"{0}\",", timestamp)
     }
+   @if (hash != null)
+    {
+            @Html.Raw(String.Format("\"hash\": \"{0}\",", hash))
+    }
+
     @if (user != null)
     {
              @Html.Raw("\"user\":{")

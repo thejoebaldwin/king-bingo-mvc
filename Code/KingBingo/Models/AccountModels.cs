@@ -6,6 +6,19 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Web.Security;
 using System.Security.Cryptography;
+using System.IO;
+using System.Text;
+
+
+
+using System.ComponentModel;
+using System.Data;
+
+using System.Linq;
+
+using System.Threading.Tasks;
+
+
 
 namespace KingBingo.Models
 {
@@ -56,7 +69,10 @@ namespace KingBingo.Models
         public virtual GameCard GameCard { get; set; }
         public virtual Game Game { get; set; }
 
-        
+        public string AuthHash()
+        {
+            return UserProfile.createAuthHashFromHash(this.PasswordHash);
+        }
 
 
         public virtual ICollection<Badge> Badges { get; set; }
@@ -65,39 +81,34 @@ namespace KingBingo.Models
         public virtual ICollection<Result> Results { get; set; }
 
 
-        static public byte[] GetBytes(string str)
+       
+
+        static public string SHA1(string cleartext)
         {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
+            byte[] p2 = System.Text.Encoding.Unicode.GetBytes(cleartext);
+            System.Security.Cryptography.SHA1 sha = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+            byte[] result = sha.ComputeHash(p2);
+            string encodedText = Convert.ToBase64String(result);
+            return encodedText;
         }
 
-        static public string createPasswordHash(string password)
+        //already hashed once and stored in database
+        static public string createAuthHashFromHash(string hash)
         {
-            SHA1 sha = new SHA1CryptoServiceProvider();
-            string hash = password;
-            byte[] data;
-            byte[] result;
-            //hash raw password once
-            data = GetBytes(hash);
-            result = sha.ComputeHash(data);
-            //back to string
-            hash = System.Text.Encoding.UTF8.GetString(result);
-            // hash = BitConverter.ToString(result);
-            //add today's date
-            hash = password + DateTime.Today.ToString("yyyy-MM-dd"); //YYYY-MM-dd
-            //hash it again
-            data = GetBytes(hash);
-            result = sha.ComputeHash(data);
-            //back to string
-            //hash = System.Text.Encoding.Default.GetString(result);
-            hash = System.Text.Encoding.UTF8.GetString(result);
-            //hash = BitConverter.ToString(result);
+            hash = hash + DateTime.Today.ToString("yyyy-MM-dd"); //YYYY-MM-dd
+            hash = SHA1(hash);
+            return hash;
+        }
+
+        static public string createAuthHash(string password)
+        {
+            string hash = SHA1(password);
+            hash = hash + DateTime.Today.ToString("yyyy-MM-dd"); //YYYY-MM-dd
+            hash = SHA1(hash);
             return hash;
         }
 
     }
-
     public class RegisterExternalLoginModel
     {
         [Required]
