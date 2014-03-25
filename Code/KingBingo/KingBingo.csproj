@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MarkdownSharp">
+      <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -350,6 +353,13 @@
     <Content Include="Views\Secure\Friends.cshtml" />
     <Content Include="Views\Secure\GameDetail.cshtml" />
     <Content Include="Views\Service\Help.cshtml" />
+    <Content Include="Views\Service\docs\createuser.md" />
+    <Content Include="Views\Service\docs\allgames.md" />
+    <Content Include="Views\Service\docs\allusers.md" />
+    <Content Include="Views\Service\docs\getnumber.md" />
+    <Content Include="Views\Service\docs\joingame.md" />
+    <Content Include="Views\Service\docs\main.md" />
+    <Content Include="Views\Service\docs\quitgame.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

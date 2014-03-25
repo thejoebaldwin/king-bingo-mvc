@@ -7,6 +7,8 @@ using KingBingo.DAL;
 using KingBingo.Models;
 using System.Web.Security;
 using WebMatrix.WebData;
+using System.IO;
+using MarkdownSharp;
 
 namespace KingBingo.Controllers
 {
@@ -182,15 +184,10 @@ namespace KingBingo.Controllers
                         var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
                         if (user != null)
                         {
-                           
-
                             string authenticationToken = data.authentication_token;
-                           
-
                             if (user.AuthenticationToken != authenticationToken)
                             {
-
-                                ViewBag.Message = "Authentication Token Expired";
+                                ViewBag.Message = "Authentication Token Invalid";
                                 ViewBag.Status = "Error";
                             }
                             else
@@ -298,8 +295,27 @@ namespace KingBingo.Controllers
             }
             else
             {
+                ViewBag.Markdown = MarkdownForOperation(operation);
                 return View("Help");
             }
         }
+
+
+        string MarkdownForOperation(string operation)
+        {
+            if (operation == "" || operation == null) operation = "main";
+            string path = string.Concat(HttpContext.Request.PhysicalApplicationPath, "\\Views\\Service\\docs\\", operation, ".md");
+            string contents;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                Markdown md = new Markdown();
+                contents = md.Transform(sr.ReadToEnd());
+            }
+            return contents;
+
+
+        }
+
     }
 }
