@@ -1,6 +1,6 @@
-#Create User
+##Create User
 
-**POST Request to http://bingo.humboldttechgroup.com:1111/?cmd=createuser**
+**POST Request to http://itweb.fvtc.edu/service/v0/createuser**
 
 Creates a user and returns a user\_id, or existing user\_id if given login name already exists.
 

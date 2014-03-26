@@ -1,4 +1,4 @@
-##Get All Users
+##Get Users
 
 **POST Request to http://itweb.fvtc.edu/service/v0/allusers**
 

@@ -1,6 +1,6 @@
-#Join Game
+##Join Game
 
-**POST Request to http://bingo.humboldttechgroup.com:1111/?cmd=joingame**
+**POST Request to http://itweb.fvtc.edu/service/v0/joingame**
 
 Use this command to join a login to an existing game. A successful response will return the Game ID and a comma delimited list of numbers, in order, that make up the user's bingo card. The numbers should be placed in the card from top to bottom in a 5 x 5 grid. For example: using the below "board" data should produce a card with the following numbers in the "B" column, from top to bottom: 12, 1, 15, 2, and 9.
 

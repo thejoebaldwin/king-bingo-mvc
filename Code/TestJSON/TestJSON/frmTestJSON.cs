@@ -64,6 +64,7 @@ namespace TestJSON
         {
          
             string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token +  "\"}";
+            txtRequest.Text = post_json;
             txtResponse.Text = PostDataWithOperation("allusers", post_json); ;
         }
 

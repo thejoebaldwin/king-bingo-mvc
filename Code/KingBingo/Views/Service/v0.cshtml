@@ -17,27 +17,27 @@
 {
     "status": "@ViewBag.Status",
     "operation": "@ViewBag.Operation",
-    "message": "@ViewBag.Message",  
+    "message": "@ViewBag.Message"
     @if (numbers != null)
     {
-         @String.Format("\"numbers\": \"{0}\",", numbers)
+         @String.Format(",\"numbers\": \"{0}\"", numbers)
     }
     @if (number != null)
     {
-         @String.Format("\"number\": \"{0}\",", number)
+         @String.Format(",\"number\": \"{0}\"", number)
     }
     @if (timestamp != null)
     {
-         @String.Format("\"timestamp\": \"{0}\",", timestamp)
+         @String.Format(",\"timestamp\": \"{0}\"", timestamp)
     }
    @if (hash != null)
     {
-            @Html.Raw(String.Format("\"hash\": \"{0}\",", hash))
+            @Html.Raw(String.Format(",\"hash\": \"{0}\"", hash))
     }
 
     @if (user != null)
     {
-             @Html.Raw("\"user\":{")
+             @Html.Raw(",\"user\":{")
              @Html.Raw(String.Format("\"user_id\": \"{0}\",", user.UserId))
              @Html.Raw(String.Format("\"username\": \"{0}\",", user.UserName))
              @Html.Raw(String.Format("\"name\": \"{0}\",", user.Name))
@@ -49,25 +49,26 @@
              @Html.Raw(String.Format("\"birthdate\": \"{0}\",", user.Birthdate))
              @Html.Raw(String.Format("\"receive_emails\": \"{0}\",", user.ReceiveEmails))
              @Html.Raw(String.Format("\"authentication_token\": \"{0}\",", user.AuthenticationToken))
-             @Html.Raw(String.Format("\"authentication_token_expires\": \"{0}\",", user.AuthenticationTokenExpires))
+             @Html.Raw(String.Format("\"authentication_token_expires\": \"{0}\"", user.AuthenticationTokenExpires))
         if (user.ProfileImage != null)
         {
-             @Html.Raw(String.Format("\"profile_image\": \"{0}\",", user.ProfileImage))
+             @Html.Raw(String.Format(",\"profile_image\": \"{0}\"", user.ProfileImage))
     }
 
-             @Html.Raw(String.Format("\"active\": \"{0}\",", user.Active))
-             @Html.Raw(String.Format("\"sex\": \"{0}\",", user.Sex))
+             @Html.Raw(String.Format(",\"active\": \"{0}\"", user.Active))
+             @Html.Raw(String.Format(",\"sex\": \"{0}\"", user.Sex))
        
-             @Html.Raw(String.Format("\"confirmed\": \"{0}\",", user.Confirmed))
+             @Html.Raw(String.Format(",\"confirmed\": \"{0}\"", user.Confirmed))
         if (user.Location != null)
         {
-             @Html.Raw(String.Format("\"location\": \"{0}\",", user.Location))
+             @Html.Raw(String.Format(",\"location\": \"{0}\"", user.Location))
     }
-            @Html.Raw("},")
+            @Html.Raw("}")
     }
-    "users":[  
+
     @if (users != null)
     {
+         @Html.Raw(",\"users\":[")  
         foreach(var u in users) 
         {
             if (userCount > 0) 
@@ -78,15 +79,17 @@
                @Html.Raw(String.Format("\"user_id\": \"{0}\",", u.UserId))
                @Html.Raw(String.Format("\"username\": \"{0}\",", u.UserName))
                @Html.Raw(String.Format("\"name\": \"{0}\",", u.Name))
-               @Html.Raw(String.Format("\"bio\": \"{0}\",", u.Bio))
+               @Html.Raw(String.Format("\"bio\": \"{0}\"", u.Bio))
             userCount++;
             @Html.Raw("}")
         }
+         @Html.Raw("]")  
     }
-    ],
-    "games":[  
+   
+   
     @if (games != null)
     {
+          @Html.Raw(",\"games\":[")  
         foreach(var g in games) 
         {
             if (gameCount > 0) 
@@ -105,6 +108,7 @@
             @Html.Raw("}")  
             gameCount++;
         }
+           @Html.Raw("]")  
     }
-        ]
+        
 }

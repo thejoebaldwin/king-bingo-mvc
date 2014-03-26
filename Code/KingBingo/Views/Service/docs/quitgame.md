@@ -1,6 +1,6 @@
-#Quit Game
+##Quit Game
 
-**POST Request to http://bingo.humboldttechgroup.com:1111/?cmd=quitgame**
+**POST Request to http://itweb.fvtc.edu/service/v0/quitgame**
 
 Use this command to quit a login to a previously joined game. 
 

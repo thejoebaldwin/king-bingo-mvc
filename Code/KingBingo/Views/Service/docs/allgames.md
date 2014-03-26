@@ -1,6 +1,6 @@
-#Get All Games  
+##Get All Games  
 
-**POST Request to http://bingo.humboldttechgroup.com:1111/?cmd=allgames**
+**POST Request to http://itweb.fvtc.edu/service/v0/allgames**
 
 Returns all currently in progress games
 
@@ -18,32 +18,29 @@ Returns all currently in progress games
 
 ##Sample request body: 
 
-    Post Body not needed
+{
+    "user_id": "1",
+    "authentication_token": "cb501ead-ce59-4043-8a14-f6314b3c4970"
+}
 * * *
 
 ##Sample response data:
 
-	{
-		"status": "ok",
-		"command": "allgames",
-		"message": "successfully retrieved list of active games",  
-	 	"games":[  
-					{
-					"game_id": "1",  
- 					"win_limit": "10",  
- 					"win_count": "0",  
- 					"user_limit": "10",  
-					"user_count":"9",  
- 					"created_date":"2013-04-04 00:00:00"  
-				},  
-				{  
-					"game_id": "2",  
- 					"win_limit": "5",  
- 					"win_count": "2",  
- 					"user_limit": "5",  
-					"user_count":"4",  
- 					"created_date":"2013-04-03 00:00:00"
-				}
-			]  
-	}
+{
+    "status": "ok",
+    "operation": "allgames",
+    "message": "Successfully retrieved list of all games",
+    "games": [
+        {
+            "game_id": "1",
+            "name": "New Game 1",
+            "description": "New game description",
+            "win_limit": "1",
+            "win_count": "0",
+            "user_limit": "3",
+            "user_count": "0",
+            "created_date": "2014-03-25 09:18:59"
+        }
+    ]
+}
 * * *
