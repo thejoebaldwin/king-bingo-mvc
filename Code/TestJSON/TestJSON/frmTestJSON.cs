@@ -14,8 +14,7 @@ namespace TestJSON
 {
     public partial class frmTestJSON : Form
     {
-       const string AUTH_POST_URL = "http://localhost:22986/service/v0";
-       //const string AUTH_POST_URL = "http://itweb.fvtc.edu/kingbingo/service/v0";
+      
 
         public string authentication_token = "";
         public int user_id = -1;
@@ -24,15 +23,28 @@ namespace TestJSON
             InitializeComponent();
         }
 
-     
+        private string getTargetUrl()
+        {
+            string targetURL = "";
+            if (cbTarget.SelectedIndex == 0)
+            {
+               targetURL = "http://localhost:22986/service/v0";
+              
+            }
+            else if (cbTarget.SelectedIndex == 1)
+            {
+                targetURL = "http://itweb.fvtc.edu/kingbingo/service/v0";
+            }
+            return targetURL;
+        }
 
 
         private string PostDataWithOperation(string operation, string JSON)
         {
-            string host = AUTH_POST_URL;
+          
 
             //build request
-            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}/{1}", host, operation));
+            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}/{1}", getTargetUrl(), operation));
             //set http method
             request.Method = "POST";
             //content type
@@ -137,6 +149,11 @@ namespace TestJSON
         {
 
             lblHash.Text = createAuthHash(txtPassword.Text.Trim());
+        }
+
+        private void frmTestJSON_Load(object sender, EventArgs e)
+        {
+            cbTarget.SelectedIndex = 0;
         }
     }
 }

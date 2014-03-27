@@ -46,12 +46,13 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbTarget = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGetAllGames
             // 
-            this.btnGetAllGames.Location = new System.Drawing.Point(64, 456);
+            this.btnGetAllGames.Location = new System.Drawing.Point(64, 504);
             this.btnGetAllGames.Name = "btnGetAllGames";
             this.btnGetAllGames.Size = new System.Drawing.Size(75, 23);
             this.btnGetAllGames.TabIndex = 0;
@@ -61,7 +62,7 @@
             // 
             // txtResponse
             // 
-            this.txtResponse.Location = new System.Drawing.Point(376, 162);
+            this.txtResponse.Location = new System.Drawing.Point(376, 210);
             this.txtResponse.Multiline = true;
             this.txtResponse.Name = "txtResponse";
             this.txtResponse.Size = new System.Drawing.Size(381, 255);
@@ -69,7 +70,7 @@
             // 
             // btnGetAllUsers
             // 
-            this.btnGetAllUsers.Location = new System.Drawing.Point(165, 456);
+            this.btnGetAllUsers.Location = new System.Drawing.Point(165, 504);
             this.btnGetAllUsers.Name = "btnGetAllUsers";
             this.btnGetAllUsers.Size = new System.Drawing.Size(75, 23);
             this.btnGetAllUsers.TabIndex = 2;
@@ -79,7 +80,7 @@
             // 
             // btnGetUser
             // 
-            this.btnGetUser.Location = new System.Drawing.Point(64, 497);
+            this.btnGetUser.Location = new System.Drawing.Point(64, 545);
             this.btnGetUser.Name = "btnGetUser";
             this.btnGetUser.Size = new System.Drawing.Size(75, 23);
             this.btnGetUser.TabIndex = 3;
@@ -89,7 +90,7 @@
             // 
             // txtRequest
             // 
-            this.txtRequest.Location = new System.Drawing.Point(33, 162);
+            this.txtRequest.Location = new System.Drawing.Point(33, 210);
             this.txtRequest.Multiline = true;
             this.txtRequest.Name = "txtRequest";
             this.txtRequest.Size = new System.Drawing.Size(334, 255);
@@ -168,7 +169,7 @@
             // 
             // btnHash
             // 
-            this.btnHash.Location = new System.Drawing.Point(386, 456);
+            this.btnHash.Location = new System.Drawing.Point(386, 504);
             this.btnHash.Name = "btnHash";
             this.btnHash.Size = new System.Drawing.Size(144, 23);
             this.btnHash.TabIndex = 14;
@@ -179,7 +180,7 @@
             // lblHash
             // 
             this.lblHash.AutoSize = true;
-            this.lblHash.Location = new System.Drawing.Point(561, 461);
+            this.lblHash.Location = new System.Drawing.Point(561, 509);
             this.lblHash.Name = "lblHash";
             this.lblHash.Size = new System.Drawing.Size(103, 13);
             this.lblHash.TabIndex = 15;
@@ -188,7 +189,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(392, 143);
+            this.label4.Location = new System.Drawing.Point(392, 191);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 13);
             this.label4.TabIndex = 16;
@@ -197,7 +198,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(30, 143);
+            this.label5.Location = new System.Drawing.Point(30, 191);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(47, 13);
             this.label5.TabIndex = 17;
@@ -213,18 +214,30 @@
             this.groupBox1.Controls.Add(this.btnCreateUser);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.btnAuth);
-            this.groupBox1.Location = new System.Drawing.Point(28, 12);
+            this.groupBox1.Location = new System.Drawing.Point(28, 60);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(725, 115);
             this.groupBox1.TabIndex = 18;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "User";
             // 
+            // cbTarget
+            // 
+            this.cbTarget.FormattingEnabled = true;
+            this.cbTarget.Items.AddRange(new object[] {
+            "Development",
+            "Production"});
+            this.cbTarget.Location = new System.Drawing.Point(64, 13);
+            this.cbTarget.Name = "cbTarget";
+            this.cbTarget.Size = new System.Drawing.Size(121, 21);
+            this.cbTarget.TabIndex = 19;
+            // 
             // frmTestJSON
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(775, 608);
+            this.Controls.Add(this.cbTarget);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -237,6 +250,7 @@
             this.Controls.Add(this.btnGetAllGames);
             this.Name = "frmTestJSON";
             this.Text = "King Bingo JSON Tester";
+            this.Load += new System.EventHandler(this.frmTestJSON_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -264,6 +278,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ComboBox cbTarget;
     }
 }
 
