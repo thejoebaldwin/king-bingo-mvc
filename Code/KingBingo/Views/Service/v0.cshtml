@@ -12,6 +12,7 @@
     var friendships = ViewBag.Friendships;
     var user_id = ViewBag.UserId;
     var hash = ViewBag.Hash;
+    var gamecard = ViewBag.GameCard;
 }
 
 {
@@ -94,14 +95,22 @@
                 @Html.Raw(",")
             }
             @Html.Raw("{")
-             @Html.Raw(String.Format("\"game_id\": \"{0}\",", g.GameID))
-             @Html.Raw(String.Format("\"name\": \"{0}\",", g.Name))
-             @Html.Raw(String.Format("\"description\": \"{0}\",", g.Description))
+            @Html.Raw(String.Format("\"game_id\": \"{0}\",", g.GameID))
+            @Html.Raw(String.Format("\"name\": \"{0}\",", g.Name))
+            @Html.Raw(String.Format("\"description\": \"{0}\",", g.Description))
             @Html.Raw(String.Format("\"win_limit\": \"{0}\",", g.WinLimit)  ) 
             @Html.Raw(String.Format("\"win_count\": \"{0}\",", g.WinCount())  ) 
-             @Html.Raw(String.Format(" \"user_limit\": \"{0}\",", g.UserLimit)   )
-             @Html.Raw(String.Format("\"user_count\":\"{0}\",", g.UserCount())   )
-            @Html.Raw(String.Format(" \"created_date\":\"{0}\"", g.Created.ToString("yyyy-MM-dd hh:mm:ss")))
+            @Html.Raw(String.Format("\"user_limit\": \"{0}\",", g.UserLimit)   )
+            @Html.Raw(String.Format("\"user_count\":\"{0}\",", g.UserCount())   )
+            @Html.Raw(String.Format("\"created_date\":\"{0}\"", g.Created.ToString("yyyy-MM-dd hh:mm:ss")))
+            if (gamecard != null)
+            {
+                @Html.Raw(",\"game_card\":{")
+            
+                   @String.Join(",", g.GameCard.Numbers)
+              
+               @Html.Raw("}")
+            }
             @Html.Raw("}")  
             gameCount++;
         }

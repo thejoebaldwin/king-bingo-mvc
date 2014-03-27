@@ -26,28 +26,7 @@ namespace KingBingo.Controllers
 
         public string getPostBody(HttpRequestBase request)
         {
-            /*
-            System.IO.Stream str; 
-            String strmContents;
-            Int32 counter, strLen, strRead;
-            // Create a Stream object.
-            str = request.InputStream;
-            // Find number of bytes in stream.
-            strLen = Convert.ToInt32(str.Length);
-            // Create a byte array.
-            byte[] strArr = new byte[strLen];
-            // Read stream into byte array.
-            strRead = str.Read(strArr, 0, strLen);
-
-            // Convert byte array to a text string.
-            strmContents = "";
-            for (counter = 0; counter < strLen; counter++)
-            {
-                strmContents = strmContents + strArr[counter].ToString();
-            }
-            */
             string data = new System.IO.StreamReader(Request.InputStream).ReadToEnd();
-
             return data;
         }
 
@@ -89,14 +68,8 @@ namespace KingBingo.Controllers
 
                     if (operation == "auth")
                     {
-                        //int user_id = data.user_id;
                         string username = data.username;
                         string hash = data.hash;
-
-                        //byte[] raw = UserProfile.GetBytes(hash);
-                      
-                        //back to string
-                       // hash = System.Text.Encoding.UTF8.GetString(raw);
 
                         var user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
                         ViewBag.Operation = "auth";
@@ -123,7 +96,6 @@ namespace KingBingo.Controllers
                         string username = data.username;
                         string password = data.password;
                         string email = data.email;
-                        //need to have check for if username already exists!!
                         var user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
                         if (user == null)
                         {
@@ -157,10 +129,6 @@ namespace KingBingo.Controllers
                                 user.Location = new Decimal?[2] { 88, -120 };
                                 user.GameCard = null;
                                 user.Badges = new List<Badge>(); ;
-
-
-
-
                                 db.SaveChanges();
                                 ViewData["User"] = user;
                                 ViewBag.Message = "Successfully created user";
@@ -222,13 +190,15 @@ namespace KingBingo.Controllers
                                 }
                                 else if (operation == "creategame")
                                 {
-                                    ViewBag.Operation = "creategame";
-                                    ViewBag.Message = "Successfully created game";
+                                    createGame(data);
+
                                 }
                                 else if (operation == "inviteusers")
                                 {
                                     ViewBag.Operation = "inviteusers";
                                     ViewBag.Message = "Successfully invited users";
+                                    //CREATE NOTIFICATIONS
+
                                 }
                                 else if (operation == "addfriend")
                                 {
@@ -298,6 +268,54 @@ namespace KingBingo.Controllers
                 ViewBag.Markdown = MarkdownForOperation(operation);
                 return View("Help");
             }
+        }
+
+        void createGame(dynamic data)
+        {
+            ViewBag.Operation = "creategame";
+            ViewBag.Message = "Successfully created game";
+            Game game = new Game();
+            game.Name = data.name;
+            game.Description = data.description;
+            game.WinLimit = data.win_limit;
+            game.UserLimit = data.user_limit;
+            game.Speed = data.speed;
+            game.Created = DateTime.Now;
+            game.Private = data["private"];
+            game.NumbersIndex = 0;
+            game.Numbers = new List<int>();
+            List<UserProfile> players = new List<UserProfile>();
+            players.Add(db.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name));
+            string[] splitString = { "," };
+            string temp = data.player_ids;
+            string[] playerIDs = temp.Split(splitString, StringSplitOptions.None);
+            //loop through request users
+            foreach (string player_id in playerIDs)
+            {
+                int tempUser_id = System.Convert.ToInt32(player_id);
+                players.Add(db.UserProfiles.SingleOrDefault(u => u.UserId == tempUser_id));
+                //create an invite notification for each player                                        
+            }
+            //generate unique gamecards
+            game.GameCards = new List<GameCard>();
+            GameCard tempGameCard = new GameCard
+            {
+                Numbers = new int[25] {
+                    11,13,4,2,3,
+                    22,27,30,28,20,
+                    33,31,-1,38,37,
+                    58,57,53,49,56,
+                    74,63,65,67,69},
+                Hash = "0123456789ABCDEF"
+            };
+            game.GameCards.Add(tempGameCard);
+
+            ViewData["GameCard"] = tempGameCard;
+            game.Players = players;
+            game.Results = new List<Result>();
+            db.Games.Add(game);
+            db.SaveChanges();
+            ViewData["Game"] = game;
         }
 
 

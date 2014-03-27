@@ -155,5 +155,25 @@ namespace TestJSON
         {
             cbTarget.SelectedIndex = 0;
         }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCreateGame_Click(object sender, EventArgs e)
+        {
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+
+            post_json += ",\"win_limit\":\"" + txtWinLimit.Text + "\", \"user_limit\":\"" + txtUserLimit.Text + "\"";
+            post_json += ",\"speed\":\"" + txtWinLimit.Text + "\", \"name\":\"" + txtName.Text + "\"";
+            post_json += ",\"description\":\"" + txtDescription.Text + "\"";
+            post_json += ",\"player_ids\":\"" + txtPlayers.Text + "\", \"private\":\"" + chkPrivate.Checked.ToString() + "\"";
+            post_json += "}";
+
+            txtRequest.Text = post_json;
+
+            txtResponse.Text = PostDataWithOperation("creategame", post_json); 
+        }
     }
 }

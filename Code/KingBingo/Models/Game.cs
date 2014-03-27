@@ -25,6 +25,7 @@ namespace KingBingo.Models
         
         public virtual ICollection<UserProfile> Players { get; set; }
         public virtual ICollection<Result> Results { get; set; }
+        public virtual ICollection<GameCard> GameCards { get; set; }
 
         public int WinCount()
         {
@@ -34,6 +35,8 @@ namespace KingBingo.Models
         {
             return 0;
         }
+
+       
     }
 
 

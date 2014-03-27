@@ -13,6 +13,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="shortcut icon" href="~/images/favicon.ico" />
     <title>@ViewBag.Title</title>
     <!-- Bootstrap -->
           @Styles.Render("~/Bootstrap/css/bootstrap.min.css")
@@ -55,13 +56,13 @@
                           </button>
                            @if (Request.IsAuthenticated) {
                              <a class="navbar-brand" style="padding-top:0px;" href="@Url.Action("Index", "Secure")" >
-                                 <img src="/images/crown-icon.png" />
-                                  <img src="/images/king-bingo-title.png" />
+                                 <img src="~/images/crown-icon.png" />
+                                  <img src="~/images/king-bingo-title.png" />
                              </a>
                            } else {
                                   <a class="navbar-brand" style="padding-top:0px;" href="@Url.Action("Index", "Home")" >
-                                 <img src="/images/crown-icon.png" />
-                                  <img src="/images/king-bingo-title.png" />
+                                 <img src="~/images/crown-icon.png" />
+                                  <img src="~/images/king-bingo-title.png" />
                              </a>
                            }
                         </div>
