@@ -38,7 +38,7 @@ namespace KingBingo.Filters
                         }
                     }
 
-                    WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                    WebSecurity.InitializeDatabaseConnection("StudentConnection", "User", "UserID", "UserName", autoCreateTables: true);
                 }
                 catch (Exception ex)
                 {

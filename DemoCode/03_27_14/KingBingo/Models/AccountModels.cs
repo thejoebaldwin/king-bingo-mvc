@@ -9,7 +9,7 @@ using System.Web.Security;
 namespace KingBingo.Models
 {
 
-    //http://stackoverflow.com/questions/15112214/using-mvc-4-simplemembership-with-an-existing-database-first-ef-model
+    
 
     public class UsersContext : DbContext
     {
