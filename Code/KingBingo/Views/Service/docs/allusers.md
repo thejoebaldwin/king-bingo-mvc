@@ -15,7 +15,7 @@ Returns all currently joined users in a given game
 	{
     "user_id": "1",
     "authentication_token": "4e121e1a-d5ee-4789-8620-aeb094e7ea71"
-}
+	}
 * * *
 
 ##Sample response data:

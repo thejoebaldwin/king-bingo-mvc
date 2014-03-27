@@ -17,35 +17,35 @@ Use this command to join a login to an existing game. A successful response will
 
 ##Sample request body: 
 
-	{  
- 		"timestamp": "1234567890",  
- 		"game_id": "1",  
- 		"user_id":"1"  
+	{
+    "username": "test1",
+    "hash": "DMK3DB2yBmJaBi7zV4TiSyJGc5E="
 	}
 * * *
 
 ##Sample response data:
 
-	{  
-		"status": "ok",  
-		"command": "joingame",
- 		"message": "game sucessfully joined",  
-		"board_id": "1",
- 		"board": "12,1,15,2,9,24,30,22,18,21,34,43,45,31,42,54,50,58,56,55,68,63,70,72,62",  
- 		"game_id": "1",
-		"user_id": "1",
-		"timestamp": "1234567890"
-	}
-If user has already joined game, the following will be returned instead, with the board data being the previously generated value.
-	
-	{  
-		"status": "ok",  
-		"command": "joingame",
- 		"message": "user already joined game",  
-		"board_id": "1",
- 		"board": "12,1,15,2,9,24,30,22,18,21,34,43,45,31,42,54,50,58,56,55,68,63,70,72,62",  
- 		"game_id": "1",
-		"user_id": "1",
-		"timestamp": "1234567890"
+	{
+    "status": "ok",
+    "operation": "auth",
+    "message": "Successfully authenticated",
+    "hash": "DMK3DB2yBmJaBi7zV4TiSyJGc5E=",
+    "user": {
+        "user_id": "1",
+        "username": "test1",
+        "name": "Test User 1",
+        "bio": "This is the Bio for test user 1",
+        "Email": "test@test.com",
+        "created": "3/26/2014 5:40:42 PM",
+        "device_token": "0123456789ABCDEF",
+        "zip": "54915",
+        "birthdate": "10/25/1977 12:00:00 AM",
+        "receive_emails": "True",
+        "authentication_token": "3cc4b84d-5cfb-4a87-ac5c-27ec0ba51fd4",
+        "authentication_token_expires": "4/2/2014 5:49:43 PM",
+        "active": "True",
+        "sex": "Male",
+        "confirmed": "True"
+		}
 	}
 * * *
