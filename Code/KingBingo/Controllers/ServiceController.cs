@@ -9,6 +9,7 @@ using System.Web.Security;
 using WebMatrix.WebData;
 using System.IO;
 using MarkdownSharp;
+using System.Collections;
 
 namespace KingBingo.Controllers
 {
@@ -58,9 +59,9 @@ namespace KingBingo.Controllers
 
         public ActionResult V0(string operation)
         {
-            ViewBag.Status = "ok";
-            ViewBag.Command = "";
-            ViewBag.Message = "";
+            ViewBag.status = "ok";
+            ViewBag.command = "";
+            ViewBag.message = "";
             if (Request.HttpMethod == "POST")
             {
                     string json = getPostBody(Request);
@@ -72,27 +73,27 @@ namespace KingBingo.Controllers
                         string hash = data.hash;
 
                         var user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
-                        ViewBag.Operation = "auth";
-                        ViewData["Hash"] = user.AuthHash();
+                        ViewBag.operation = "auth";
+                        ViewData["hash"] = user.AuthHash();
                         if (hash == user.AuthHash())
                         {
 
                             user.AuthenticationToken = Guid.NewGuid().ToString();
                             user.AuthenticationTokenExpires = DateTime.Now.AddDays(7);
                             db.SaveChanges();
-                            ViewData["User"] = user;
+                            ViewData["user"] = user;
                           
-                            ViewBag.Message = "Successfully authenticated";
+                            ViewBag.message = "Successfully authenticated";
                         }
                         else
                         {
-                            ViewBag.Status = "error";
-                            ViewBag.Message = "Password hash did not match with given user_id";
+                            ViewBag.status = "error";
+                            ViewBag.message = "Password hash did not match with given user_id";
                         }
                     }
                     else if (operation == "createuser")
                     {
-                        ViewBag.Operation = "createuser";
+                        ViewBag.operation = "createuser";
                         string username = data.username;
                         string password = data.password;
                         string email = data.email;
@@ -130,19 +131,19 @@ namespace KingBingo.Controllers
                                 user.GameCard = null;
                                 user.Badges = new List<Badge>(); ;
                                 db.SaveChanges();
-                                ViewData["User"] = user;
-                                ViewBag.Message = "Successfully created user";
+                                ViewData["user"] = user;
+                                ViewBag.message = "Successfully created user";
                             }
                             else
                             {
-                                ViewBag.Status = "error";
-                                ViewBag.Message = "email already exists";
+                                ViewBag.status = "error";
+                                ViewBag.message = "email already exists";
                             }
                         }
                         else
                         {
-                            ViewBag.Status = "error";
-                            ViewBag.Message = "user already exists";
+                            ViewBag.status = "error";
+                            ViewBag.message = "user already exists";
                         }
                     }
                     else
@@ -155,57 +156,46 @@ namespace KingBingo.Controllers
                             string authenticationToken = data.authentication_token;
                             if (user.AuthenticationToken != authenticationToken)
                             {
-                                ViewBag.Message = "Authentication Token Invalid";
-                                ViewBag.Status = "Error";
+                                ViewBag.message = "Authentication Token Invalid";
+                                ViewBag.status = "error";
                             }
                             else
                             {
-
                                 if (operation == "allgames")
                                 {
-
-                                    ViewData["Games"] = db.Games;
-                                    ViewBag.Operation = "allgames";
-                                    ViewBag.Message = "Successfully retrieved list of all games";
-
-
+                                    ViewData["games"] = db.Games;
+                                    ViewBag.operation = "allgames";
+                                    ViewBag.message = "Successfully retrieved list of all games";
                                 }
                                 if (operation == "allusers")
                                 {
 
-                                    ViewData["Users"] = db.UserProfiles;
-                                    ViewBag.Operation = "allusers";
-                                    ViewBag.Message = "Successfully retrieved list of all users";
-
-
+                                    ViewData["users"] = db.UserProfiles;
+                                    ViewBag.operation = "allusers";
+                                    ViewBag.message = "Successfully retrieved list of all users";
                                 }
                                 else if (operation == "getuser")
                                 {
-                                    ViewBag.Operation = "getuser";
-
-                                    ViewBag.Message = "Successfully retrieved user";
+                                    ViewBag.operation = "getuser";
+                                    ViewBag.message = "Successfully retrieved user";
                                     int query_user_id = data.user_id;
-                                    ViewData["User"] = db.UserProfiles.SingleOrDefault(u => u.UserId == query_user_id);
-
+                                    ViewData["user"] = db.UserProfiles.SingleOrDefault(u => u.UserId == query_user_id);
                                 }
                                 else if (operation == "creategame")
                                 {
                                     createGame(data);
-
                                 }
                                 else if (operation == "inviteusers")
                                 {
-                                    ViewBag.Operation = "inviteusers";
-                                    ViewBag.Message = "Successfully invited users";
+                                    ViewBag.operation = "inviteusers";
+                                    ViewBag.message = "Successfully invited users";
                                     //CREATE NOTIFICATIONS
 
                                 }
                                 else if (operation == "addfriend")
                                 {
-                                    ViewBag.Operation = "addfriend";
-                                    ViewBag.Message = "Successfully added friend";
-
-
+                                    ViewBag.operation = "addfriend";
+                                    ViewBag.message = "Successfully added friend";
                                     int friend_id = data.friend_id;
 
                                     var friend_user = db.UserProfiles.SingleOrDefault(u => u.UserId == friend_id);
@@ -220,60 +210,132 @@ namespace KingBingo.Controllers
                                 }
                                 else if (operation == "acceptfriend")
                                 {
-                                    ViewBag.Operation = "acceptfriend";
-                                    ViewBag.Message = "Successfully accepted friend";
+                                    ViewBag.operation = "acceptfriend";
+                                    ViewBag.message = "Successfully accepted friend";
                                 }
                                 else if (operation == "rejectfriend")
                                 {
-                                    ViewBag.Operation = "rejectfriend";
-                                    ViewBag.Message = "Successfully added friend";
+                                    ViewBag.operation = "rejectfriend";
+                                    ViewBag.message = "Successfully added friend";
                                 }
                                 else if (operation == "getnumber")
                                 {
-                                    ViewBag.Operation = "getnumber";
-                                    ViewBag.Message = "Successfully retrieved number";
+                                    getNumber(data);
                                 }
                                 else if (operation == "joingame")
                                 {
-                                    ViewBag.Operation = "joingame";
-                                    ViewBag.Message = "Successfully joined game";
-
-                                    int game_id = data.game_id;
-
-                                    //create game here 
+                                    joinGame(data);
                                 }
                                 else if (operation == "quitgame")
                                 {
-                                    ViewBag.Operation = "quitgame";
-                                    ViewBag.Message = "Successfully quit game";
+                                    quitGame(data);
                                 }
-
+                                else if (operation == "getfriends")
+                                {
+                                    ViewBag.operation = "getfriends";
+                                    ViewBag.message = "Successfully retrieved list of friends";
+                                    //get all friendship requests
+                                }
                             }
                         }
                         else
                         {
-                            ViewBag.Operation = operation;
-                            ViewBag.Status = "error";
-                            ViewBag.Message = "missing authentication data";
+                            ViewBag.operation = operation;
+                            ViewBag.status = "error";
+                            ViewBag.message = "missing authentication data";
                         }
 
                     } // before this
-                  
-
-              
                 return View();
             }
             else
             {
-                ViewBag.Markdown = MarkdownForOperation(operation);
+                ViewBag.markdown = MarkdownForOperation(operation);
                 return View("Help");
+            }
+        }
+
+        void getNumber(dynamic data)
+        {
+            ViewBag.operation = "getnumber";
+            ViewBag.message = "Successfully retrieved number";
+            int game_id = data.game_id;
+            var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
+            int number = game.GetNextNumber();
+            if (number > -1)
+            {
+                ViewBag.number = Game.BingofyNumber(number);
+            }
+            else
+            {
+                ViewBag.status = "error";
+                ViewBag.message = "All Numbers have been drawn for this game";
+                ViewBag.number = -1;
+            }
+            db.SaveChanges();
+        }
+
+        void quitGame(dynamic data)
+        {
+            ViewBag.operation = "quitgame";
+           
+            int user_id = data.user_id;
+            int game_id = data.game_id;
+            var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
+            var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
+            if (game.Players != null && game.Players.Contains(user))
+            {
+                game.Players.Remove(user);
+                //is game empty then close it
+                user.Game = null;
+                db.SaveChanges();
+                ViewBag.message = "Successfully quit game";
+            }
+            else
+            {
+                ViewBag.message = "User was not joined to the game";
+                ViewBag.Status = "error";
+            }
+            
+        }
+
+   
+        void joinGame(dynamic data)
+        {
+            ViewBag.operation = "joingame";
+            int user_id = data.user_id;
+            int game_id = data.game_id;
+            var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
+            var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
+
+            if (game.Players != null && game.Players.Contains(user))
+            {
+                ViewBag.status = "error";
+                ViewBag.message = "User is already joined to game";
+            }
+            else
+            {
+                ViewBag.message = "Successfully joined game";
+                if (user.Game != null)
+                {
+                    user.Game.Players.Remove(user);
+                }
+                ViewData["game"] = game;
+                GameCard gamecard = game.GetNextGameCard();
+                gamecard = db.GameCards.SingleOrDefault(gc => gc.GameCardID == gamecard.GameCardID);
+                ViewData["gamecard"] = gamecard;
+                user.GameCard = gamecard;
+                user.Game = game;
+                if (game.Players == null) game.Players = new List<UserProfile>();
+                game.Players.Add(user);
+                db.SaveChanges();
             }
         }
 
         void createGame(dynamic data)
         {
-            ViewBag.Operation = "creategame";
-            ViewBag.Message = "Successfully created game";
+            ViewBag.operation = "creategame";
+            ViewBag.message = "Successfully created game";
             Game game = new Game();
             game.Name = data.name;
             game.Description = data.description;
@@ -284,8 +346,21 @@ namespace KingBingo.Controllers
             game.Private = data["private"];
             game.NumbersIndex = 0;
             game.Numbers = new List<int>();
-            List<UserProfile> players = new List<UserProfile>();
-            players.Add(db.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name));
+            int user_id = data.user_id;
+            game.Players = new List<UserProfile>();
+
+            UserProfile createdByUser = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
+            createdByUser.Game = game;
+            game.Players.Add(createdByUser);
+        
+
+            //generate unique gamecards
+            game.GenerateGameCards(game.UserLimit);
+            foreach (GameCard gc in game.GameCards)
+            {
+                db.GameCards.Add(gc);
+            }
+
             string[] splitString = { "," };
             string temp = data.player_ids;
             string[] playerIDs = temp.Split(splitString, StringSplitOptions.None);
@@ -293,29 +368,24 @@ namespace KingBingo.Controllers
             foreach (string player_id in playerIDs)
             {
                 int tempUser_id = System.Convert.ToInt32(player_id);
-                players.Add(db.UserProfiles.SingleOrDefault(u => u.UserId == tempUser_id));
+                var playerUser = db.UserProfiles.SingleOrDefault(u => u.UserId == tempUser_id);
+              
+                
                 //create an invite notification for each player                                        
             }
-            //generate unique gamecards
-            game.GameCards = new List<GameCard>();
-            GameCard tempGameCard = new GameCard
-            {
-                Numbers = new int[25] {
-                    11,13,4,2,3,
-                    22,27,30,28,20,
-                    33,31,-1,38,37,
-                    58,57,53,49,56,
-                    74,63,65,67,69},
-                Hash = "0123456789ABCDEF"
-            };
-            game.GameCards.Add(tempGameCard);
+            createdByUser.GameCard = game.GetNextGameCard();
+          
+          
+        
 
-            ViewData["GameCard"] = tempGameCard;
-            game.Players = players;
+            ViewData["gamecard"] = createdByUser.GameCard;
+           
             game.Results = new List<Result>();
             db.Games.Add(game);
             db.SaveChanges();
-            ViewData["Game"] = game;
+            List<Game> games = new List<Game>();
+            games.Add(game);
+            ViewData["games"] = games;
         }
 
 

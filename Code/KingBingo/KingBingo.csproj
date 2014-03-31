@@ -405,6 +405,12 @@
     <Content Include="Views\Service\docs\quitgame.md" />
     <Content Include="Views\Service\docs\auth.md" />
     <Content Include="Views\Service\docs\getuser.md" />
+    <Content Include="Views\Service\docs\creategame.md" />
+    <Content Include="Views\Service\docs\inviteusers.md" />
+    <Content Include="Views\Service\docs\addfriend.md" />
+    <Content Include="Views\Service\docs\acceptfriend.md" />
+    <Content Include="Views\Service\docs\rejectfriend.md" />
+    <Content Include="Views\Service\docs\getfriends.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -175,5 +175,29 @@ namespace TestJSON
 
             txtResponse.Text = PostDataWithOperation("creategame", post_json); 
         }
+
+        private void btnJoinGame_Click(object sender, EventArgs e)
+        {
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+            post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
+            txtRequest.Text = post_json;
+            txtResponse.Text = PostDataWithOperation("joingame", post_json); 
+        }
+
+        private void btnQuitGame_Click(object sender, EventArgs e)
+        {
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+            post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
+            txtRequest.Text = post_json;
+            txtResponse.Text = PostDataWithOperation("quitgame", post_json); 
+        }
+
+        private void btnGetNextNumber_Click(object sender, EventArgs e)
+        {
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+            post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
+            txtRequest.Text = post_json;
+            txtResponse.Text = PostDataWithOperation("getnumber", post_json); 
+        }
     }
 }

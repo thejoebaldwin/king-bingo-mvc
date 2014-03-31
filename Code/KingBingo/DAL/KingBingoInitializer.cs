@@ -72,26 +72,12 @@ namespace KingBingo.DAL
             //GAMECARD
             var gameCards = new List<GameCard>
             {
-                new GameCard{Numbers = new int[25] {
-                    11,13,4,2,3,
-                    22,27,30,28,20,
-                    33,31,-1,38,37,
-                    58,57,53,49,56,
-                    74,63,65,67,69},
-                    Hash = "0123456789ABCDEF"
-                },
-                new GameCard{Numbers = new int[25] {
-                    12,3,7,1,10,
-                    27,25,26,22,17,
-                    32,41,-1,33,43,
-                    55,58,59,54,48,
-                    73,75,70,62,67
-                },
-                    Hash = "0123456789ABCDEF"
-                }
-
+               GameCard.GenerateGameCard(),
+               GameCard.GenerateGameCard()
             };
-            gameCards.ForEach(g => context.GameCards.Add(g));
+            gameCards.ForEach(gc => context.GameCards.Add(gc));
+
+
             context.SaveChanges();
 
             //USERS
@@ -169,8 +155,16 @@ namespace KingBingo.DAL
             //GAMES
             var games = new List<Game>
             {
-                new Game{Name = "New Game 1", Description="New game description", WinLimit=1,UserLimit=3,   Speed=50, Created=DateTime.Now, Private=false,NumbersIndex=0,Numbers = new List<int> {1, 2, 3, 4}, Players = players}
+                new Game{Name = "New Game 1", Description="New game description", WinLimit=1,UserLimit=3,   Speed=50, Created=DateTime.Now, Private=false, Players = players}
             };
+
+            games[0].GenerateGameCards(games[0].UserLimit);
+            foreach (GameCard gc in games[0].GameCards)
+            {
+                context.GameCards.Add(gc);
+            }
+
+            context.SaveChanges();
             games[0].Results = new List<Result>();
             games.ForEach(g => context.Games.Add(g));
             context.SaveChanges();

@@ -36,7 +36,8 @@
 @foreach (var b in user.Badges)
 {
    
-    <img src="~/@b.ImagePath" alt="@b.Name" />
+   
+    <img src="@Url.Content(b.ImagePath)" alt="loading" />
 }
      
 
