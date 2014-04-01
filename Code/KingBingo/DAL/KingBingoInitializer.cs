@@ -11,7 +11,7 @@ using WebMatrix.WebData;
 namespace KingBingo.DAL
 {
 
-
+    
   
    public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseAlways<KingBingoContext>
     //public class DropCreateIfChangeInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<KingBingoContext>

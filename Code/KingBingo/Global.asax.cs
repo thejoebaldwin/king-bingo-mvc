@@ -25,9 +25,12 @@ namespace KingBingo
             Database.SetInitializer(new KingBingo.DAL.DropCreateIfChangeInitializer());
             KingBingoContext context = new KingBingoContext();
             context.Database.Initialize(true);
+            
             if (!WebSecurity.Initialized)
                 WebSecurity.InitializeDatabaseConnection("DefaultConnection",
                      "UserProfile", "UserId", "UserName", autoCreateTables: true);
+            
+            
             AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

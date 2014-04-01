@@ -25,11 +25,7 @@ namespace KingBingo.Controllers
         }
 
 
-        public string getPostBody(HttpRequestBase request)
-        {
-            string data = new System.IO.StreamReader(Request.InputStream).ReadToEnd();
-            return data;
-        }
+        
 
         protected void createUser(string username, string password, bool admin)
         {
@@ -66,7 +62,7 @@ namespace KingBingo.Controllers
             {
                 try
                 {
-                    string json = getPostBody(Request);
+                    string json = new System.IO.StreamReader(Request.InputStream).ReadToEnd();
                     dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
                     if (operation == "auth")
@@ -80,8 +76,8 @@ namespace KingBingo.Controllers
                         if (hash == user.AuthHash())
                         {
 
-                            user.AuthenticationToken = Guid.NewGuid().ToString();
-                            user.AuthenticationTokenExpires = DateTime.Now.AddDays(7);
+                            user.GenerateAuthenticationToken();
+
                             db.SaveChanges();
                             ViewData["user"] = user;
 

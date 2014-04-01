@@ -83,6 +83,13 @@ namespace KingBingo.Models
             return UserProfile.createAuthHashFromHash(this.PasswordHash);
         }
 
+        public void GenerateAuthenticationToken()
+        {
+               AuthenticationToken = Guid.NewGuid().ToString();
+               AuthenticationTokenExpires = DateTime.Now.AddDays(7);
+
+        }
+
 
         public virtual ICollection<Badge> Badges { get; set; }
         public virtual ICollection<Friend> Friends { get; set; }
