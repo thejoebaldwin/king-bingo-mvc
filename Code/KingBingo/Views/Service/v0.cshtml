@@ -1,5 +1,4 @@
 ﻿@{
-
     Layout = null;
     var games = ViewBag.games;
     var users = ViewBag.users;
@@ -13,8 +12,15 @@
     var user_id = ViewBag.userid;
     var hash = ViewBag.hash;
     var gamecard = ViewBag.gamecard;
+    var nextnumbertime = ViewBag.nextnumbertime;
 }
-
+@functions {
+    public string ToUnixTime(DateTime date)
+    {
+        var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        return Convert.ToInt64((date.ToUniversalTime() - epoch).TotalSeconds).ToString();
+    }
+   }
 {
     "status": "@ViewBag.Status",
     "operation": "@ViewBag.Operation",
@@ -27,12 +33,14 @@
     {
           @Html.Raw(String.Format(",\"number\": \"{0}\"", number))
     }
+    @if (nextnumbertime != null)
+    {
+         @Html.Raw(String.Format(",\"next_number_time\": \"{0}\"", ToUnixTime(nextnumbertime)))
+    }
     @if (timestamp != null)
     {
          @String.Format(",\"timestamp\": \"{0}\"", timestamp)
     }
-
-
     @if (user != null)
     {
              @Html.Raw(",\"user\":{")
@@ -41,13 +49,13 @@
              @Html.Raw(String.Format("\"name\": \"{0}\",", user.Name))
              @Html.Raw(String.Format("\"bio\": \"{0}\",", user.Bio))
              @Html.Raw(String.Format("\"Email\": \"{0}\",", user.Email))
-             @Html.Raw(String.Format("\"created\": \"{0}\",", user.Created))
+             @Html.Raw(String.Format("\"created\": \"{0}\",", ToUnixTime(user.Created)))
              @Html.Raw(String.Format("\"device_token\": \"{0}\",", user.DeviceToken))
              @Html.Raw(@String.Format("\"zip\": \"{0}\",", user.Zip))
-             @Html.Raw(String.Format("\"birthdate\": \"{0}\",", user.Birthdate))
+             @Html.Raw(String.Format("\"birthdate\": \"{0}\",", ToUnixTime(user.Birthdate)))
              @Html.Raw(String.Format("\"receive_emails\": \"{0}\",", user.ReceiveEmails))
              @Html.Raw(String.Format("\"authentication_token\": \"{0}\",", user.AuthenticationToken))
-             @Html.Raw(String.Format("\"authentication_token_expires\": \"{0}\"", user.AuthenticationTokenExpires))
+             @Html.Raw(String.Format("\"authentication_token_expires\": \"{0}\"", ToUnixTime(user.AuthenticationTokenExpires)))
              if (user.ProfileImage != null)
              {
               @Html.Raw(String.Format(",\"profile_image\": \"{0}\"", user.ProfileImage))
@@ -56,18 +64,15 @@
              {
               @Html.Raw(String.Format(",\"game_id\": \"{0}\"", user.Game.GameID))
              } 
-
              @Html.Raw(String.Format(",\"active\": \"{0}\"", user.Active))
              @Html.Raw(String.Format(",\"sex\": \"{0}\"", user.Sex))
-       
              @Html.Raw(String.Format(",\"confirmed\": \"{0}\"", user.Confirmed))
-        if (user.Location != null)
-        {
-             @Html.Raw(String.Format(",\"location\": \"{0}\"", user.Location))
-    }
+             if (user.Location != null)
+             {
+                @Html.Raw(String.Format(",\"location\": \"{0},{1}\"", user.Location[0], user.Location[1]))
+             }
             @Html.Raw("}")
     }
-
     @if (users != null)
     {
          @Html.Raw(",\"users\":[")  
@@ -81,23 +86,25 @@
                @Html.Raw(String.Format("\"user_id\": \"{0}\",", u.UserId))
                @Html.Raw(String.Format("\"username\": \"{0}\",", u.UserName))
                @Html.Raw(String.Format("\"name\": \"{0}\",", u.Name))
-               @Html.Raw(String.Format("\"bio\": \"{0}\"", u.Bio))
+               @Html.Raw(String.Format("\"bio\": \"{0}\",", u.Bio))
+               @Html.Raw(String.Format("\"wins\": \"{0}\",", u.WinCount))
+               @Html.Raw(String.Format("\"rank\": \"{0}\",", u.Rank))
+               @Html.Raw(String.Format("\"friends\": \"{0}\",", u.FriendCount))
+               @Html.Raw(String.Format("\"games\": \"{0}\"", u.GameCount))
             userCount++;
             @Html.Raw("}")
         }
          @Html.Raw("]")  
     }
-    
    @if (gamecard != null)
             {
 
-                @Html.Raw(",\"game_card\":{")
+                @Html.Raw(",\"game_card\":\"")
                    @Html.Raw(String.Join(",", gamecard.Numbers))
-               @Html.Raw("}")
+               @Html.Raw("\"")
 
             }
-   
-    @if (games != null)
+   @if (games != null)
     {
           @Html.Raw(",\"games\":[")  
         foreach(var g in games) 
@@ -114,7 +121,7 @@
             @Html.Raw(String.Format("\"win_count\": \"{0}\",", g.WinCount())  ) 
             @Html.Raw(String.Format("\"user_limit\": \"{0}\",", g.UserLimit)   )
             @Html.Raw(String.Format("\"user_count\":\"{0}\",", g.UserCount())   )
-            @Html.Raw(String.Format("\"created_date\":\"{0}\"", g.Created.ToString("yyyy-MM-dd hh:mm:ss")))
+            @Html.Raw(String.Format("\"created\":\"{0}\"", ToUnixTime(g.Created)))
             if (g.Players != null)
             {
                 @Html.Raw(",\"players\":\"")
@@ -128,12 +135,12 @@
                     @p.UserId
                     playerCount++;
                 }
+                    @Html.Raw("\"")
             }
-            @Html.Raw("\"")  
+        
             @Html.Raw("}")  
             gameCount++;
         }
            @Html.Raw("]")  
     }
-        
 }

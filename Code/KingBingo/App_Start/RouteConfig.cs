@@ -33,6 +33,8 @@ namespace KingBingo
                defaults: new { controller = "Service", action = "Index" }
            );
 
+        
+
             routes.MapRoute(
               name: "Terms",
               url: "terms",
@@ -58,6 +60,8 @@ namespace KingBingo
             url: "secure/games/{id}",
             defaults: new { controller = "Secure", action = "GameDetail" }
             );
+
+
             
             routes.MapRoute(
             name: "Secure",

@@ -67,7 +67,8 @@ namespace TestJSON
 
         private void btnGetAllGames_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"}";
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+            post_json += ",\"page\":\"0\"}";
             txtRequest.Text = post_json;
             txtResponse.Text = PostDataWithOperation("allgames", post_json);
         }
@@ -75,17 +76,19 @@ namespace TestJSON
         private void btnGetAllUsers_Click(object sender, EventArgs e)
         {
          
-            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token +  "\"}";
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token +  "\"";
+            post_json += ",\"page\":\"0\"}";
             txtRequest.Text = post_json;
             txtResponse.Text = PostDataWithOperation("allusers", post_json); ;
         }
 
         private void processResponse(string response_json)
         {
-            dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(response_json);
-            var user = data.user;
+          
             try
             {
+                dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(response_json);
+                var user = data.user;
                 user_id = user.user_id;
 
                 authentication_token = user.authentication_token;

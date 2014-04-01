@@ -69,6 +69,15 @@ namespace KingBingo.Models
         public virtual GameCard GameCard { get; set; }
         public virtual Game Game { get; set; }
 
+
+        public int? FriendCount { get; set; }
+        public int? WinCount { get; set; }
+        public int? Rank { get; set; }
+        public int? GameCount { get; set; }
+
+      
+
+
         public string AuthHash()
         {
             return UserProfile.createAuthHashFromHash(this.PasswordHash);
@@ -81,7 +90,7 @@ namespace KingBingo.Models
         public virtual ICollection<Result> Results { get; set; }
 
 
-       
+        
 
         static public string SHA1(string cleartext)
         {

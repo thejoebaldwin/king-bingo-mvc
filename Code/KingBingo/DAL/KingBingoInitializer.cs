@@ -91,6 +91,10 @@ namespace KingBingo.DAL
             user1.Created = DateTime.Now;
             user1.DeviceToken = "0123456789ABCDEF";
             user1.Zip = "54915";
+            user1.WinCount = 0;
+            user1.FriendCount = 0;
+            user1.Rank = 0;
+            user1.GameCount = 0;
             user1.Birthdate = new DateTime(1977, 10, 25);
             user1.ReceiveEmails = true;
             user1.AuthenticationToken = "0123456789ABCDEF";
@@ -114,6 +118,11 @@ namespace KingBingo.DAL
             user2.Created = DateTime.Now;
             user2.DeviceToken = "0123456789ABCDEF";
             user2.Zip = "54915";
+            user2.Zip = "54915";
+            user2.WinCount = 0;
+            user2.FriendCount = 0;
+            user2.Rank = 0;
+            user2.GameCount = 0;
             user2.Birthdate = new DateTime(1977, 10, 25);
             user2.ReceiveEmails = true;
             user2.AuthenticationToken = "0123456789ABCDEF";

@@ -2,14 +2,16 @@
 
 Supported Operations
 
-- [Get All Games](/service/v0/allgames "Get All Games")
-- [Get All Users](/service/v0/allusers "Get All Users")
-- [Get User](/service/v0/getuser "Get User")
-- [Authenticate](/service/v0/auth "Authenticate")
-- [Create User](/service/v0/createuser "Create User")
-- [Join Game](/service/v0/joingame "Join Game")
-- [Get Number](/service/v0/getnumber "Get Number")
-- [Quit Game](/service/v0/quitgame "Quit Game")
+- [Create User](v0/createuser "Create User")
+- [Authenticate](v0/auth "Authenticate")
+- [Get All Games](v0/allgames "Get All Games")
+- [Get All Users](v0/allusers "Get All Users")
+- [Join Game](v0/joingame "Join Game")
+- [Quit Game](v0/quitgame "Quit Game")
+- [Get Number](v0/getnumber "Get Number")
+- [Get User](v0/getuser "Get User")
+
+
 
 
 Usage  

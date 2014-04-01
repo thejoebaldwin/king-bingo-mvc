@@ -1,17 +1,19 @@
 ##Auth
 
-**POST Request to http://itweb.fvtc.edu/service/v0/auth**
+####*POST Request to http://itweb.fvtc.edu/service/v0/auth*
 
-Use this command to join a login to an existing game. A successful response will return the Game ID and a comma delimited list of numbers, in order, that make up the user's bingo card. The numbers should be placed in the card from top to bottom in a 5 x 5 grid. For example: using the below "board" data should produce a card with the following numbers in the "B" column, from top to bottom: 12, 1, 15, 2, and 9.
 
-- **game_id**: Id of the game attempting to join. 
-- **user_id**: Id of user to join to game
-- **timestamp**: UTC Time of request/response
-- **board_id**: Returned id of generated board (bingo card)
-- **board**: Comma-delimited list of numbers making up the generated board
+Use this command to authenticate to the web service and gain and authentication token for subsequent requests.
+
+- **username**: add explanation
+- **hash**: add explanation
 - **status**: "ok" if successful, "error" if problem with request
 - **message**: information about response
-
+- **user**: Array of user attributes
+- **user_id**: Id of user authenticated
+- **authentication_token**: add explanation
+- **authentication_token_expires**: add explanation
+- **game_id**: add explanation
 
 * * *
 
@@ -29,20 +31,20 @@ Use this command to join a login to an existing game. A successful response will
     "status": "ok",
     "operation": "auth",
     "message": "Successfully authenticated",
-    "hash": "DMK3DB2yBmJaBi7zV4TiSyJGc5E=",
     "user": {
         "user_id": "1",
         "username": "test1",
         "name": "Test User 1",
         "bio": "This is the Bio for test user 1",
         "Email": "test@test.com",
-        "created": "3/26/2014 5:40:42 PM",
+        "created": "1396329702",
         "device_token": "0123456789ABCDEF",
         "zip": "54915",
-        "birthdate": "10/25/1977 12:00:00 AM",
+        "birthdate": "246603600",
         "receive_emails": "True",
-        "authentication_token": "3cc4b84d-5cfb-4a87-ac5c-27ec0ba51fd4",
-        "authentication_token_expires": "4/2/2014 5:49:43 PM",
+        "authentication_token": "0798d29a-eb34-4ef1-97a5-75d5b458458a",
+        "authentication_token_expires": "1396934916",
+        "game_id": "1",
         "active": "True",
         "sex": "Male",
         "confirmed": "True"

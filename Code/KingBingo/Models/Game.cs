@@ -23,7 +23,22 @@ namespace KingBingo.Models
         public bool Private { get; set; }
         public int NumbersIndex { get; set; }
         public DateTime NextNumberTime { get; set; }
-        public ICollection<int> Numbers { get; set; }
+
+
+        public string InternalData { get; set; }
+
+        public ICollection<int> Numbers
+        {
+            get
+            {
+                return Array.ConvertAll(InternalData.Split(','), Int32.Parse);
+            }
+            set
+            {
+                InternalData = String.Join(",", value.Select(p => p.ToString()).ToArray());
+            }
+        }
+
 
         public ICollection<UserProfile> Players { get; set; }
         public virtual ICollection<Result> Results { get; set; }
@@ -35,7 +50,14 @@ namespace KingBingo.Models
         }
         public int UserCount()
         {
-            return 0;
+            if (Players == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return Players.Count;
+            }
         }
 
         public Game()
@@ -58,7 +80,7 @@ namespace KingBingo.Models
                 numbers[i] = number;
             }
             Numbers = numbers;
-            NumbersIndex = 0;
+            NumbersIndex = -1;
             NextNumberTime = DateTime.Now;
         }
 
@@ -119,16 +141,17 @@ namespace KingBingo.Models
 
         public int GetNextNumber()
         {
-            //need logic to not advance numbersIndex until time past since last draw
             int number = -1;
             if (NumbersIndex < 70)
             {
-                number = Numbers.ElementAt(NumbersIndex);
+          
+               
                 if (DateTime.Now > NextNumberTime)
                 {
                     NumbersIndex++;
                     NextNumberTime = DateTime.Now.AddSeconds(30);
                 }
+                number = Numbers.ElementAt(NumbersIndex);
             }
             return number;
         }

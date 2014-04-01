@@ -4,6 +4,8 @@
 
 Use this command to quit a login to a previously joined game. 
 
+- **user_id**: id of the user making the request
+- **authentication_token**: token retrieved by authenticating via the auth operation
 - **game_id**: Id of the game attempting to quit. 
 - **user_id**: Id of user to quit game
 - **timestamp**: UTC Time of request/response

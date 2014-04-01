@@ -1,9 +1,11 @@
 ##Get Number
 
-**POST Request to http://itweb.fvtc.edu/service/v0/getnumber**
+####POST Request to http://itweb.fvtc.edu/service/v0/getnumber
 
 Returns the next drawn number in a given game. The user\_id must match that of a user who has been joined to the game of the requested game\_id.
 
+- **user_id**: id of the user making the request
+- **authentication_token**: token retrieved by authenticating via the auth operation
 - **game_id**: Id of the game user is joined to
 - **user_id**: Id of user making request
 - **timestamp**: UTC Time of request/response

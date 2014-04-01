@@ -64,6 +64,8 @@ namespace KingBingo.Controllers
             ViewBag.message = "";
             if (Request.HttpMethod == "POST")
             {
+                try
+                {
                     string json = getPostBody(Request);
                     dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
@@ -82,7 +84,7 @@ namespace KingBingo.Controllers
                             user.AuthenticationTokenExpires = DateTime.Now.AddDays(7);
                             db.SaveChanges();
                             ViewData["user"] = user;
-                          
+
                             ViewBag.message = "Successfully authenticated";
                         }
                         else
@@ -113,11 +115,17 @@ namespace KingBingo.Controllers
                                 user.Name = username;
                                 user.Email = email;
                                 user.Bio = "";
-                             
-                               
+
+
                                 user.Created = DateTime.Now;
                                 user.DeviceToken = "";
                                 user.Zip = "";
+
+                                user.WinCount = 0;
+                                user.FriendCount = 0;
+                                user.Rank = 0;
+                                user.GameCount = 0;
+
                                 user.Birthdate = new DateTime(1977, 10, 25);
                                 user.ReceiveEmails = true;
                                 user.AuthenticationToken = Guid.NewGuid().ToString();
@@ -163,14 +171,25 @@ namespace KingBingo.Controllers
                             {
                                 if (operation == "allgames")
                                 {
-                                    ViewData["games"] = db.Games;
+                                    int resultSize = 25;
+                                    int page = 0;
+                                    if (data.page != null)
+                                    {
+                                        page = data.page;
+                                    }
+                                    ViewData["games"] = db.Games.OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allgames";
                                     ViewBag.message = "Successfully retrieved list of all games";
                                 }
                                 if (operation == "allusers")
                                 {
-
-                                    ViewData["users"] = db.UserProfiles;
+                                    int resultSize = 25;
+                                    int page = 0;
+                                    if (data.page != null)
+                                    {
+                                        page = data.page;
+                                    }
+                                    ViewData["users"] = db.UserProfiles.OrderBy(u => u.UserName).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allusers";
                                     ViewBag.message = "Successfully retrieved list of all users";
                                 }
@@ -179,7 +198,9 @@ namespace KingBingo.Controllers
                                     ViewBag.operation = "getuser";
                                     ViewBag.message = "Successfully retrieved user";
                                     int query_user_id = data.user_id;
-                                    ViewData["user"] = db.UserProfiles.SingleOrDefault(u => u.UserId == query_user_id);
+                                    var users = new List<UserProfile>();
+                                    users.Add(db.UserProfiles.SingleOrDefault(u => u.UserId == query_user_id));
+                                    ViewData["users"] = users;
                                 }
                                 else if (operation == "creategame")
                                 {
@@ -230,6 +251,11 @@ namespace KingBingo.Controllers
                                 {
                                     quitGame(data);
                                 }
+                                else if (operation == "updateuser")
+                                {
+                                    ViewBag.operation = "updateuser";
+                                    ViewBag.message = "Successfully updated user";
+                                }
                                 else if (operation == "getfriends")
                                 {
                                     ViewBag.operation = "getfriends";
@@ -245,7 +271,15 @@ namespace KingBingo.Controllers
                             ViewBag.message = "missing authentication data";
                         }
 
+
                     } // before this
+                 
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.status = "error";
+                    ViewBag.message = "check your json and documentation for proper format";
+                }
                 return View();
             }
             else
@@ -260,20 +294,43 @@ namespace KingBingo.Controllers
             ViewBag.operation = "getnumber";
             ViewBag.message = "Successfully retrieved number";
             int game_id = data.game_id;
-            var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
-            int number = game.GetNextNumber();
-            if (number > -1)
+
+
+            int user_id = data.user_id;
+         
+            var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
+            //var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
+            var game = db.Games.Include("Players").Where(g => g.GameID == game_id).FirstOrDefault();
+            if (!game.Players.Contains(user))
             {
-                ViewBag.number = Game.BingofyNumber(number);
+                ViewBag.Status = "error";
+                ViewBag.message = "User not joined to game.";
             }
             else
             {
-                ViewBag.status = "error";
-                ViewBag.message = "All Numbers have been drawn for this game";
-                ViewBag.number = -1;
+                ViewBag.message = "Successfully retrieved number";
+                int number = game.GetNextNumber();
+                ViewBag.nextnumbertime = game.NextNumberTime;
+                if (number > -1)
+                {
+                    ViewBag.number = Game.BingofyNumber(number);
+                }
+                else
+                {
+                    ViewBag.status = "error";
+                    ViewBag.message = "All Numbers have been drawn for this game";
+                    ViewBag.number = -1;
+                }
+                db.SaveChanges();
             }
-            db.SaveChanges();
+         
         }
+
+        //public string ToUnixTime(DateTime date)
+        //{
+        //    var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        //    return Convert.ToInt64((date.ToUniversalTime() - epoch).TotalSeconds).ToString();
+        //}
 
         void quitGame(dynamic data)
         {
@@ -307,7 +364,7 @@ namespace KingBingo.Controllers
             int game_id = data.game_id;
             var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
             var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
-
+          
             if (game.Players != null && game.Players.Contains(user))
             {
                 ViewBag.status = "error";
@@ -345,7 +402,7 @@ namespace KingBingo.Controllers
             game.Created = DateTime.Now;
             game.Private = data["private"];
             game.NumbersIndex = 0;
-            game.Numbers = new List<int>();
+            //game.Numbers = new List<int>();
             int user_id = data.user_id;
             game.Players = new List<UserProfile>();
 

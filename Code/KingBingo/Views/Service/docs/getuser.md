@@ -1,9 +1,11 @@
 ##Get Users
 
-**POST Request to http://itweb.fvtc.edu/service/v0/allusers**
+####POST Request to http://itweb.fvtc.edu/service/v0/allusers
 
 Returns all currently joined users in a given game
 
+- **user_id**: id of the user making the request
+- **authentication_token**: token retrieved by authenticating via the auth operation
 - **status**: "ok" if successful, "error" if problem with request
 - **users**: Array of user elements, each containing it's own user\_id and login attributes.
 - **message**: Message associated with the response
