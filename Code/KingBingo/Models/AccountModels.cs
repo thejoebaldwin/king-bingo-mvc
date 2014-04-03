@@ -58,7 +58,7 @@ namespace KingBingo.Models
         public bool? ReceiveEmails { get; set; }
         public string AuthenticationToken { get; set; }
         public DateTime? AuthenticationTokenExpires { get; set; }
-        public byte?[] ProfileImage { get; set; }
+        public byte[] ProfileImage { get; set; }
         public string ConfirmationKey { get; set; }
         public bool? Active { get; set; }
         public Sex? Sex { get; set; }
@@ -147,6 +147,25 @@ namespace KingBingo.Models
                 roles.AddUsersToRoles(new[] { username }, new[] { "admin" });
             }
 
+        }
+
+
+        public static byte[] GetProfileImage(string name)
+        {
+            System.Drawing.Image img = System.Drawing.Image.FromFile(System.Web.HttpContext.Current.Server.MapPath("~/Images/Profiles/" + name));
+            MemoryStream ms = new MemoryStream();
+            if (name.ToLower().Contains(".jpg"))
+            {
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            else  if (name.ToLower().Contains(".png"))
+            {
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            }
+          
+          
+
+           return ms.ToArray();
         }
 
     }

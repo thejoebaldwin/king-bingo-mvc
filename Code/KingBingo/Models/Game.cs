@@ -84,11 +84,11 @@ namespace KingBingo.Models
             NextNumberTime = DateTime.Now;
         }
 
-        public void GenerateGameCards(int players)
+        public void GenerateGameCards()
         {
             int count = 0;
             Hashtable hash = new Hashtable();
-            while (count < players * 2)
+            while (count < UserLimit * 2)
             {
                 GameCard gc = GameCard.GenerateGameCard();
                 if (!hash.ContainsKey(gc.Hash()))

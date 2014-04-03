@@ -410,7 +410,7 @@ namespace KingBingo.Controllers
         
 
             //generate unique gamecards
-            game.GenerateGameCards(game.UserLimit);
+            game.GenerateGameCards();
             foreach (GameCard gc in game.GameCards)
             {
                 db.GameCards.Add(gc);

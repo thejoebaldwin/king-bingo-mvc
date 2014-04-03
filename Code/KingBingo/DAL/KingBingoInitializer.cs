@@ -8,6 +8,8 @@ using System.Web.Security;
 
 using WebMatrix.WebData;
 
+using System.IO;
+
 namespace KingBingo.DAL
 {
 
@@ -85,6 +87,12 @@ namespace KingBingo.DAL
             user1.Location = new Decimal?[2] { 88, -120 };
             user1.GameCard = gameCards[0];
             user1.Badges = badgesUser1;
+
+
+
+            user1.ProfileImage = UserProfile.GetProfileImage("test.jpeg");
+
+         
             //
             UserProfile.CreateUser("test2", "test2", true);
             var user2 = context.UserProfiles.SingleOrDefault(u => u.UserName == "test2");
@@ -96,7 +104,7 @@ namespace KingBingo.DAL
             user2.Created = DateTime.Now;
             user2.DeviceToken = "0123456789ABCDEF";
             user2.Zip = "54915";
-            user2.Zip = "54915";
+      
             user2.WinCount = 0;
             user2.FriendCount = 0;
             user2.Rank = 0;
@@ -105,7 +113,7 @@ namespace KingBingo.DAL
             user2.ReceiveEmails = true;
             user2.AuthenticationToken = "0123456789ABCDEF";
             user2.AuthenticationTokenExpires = DateTime.Now.Add(new TimeSpan(7, 0, 0, 0));
-            user2.ProfileImage = null;
+            user2.ProfileImage =  UserProfile.GetProfileImage("crown-icon.png"); ;
             user2.ConfirmationKey = "0123456789ABCDEF";
             user2.Active = true;
             user2.Sex = Sex.Female;
@@ -145,7 +153,7 @@ namespace KingBingo.DAL
                 new Game{Name = "New Game 1", Description="New game description", WinLimit=1,UserLimit=3,   Speed=50, Created=DateTime.Now, Private=false, Players = players}
             };
 
-            games[0].GenerateGameCards(games[0].UserLimit);
+            games[0].GenerateGameCards();
             foreach (GameCard gc in games[0].GameCards)
             {
                 context.GameCards.Add(gc);

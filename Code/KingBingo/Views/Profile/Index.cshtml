@@ -30,7 +30,7 @@
               </tr>
           </tbody>
       </table>
-     
+      @Html.Raw("<img src=\"data:image/jpeg;base64," + Convert.ToBase64String( user.ProfileImage) + "\" />");
    Badges<br />
     
 @foreach (var b in user.Badges)
