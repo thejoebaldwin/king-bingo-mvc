@@ -8,9 +8,7 @@ Use this command to join a login to an existing game. A successful response will
 - **authentication_token**: token retrieved by authenticating via the auth operation
 - **game_id**: Id of the game attempting to join. 
 - **user_id**: Id of user to join to game
-- **timestamp**: UTC Time of request/response
-- **board_id**: Returned id of generated board (bingo card)
-- **board**: Comma-delimited list of numbers making up the generated board
+- **game_card**: Comma-delimited list of numbers making up the generated board
 - **status**: "ok" if successful, "error" if problem with request
 - **message**: information about response
 
@@ -33,11 +31,22 @@ Use this command to join a login to an existing game. A successful response will
     "message": "Successfully joined game",
     "game_card": "4,11,14,1,5,23,27,19,22,17,31,36,44,45,39,51,55,60,57,59,63,68,67,64,69"
 	}
+* * *
+
 If user has already joined game, the following will be returned instead.
 	
 	{
     "status": "error",
     "operation": "joingame",
     "message": "User is already joined to game"
+	}
+* * *
+
+If the game is full the following will result.
+	
+	{
+    "status": "error",
+    "operation": "joingame",
+    "message": "Maximum amount of players have joined"
 	}
 * * *

@@ -12,7 +12,7 @@ Use this command to authenticate to the web service and gain and authentication 
 - **user**: Array of user attributes
 - **user_id**: Id of user authenticated
 - **authentication_token**: add explanation
-- **authentication_token_expires**: add explanation
+- **authentication\_token\_expires**: add explanation
 - **game_id**: add explanation
 
 * * *

@@ -109,7 +109,7 @@
                                 <li>@Html.ActionLink("Terms", "Terms", "Home")</li>
                                 <li>@Html.ActionLink("Privacy", "Privacy", "Home")</li>
                                 <li>@Html.ActionLink("Contact", "Index", "Contact")</li>
-                                <li>@Html.ActionLink("API", "v0", "Service")</li>
+                                <li>@Html.ActionLink("API", "v0", new { controller = "Service", operation = string.Empty })</li>
                              </ul>
                        </div>
              </div>

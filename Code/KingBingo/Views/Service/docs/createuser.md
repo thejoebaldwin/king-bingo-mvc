@@ -1,8 +1,18 @@
 ##Create User
 
-####POST Request to http://itweb.fvtc.edu/service/v0/createuser
+####POST Request to *http://itweb.fvtc.edu/service/v0/createuser*
 
 Creates a user and returns a user\_id, or existing user\_id if given login name already exists.
+
+- **username**: add explanation
+- **password**: add explanation
+- **email**: add explanation
+- **status**: "ok" if successful, "error" if problem with request
+- **message**: Message associated with the response
+- **user**: Array of user attributes
+- **user_id**: Id of user authenticated
+- **authentication_token**: add explanation
+- **authentication\_token\_expires**: add explanation
 
 * * *
 

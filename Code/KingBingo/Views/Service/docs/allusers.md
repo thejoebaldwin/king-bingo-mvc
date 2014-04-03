@@ -7,7 +7,7 @@ Returns all users in the system in batches of 25
 - **user_id**: id of the user making the request
 - **authentication_token**: token retrieved by authenticating via the auth operation
 - **status**: "ok" if successful, "error" if problem with request
-- **users**: Array of user elements, each containing it's own user\_id and attributes.
+- **users**: Array of user elements,  each consisting of public user attributes.
 - **message**: Message associated with the response
 - **page**: Optional. The set of results to return. A page value of 0 would return the first 25 users, 1 would return 26-50, etc. When excluded from the post body a value of 0 is default.
 

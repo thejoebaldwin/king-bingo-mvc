@@ -7,7 +7,7 @@ Returns all currently in progress games
 - **user_id**: id of the user making the request
 - **authentication_token**: token retrieved by authenticating via the auth operation
 - **games**: Array of game elements, each containing it's own game\_id, win\_limit, win\_count, user\_limit, user\_count, and created\_date.
-- **game_id**: id of the game. used in joingame command to join user to the game.
+- **game_id**: id of the game
 - **win_limit**: number of wins allowed before game is closed
 - **win_count**: number of wins so far in current game
 - **user_limit**: limit of how many users are allowed to participate in current game
