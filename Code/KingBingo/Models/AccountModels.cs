@@ -15,7 +15,8 @@ using System.ComponentModel;
 using System.Data;
 
 using System.Linq;
-
+using System.Web.Security;
+using WebMatrix.WebData;
 using System.Threading.Tasks;
 
 
@@ -122,6 +123,30 @@ namespace KingBingo.Models
             hash = hash + DateTime.Today.ToString("yyyy-MM-dd"); //YYYY-MM-dd
             hash = SHA1(hash);
             return hash;
+        }
+
+        public static void CreateUser(string username, string password, bool admin)
+        {
+            var roles = (SimpleRoleProvider)Roles.Provider;
+            var membership = (SimpleMembershipProvider)Membership.Provider;
+
+            if (admin)
+            {
+                if (!roles.RoleExists("Admin"))
+                {
+                    roles.CreateRole("Admin");
+                }
+            }
+
+            if (membership.GetUser(username, false) == null)
+            {
+                membership.CreateUserAndAccount(username, password);
+            }
+            if (!roles.GetRolesForUser(username).Contains("Admin"))
+            {
+                roles.AddUsersToRoles(new[] { username }, new[] { "admin" });
+            }
+
         }
 
     }

@@ -18,29 +18,7 @@ namespace KingBingo.DAL
     {
 
 
-        protected void createUser(string username, string password, bool admin)
-        {
-            var roles = (SimpleRoleProvider)Roles.Provider;
-            var membership = (SimpleMembershipProvider)Membership.Provider;
-
-            if (admin)
-            {
-                if (!roles.RoleExists("Admin"))
-                {
-                    roles.CreateRole("Admin");
-                }
-            }
-
-            if (membership.GetUser(username, false) == null)
-            {
-                membership.CreateUserAndAccount(username, password);
-            }
-            if (!roles.GetRolesForUser(username).Contains("Admin"))
-            {
-                roles.AddUsersToRoles(new[] { username }, new[] { "admin" });
-            }
-            
-        }
+        
 
         protected override void Seed(KingBingoContext context)
         {
@@ -81,7 +59,7 @@ namespace KingBingo.DAL
             context.SaveChanges();
 
             //USERS
-            createUser("test1", "test1", true);
+            UserProfile.CreateUser("test1", "test1", true);
             var user1 = context.UserProfiles.SingleOrDefault(u => u.UserName == "test1");
             user1.Name = "Test User 1";
             user1.Email = "test@test.com";
@@ -108,7 +86,7 @@ namespace KingBingo.DAL
             user1.GameCard = gameCards[0];
             user1.Badges = badgesUser1;
             //
-            createUser("test2", "test2", true);
+            UserProfile.CreateUser("test2", "test2", true);
             var user2 = context.UserProfiles.SingleOrDefault(u => u.UserName == "test2");
             user2.Name = "Test User 2";
             user2.Bio = "This is the Bio for test user 2";
@@ -143,8 +121,8 @@ namespace KingBingo.DAL
             };
             context.SaveChanges();
 
-            var friend1 = new Friend { User = user1, FriendUser = user2, Created = DateTime.Now, Status = RequestStatus.Accepted };
-            var friend2 = new Friend { User = user2, FriendUser = user1, Created = DateTime.Now, Status = RequestStatus.Accepted };
+            var friend1 = new Friend { User = user1, FriendUser = user2, Status = RequestStatus.Accepted };
+            var friend2 = new Friend { User = user2, FriendUser = user1, Status = RequestStatus.Accepted };
 
             context.Friends.Add(friend1);
             context.Friends.Add(friend2);

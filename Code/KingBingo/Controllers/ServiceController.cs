@@ -193,7 +193,7 @@ namespace KingBingo.Controllers
                                 {
                                     ViewBag.operation = "getuser";
                                     ViewBag.message = "Successfully retrieved user";
-                                    int query_user_id = data.user_id;
+                                    int query_user_id = data.query_user_id;
                                     var users = new List<UserProfile>();
                                     users.Add(db.UserProfiles.SingleOrDefault(u => u.UserId == query_user_id));
                                     ViewData["users"] = users;
@@ -216,8 +216,8 @@ namespace KingBingo.Controllers
                                     int friend_id = data.friend_id;
 
                                     var friend_user = db.UserProfiles.SingleOrDefault(u => u.UserId == friend_id);
-                                    var friend1 = new Friend { User = user, FriendUser = friend_user, Created = DateTime.Now, Status = RequestStatus.Requested };
-                                    var friend2 = new Friend { User = friend_user, FriendUser = user, Created = DateTime.Now, Status = RequestStatus.Pending };
+                                    var friend1 = new Friend { User = user, FriendUser = friend_user, Status = RequestStatus.Requested };
+                                    var friend2 = new Friend { User = friend_user, FriendUser = user, Status = RequestStatus.Pending };
                                     db.Friends.Add(friend1);
                                     db.Friends.Add(friend2);
                                     db.SaveChanges();
@@ -257,6 +257,8 @@ namespace KingBingo.Controllers
                                     ViewBag.operation = "getfriends";
                                     ViewBag.message = "Successfully retrieved list of friends";
                                     //get all friendship requests
+                                    var friends = db.Friends.Include("FriendUser").Where(f => f.User == user);
+                                    ViewData["friends"] = friends;
                                 }
                             }
                         }

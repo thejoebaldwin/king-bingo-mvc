@@ -8,7 +8,7 @@
     var number = ViewBag.number;
     var timestamp = ViewBag.timestamp;
     var user = ViewBag.user;
-    var friendships = ViewBag.friendships;
+    var friends = ViewBag.friends;
     var user_id = ViewBag.userid;
     var hash = ViewBag.hash;
     var gamecard = ViewBag.gamecard;
@@ -72,6 +72,18 @@
                 @Html.Raw(String.Format(",\"location\": \"{0},{1}\"", user.Location[0], user.Location[1]))
              }
             @Html.Raw("}")
+    }
+    @if (friends != null)
+    {
+         @Html.Raw(",\"friends\":[")  
+         foreach(var f in friends) 
+         {
+               @Html.Raw(String.Format("{\"username\": \"{0}\",", f.FriendUser.UserName))
+               @Html.Raw(String.Format("\"name\": \"{0}\",", f.FriendUser.Name))
+               @Html.Raw(String.Format("\"bio\": \"{0}\"}", f.FriendUser.Status))
+               @Html.Raw(String.Format("\"bio\": \"{0}\"}", f.FriendUser.Bio))
+         }
+         @Html.Raw("]")
     }
     @if (users != null)
     {

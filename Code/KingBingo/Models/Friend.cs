@@ -24,6 +24,12 @@ namespace KingBingo.Models
 
         public virtual UserProfile User { get; set; }
         public virtual UserProfile FriendUser { get; set; }
+
+        public Friend()
+        {
+            Created = DateTime.Now;
+        }
+
         
     }
 }
