@@ -16,12 +16,14 @@
        <link rel="shortcut icon" href="~/images/favicon.ico" />
     <title>@ViewBag.Title</title>
     <!-- Bootstrap -->
-          @Styles.Render("~/Bootstrap/css/bootstrap.min.css")
-          @Styles.Render("~/Bootstrap/css/bootstrap-theme.min.css")
-          @Styles.Render("~/Content/Site.css")
+       @Styles.Render("~/Bootstrap/css/bootstrap.min.css")
+       @Styles.Render("~/Bootstrap/css/bootstrap-theme.min.css")
+       @Styles.Render("~/Content/Site.css")
 
        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/Bootstrap/js/bootstrap.min.js")
+       @Scripts.Render("~/Bootstrap/js/bootstrap.min.js")
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -120,6 +122,10 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
       
      
-        @RenderSection("scripts", required: false)
+      @RenderSection("scripts", required: false)
+
+
+    
+
   </body>
 </html>

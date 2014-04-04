@@ -1,9 +1,101 @@
 ﻿@{
     ViewBag.Title = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = ViewBag.User;
 }
 
 <h2>Profile</h2>
+
+  @Html.Raw("<img src=\"data:image/jpeg;base64," + Convert.ToBase64String( user.ProfileImage) + "\" />")
+
+
+<script>
+
+    function getFile() {
+        document.getElementById("btnFile").click();
+    }
+
+</script>
+
+
+
+
+
+    <!-- Button trigger modal -->
+<button class="btn btn-success btn-lg" data-toggle="modal" data-target="#UploadModal" onclick="modalClick()">
+  Change Picture
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Step 1 -->
+     
+        <style>
+
+
+        </style>
+
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Change your picture</h4>
+      </div>
+      <div class="modal-body">
+        
+          <form action="/secure/UploadImages" method="post" enctype="multipart/form-data">
+
+              <div class="alert alert-danger"  id="errorMessage" style="display:none">
+  <a href="#" class="alert-link" id="errorMessageText">...</a>
+    </div>
+
+           <input type="button"  class="btn btn-success btn-lg" value="Choose File" onclick="uploadClick()" />
+
+              <button type="button" class="btn btn-lg" data-dismiss="modal">Close</button>
+
+                        <input id="fileUpload" style="display:none"  type="file" name="file"  title="file upload" />
+                
+  <input type="hidden" name="user_id" value="@user.UserId" />
+  <input class="btn btn-success btn-lg" id="btnSubmit" type="submit" value="Submit" style="display:none"   />
+</form>
+
+
+      </div>
+      <div class="modal-footer">
+
+      
+      </div>
+         
+
+    </div>
+
+      <script>
+          $("#fileUpload").change(function () {
+
+              var fileUpload = document.getElementById("fileUpload");
+              var file = fileUpload.files[0];
+
+              $("#errorMessage").show();
+              $("#errorMessageText").html(file.name);
+
+              //if (file.size > 100) {
+                  
+                //  $("#errorMessage").show();
+                  //$("#errorMessageText").html('Filesize must 2.5mb or below');
+               
+              //}
+              //else {
+                  //document.getElementById("btnSubmit").click();
+              //}
+          });
+      </script>
+
+  </div>
+
+      
+ 
+</div>
+
 
 
 
@@ -12,5 +104,18 @@
     Email:<input name="Email" id="Email" type="text" /><br />
     Bio:<input name="Bio" id="Bio" type="text" /><br />
     Zip:<input name="Zip" id="Zip" type="text" /><br />
+   
+
+
     <input type="submit" value="save" />
 </form>
+
+
+<script>
+    function uploadClick() {
+
+        document.getElementById('fileUpload').click();
+            
+    }
+
+</script>

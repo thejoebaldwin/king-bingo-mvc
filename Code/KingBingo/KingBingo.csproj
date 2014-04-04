@@ -224,6 +224,7 @@
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Bootstrap\js\bootstrap.file-input.js" />
     <Content Include="Bootstrap\js\bootstrap.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -414,6 +415,7 @@
     <Content Include="Views\Service\docs\acceptfriend.md" />
     <Content Include="Views\Service\docs\rejectfriend.md" />
     <Content Include="Views\Service\docs\getfriends.md" />
+    <Content Include="Views\Secure\UploadComplete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

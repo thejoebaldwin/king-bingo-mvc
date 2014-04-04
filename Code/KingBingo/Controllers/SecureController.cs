@@ -8,6 +8,7 @@ using System.Web.Security;
 using WebMatrix.WebData;
 using KingBingo.Models;
 using System.Data.Entity;
+using System.IO;
 
 namespace KingBingo.Controllers
 {
@@ -21,9 +22,9 @@ namespace KingBingo.Controllers
         public ActionResult Index()
         {
 
-        //    var membership = (SimpleMembershipProvider)Membership.Provider;
-          
-          //  db.UserProfiles.SingleOrDefault(u => u.UserName == "test2");
+            //    var membership = (SimpleMembershipProvider)Membership.Provider;
+
+            //  db.UserProfiles.SingleOrDefault(u => u.UserName == "test2");
 
             return View();
         }
@@ -32,8 +33,8 @@ namespace KingBingo.Controllers
         public ActionResult Profile()
         {
 
-          
-
+            var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
+            ViewData["user"] = user;
             return View();
         }
 
@@ -41,7 +42,7 @@ namespace KingBingo.Controllers
         public ActionResult Notifications()
         {
 
-          
+
 
             return View();
         }
@@ -61,7 +62,7 @@ namespace KingBingo.Controllers
             ViewData["Game"] = game;
             return View();
         }
-        
+
         [Authorize]
         public ActionResult Friends()
         {
@@ -71,5 +72,41 @@ namespace KingBingo.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult UploadComplete()
+        {
+
+            return View();
+        }
+
+         [Authorize]
+        [HttpPost]
+        public ActionResult UploadImages(HttpPostedFileBase file, int user_id)
+        {
+           /*
+             if (file.Count() <= 1)
+            {
+                return RedirectToAction("BrowseImages");
+            }
+             */
+            //foreach (var image in uploadImages)
+            //{
+            if (file.ContentLength > 0)
+                {
+                    byte[] imageData = null;
+                    using (var binaryReader = new BinaryReader(file.InputStream))
+                    {
+                        imageData = binaryReader.ReadBytes(file.ContentLength);
+                    }
+
+                    var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
+                    user.ProfileImage = imageData;
+                    db.SaveChanges();
+                 
+                }
+           // }
+           return RedirectToAction("Profile");
+
+        }
     }
 }
