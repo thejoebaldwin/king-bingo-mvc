@@ -221,6 +221,7 @@
     <Content Include="Bootstrap\css\bootstrap.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Bootstrap\css\jquery.Jcrop.css" />
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -231,6 +232,9 @@
     <Content Include="Bootstrap\js\bootstrap.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Bootstrap\js\jquery.color.js" />
+    <Content Include="Bootstrap\js\jquery.Jcrop.min.js" />
+    <Content Include="Bootstrap\js\jquery.min.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />

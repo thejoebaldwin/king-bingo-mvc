@@ -9,6 +9,7 @@ using WebMatrix.WebData;
 using KingBingo.Models;
 using System.Data.Entity;
 using System.IO;
+using System.Drawing;
 
 namespace KingBingo.Controllers
 {
@@ -81,7 +82,7 @@ namespace KingBingo.Controllers
 
          [Authorize]
         [HttpPost]
-        public ActionResult UploadImages(HttpPostedFileBase file, int user_id)
+        public ActionResult UploadImages(HttpPostedFileBase file, int user_id, int x0, int y0, int x1, int y1)
         {
            /*
              if (file.Count() <= 1)
@@ -98,6 +99,24 @@ namespace KingBingo.Controllers
                     {
                         imageData = binaryReader.ReadBytes(file.ContentLength);
                     }
+                    System.Drawing.Image img;
+
+                    using (var ms = new System.IO.MemoryStream(imageData)) {
+                        img = System.Drawing.Image.FromStream(ms);
+                    }
+
+                    img = cropImage(img, new Rectangle(x0, y0, x1-x0, y1-y0));
+                    
+                   MemoryStream newstream = new MemoryStream();
+           
+             
+           
+                    img.Save(newstream, System.Drawing.Imaging.ImageFormat.Png);
+           
+          
+          
+
+                 imageData = newstream.ToArray();
 
                     var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
                     user.ProfileImage = imageData;
@@ -108,5 +127,16 @@ namespace KingBingo.Controllers
            return RedirectToAction("Profile");
 
         }
+
+         private static Image cropImage(Image img, Rectangle cropArea)
+         {
+             Bitmap bmpImage = new Bitmap(img);
+             Bitmap bmpCrop = bmpImage.Clone(cropArea, bmpImage.PixelFormat);
+             return (Image)(bmpCrop);
+         }
+
     }
+
+
+   
 }
