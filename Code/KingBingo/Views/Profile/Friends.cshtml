@@ -36,8 +36,13 @@
     
 @foreach (var f in user.Friends)
 {
-   <div> @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null)</div>
-  
+   <div> 
+       @Html.Raw("<img src=\"data:image/jpeg;base64," + Convert.ToBase64String( user.ProfileImage) + "\" />")
+
+       @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null)
+
+   </div>
+   
    
 }
      

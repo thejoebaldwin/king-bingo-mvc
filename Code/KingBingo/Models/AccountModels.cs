@@ -154,7 +154,7 @@ namespace KingBingo.Models
         {
             System.Drawing.Image img = System.Drawing.Image.FromFile(System.Web.HttpContext.Current.Server.MapPath("~/Images/Profiles/" + name));
             MemoryStream ms = new MemoryStream();
-            if (name.ToLower().Contains(".jpg"))
+            if (name.ToLower().Contains(".jpg") || name.ToLower().Contains(".jpeg"))
             {
                 img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
             }

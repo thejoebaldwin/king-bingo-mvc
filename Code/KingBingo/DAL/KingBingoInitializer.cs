@@ -79,7 +79,7 @@ namespace KingBingo.DAL
             user1.ReceiveEmails = true;
             user1.AuthenticationToken = "0123456789ABCDEF";
             user1.AuthenticationTokenExpires = DateTime.Now.Add(new TimeSpan(7, 0, 0, 0));
-            user1.ProfileImage = null;
+            user1.ProfileImage = UserProfile.GetProfileImage("crown-icon.png"); ;
             user1.ConfirmationKey = "0123456789ABCDEF";
             user1.Active = true;
             user1.Sex = Sex.Male;
@@ -90,7 +90,7 @@ namespace KingBingo.DAL
 
 
 
-            user1.ProfileImage = UserProfile.GetProfileImage("test.jpeg");
+            
 
          
             //

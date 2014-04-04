@@ -10,16 +10,17 @@
 </hgroup>
 
 <article>
+    @Html.Raw("<img src=\"data:image/jpeg;base64," + Convert.ToBase64String( user.ProfileImage) + "\" />")
       @user.Bio
 
       <table>
           <thead>
               <tr>
-              <th>Games</th>
+               <th>Games</th>
                <th>Wins</th>
                <th>Rank</th>
-                 <th>@Html.ActionLink("Friends", "Friends",new { controller = "Profile", username = ViewContext.RouteData.Values["username"] }, null)</th>
-                  </tr>
+               <th>@Html.ActionLink("Friends", "Friends",new { controller = "Profile", username = ViewContext.RouteData.Values["username"] }, null)</th>
+              </tr>
           </thead>
           <tbody>
               <tr>
@@ -30,7 +31,7 @@
               </tr>
           </tbody>
       </table>
-      @Html.Raw("<img src=\"data:image/jpeg;base64," + Convert.ToBase64String( user.ProfileImage) + "\" />");
+      
    Badges<br />
     
 @foreach (var b in user.Badges)
