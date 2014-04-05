@@ -65,8 +65,8 @@ namespace KingBingo
             
             routes.MapRoute(
             name: "Secure",
-            url: "secure/{action}",
-            defaults: new { controller = "Secure", action = "Index" }
+            url: "secure/{action}/{status}",
+            defaults: new { controller = "Secure", action = "Index", status = string.Empty }
             );
 
 

@@ -18,13 +18,17 @@
     <!-- Bootstrap -->
        @Styles.Render("~/Bootstrap/css/bootstrap.min.css")
        @Styles.Render("~/Bootstrap/css/bootstrap-theme.min.css")
-           @Styles.Render("~/Bootstrap/css/jquery.Jcrop.css")
+       @Styles.Render("~/Bootstrap/css/jquery.Jcrop.css")
+       @Styles.Render("~/Bootstrap/css/datepicker.css")
        @Styles.Render("~/Content/Site.css")
 
-           @Scripts.Render("~/bundles/jquery")
+       @Scripts.Render("~/bundles/jquery")
        @Scripts.Render("~/Bootstrap/js/bootstrap.min.js")
-        @Scripts.Render("~/Bootstrap/js/jquery.Jcrop.min.js")
-           @Scripts.Render("~/Bootstrap/js/jquery.color.js")
+       @Scripts.Render("~/Bootstrap/js/jquery.Jcrop.min.js")
+       @Scripts.Render("~/Bootstrap/js/jquery.color.js")
+       @Scripts.Render("~/Bootstrap/js/bootstrap-datepicker.js")
+      
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -97,10 +101,10 @@
              </div>
             <div class="container theme-showcase" role="main">
             <!-- Main jumbotron for a primary marketing message or call to action -->
-            <div class="jumbotron">
+          <div class="jumbotron">
                 @RenderSection("featured", required: false)
                 @RenderBody()
-            </div>
+      </div> 
         <div id="push"></div>
         </div> <!-- /container -->
        </div> <!-- wrap -->

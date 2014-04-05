@@ -31,9 +31,9 @@ namespace KingBingo.Controllers
         }
 
         [Authorize]
-        public ActionResult Profile()
+        public ActionResult Profile(string status)
         {
-
+            ViewBag.Status = status;
             var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
             ViewData["user"] = user;
             return View();
@@ -133,6 +133,37 @@ namespace KingBingo.Controllers
              Bitmap bmpImage = new Bitmap(img);
              Bitmap bmpCrop = bmpImage.Clone(cropArea, bmpImage.PixelFormat);
              return (Image)(bmpCrop);
+         }
+
+
+
+         public ActionResult UpdateProfile(string Name, string Email, string Bio, string Zip, DateTime BirthDate, string Sex)
+         {
+
+
+             var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
+           
+             user.Email = Email;
+             user.Name = Name;
+             user.Bio = Bio;
+             user.Zip = Zip;
+             user.Birthdate = BirthDate;
+             if (Sex == "Male")
+             {
+                 user.Sex = Models.Sex.Male;
+             }
+             else
+             {
+                 user.Sex = Models.Sex.Female;
+             }
+
+             db.SaveChanges();
+             ViewData["user"] = user;
+             ViewBag.Updated = true;
+
+
+             return RedirectToAction("Profile", new { status = "updated" });
+      
          }
 
     }

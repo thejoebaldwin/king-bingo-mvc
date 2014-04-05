@@ -2,75 +2,117 @@
     ViewBag.Title = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var user = ViewBag.User;
+    
 }
 
-<h2>Profile</h2>
 
-  @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( user.ProfileImage) + "\" />")
+@if (ViewBag.Status == "updated")
+{
 
+      <div class="alert alert-success" >
+                    <a href="#" class="alert-link" >Your Profile Has Been Successfully Updated</a>
+               </div>
 
-<script>
+}
 
-    function getFile() {
-        document.getElementById("btnFile").click();
-    }
+   <h2>Profile</h2>
+<div  class='row'>
+    <div class='col-md-3'>
+        @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String(user.ProfileImage) + "\" />")
+        <a onclick="getFile()">Change Picture</a>
+    </div>
+    <div class="col-md-9">
+        <form action="/secure/updateprofile" method="post" role="form">
+             <div class="form-group">
+                <label for="Name">Name</label>
+                <input class="form-control" name="Name" id="Name" type="text" value="@user.Name" />
+            </div>
+            <div class="form-group">
+                 <label for="Email">Email</label>
+                <input class="form-control" name="Email" id="Email" type="text" value="@user.Email" />
+            </div>
+            <div class="form-group">
+                 <label for="Bio">Bio</label>
+                <input class="form-control" name="Bio" id="Bio" type="text" value="@user.Bio" />
+            </div>
+              <div class="form-group">
+                <label>
+                    <input type="radio" name="Sex" id="sexRadioMale" value="Male" @if (user.Sex == KingBingo.Models.Sex.Male)
+                                                                                  { @Html.Raw("checked") }>
+                     Male
+                     <input type="radio" name="Sex" id="sexRadioFemail" value="Female"  @if (user.Sex == KingBingo.Models.Sex.Female)
+                                                                                        { @Html.Raw("checked") } >
+                    Female
+                </label>
+            </div>
+            <div class="form-group">
+                 <label for="Zip">Zip</label>
+                <input class="form-control" name="Zip" id="Zip" type="text" value="@user.Zip" />
+            </div>
+            <div class="form-group">
+                 <label for="Birthdate">Birthdate</label>
+                <input class="form-control" name="Birthdate" id="Birthdate" type="text" value='@user.Birthdate.ToString("MM/dd/yy")' />
+            </div>
+            <div class="form-group">
+                 <label>
+                        <input   id="ReceiveEmailsCheckbox" type="checkbox" />Receive Emails?
+                 </label>
+            </div>
+             <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Save Changes" />
+            </div>
+             <!--public decimal?[] Location { get; set; } -->
+        </form>
+    </div>
+</div>
 
-</script>
 
 
 
 
 
     <!-- Button trigger modal -->
-<button class="btn btn-success btn-lg" data-toggle="modal" data-target="#UploadModal" ">
-  Change Picture
+<button class="btn btn-success btn-lg" id="btnFile" data-toggle="modal" data-target="#UploadModal" style="display:none;">
+ 
 </button>
 
 <!-- Modal -->
 <div class="modal fade" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-    
         <div class="modal-header">
              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
              <h4 class="modal-title" id="myModalLabel">Change your picture</h4>
         </div>
-          <div class="modal-body">
-          <form action="/secure/UploadImages" method="post" enctype="multipart/form-data">
-
-              <div class="alert alert-danger"  id="errorMessage" style="display:none">
-  <a href="#" class="alert-link" id="errorMessageText">...</a>
+        <div class="modal-body">
+           <form action="/secure/UploadImages" method="post" enctype="multipart/form-data">
+               <div class="alert alert-danger"  id="errorMessage" style="display:none">
+                    <a href="#" class="alert-link" id="errorMessageText"></a>
+               </div>
+               <div class="alert alert-success"  id="successMessage" style="display:none">
+                    <a href="#" class="alert-link" id="successMessageText"></a>
+               </div>
+               <input type="button"  class="btn btn-success btn-lg" value="Choose File" onclick="uploadClick()" />
+               <!-- <button type="button" class="btn btn-lg" data-dismiss="modal">Close</button> -->
+               <input id="fileUpload" style="display:none"  type="file" name="file"  title="file upload" />
+               <input type="hidden" name="user_id" value="@user.UserId" />
+               <input type="hidden" id="x0" name="x0" />
+               <input type="hidden" id="y0" name="y0" />
+               <input type="hidden" id="x1" name="x1" />
+               <input type="hidden" id="y1" name="y1"  />
+               <input class="btn btn-primary btn-lg" id="btnSubmit" type="submit" value="OK" style="display:none"   />
+            </form>
+        </div>
+        <div class="modal-footer">
+        </div>
     </div>
-
-           <input type="button"  class="btn btn-success btn-lg" value="Choose File" onclick="uploadClick()" />
-
-              <button type="button" class="btn btn-lg" data-dismiss="modal">Close</button>
-
-                        <input id="fileUpload" style="display:none"  type="file" name="file"  title="file upload" />
-                
-                 <input type="hidden" name="user_id" value="@user.UserId" />
-                <input type="hidden" id="x0" name="x0" />
-                <input type="hidden" id="y0" name="y0" />
-                <input type="hidden" id="x1" name="x1" />
-                <input type="hidden" id="y1" name="y1"  />
-
-  <input class="btn btn-success btn-lg" id="btnSubmit" type="submit" value="OK" style="display:none"   />
-</form>
-
-
-      </div>
-      <div class="modal-footer">
-
-      
-      </div>
-         
-
-    </div>
-      @section scripts {
+    @section scripts {
       <script>
+
+          $('#Birthdate').datepicker();
+
           $("#fileUpload").change(function () {
 
-           
               var fileUpload = document.getElementById("fileUpload");
               var file = fileUpload.files[0];
               var reader = new FileReader();
@@ -81,7 +123,7 @@
               var t = file.type.split('/')[1];
               var s = ~~(file.size / 1024);
 
-              if (t == 'png' || t == 'jpg' || t == 'jpeg') {
+              if (t == 'png' || t == 'jpg' || t == 'jpeg' || t == 'bmp') {
 
                   reader.readAsDataURL(file);
                   reader.onload = function (_file) {
@@ -90,41 +132,43 @@
                       image.onload = function () {
                           var w = this.width,
                               h = this.height;
-
-                          $("#errorMessage").show();
-                          $('#errorMessageText').html('<img  id="jcrop_target" src="' + this.src + '"> ' + w + 'x' + h + ' ' + s + ' kb' + t + ' ' + n + '<br>');
-                          $(function () {
-                              $('#jcrop_target').Jcrop({
-                                  aspectRatio: 1,
-                                  minSize: [100, 100],
-                                  setSelect: [20, 20, 120, 120],
-                                  onChange: showCoords
+                          $('#successMessageText').html('');
+                          $("#successMessage").hide();
+                          $("#btnSubmit").hide();
+                          if (w > 700 || h > 700) {
+                              $("#errorMessage").show();
+                              $('#errorMessageText').html("Please select an image smaller than 700 x 700");
+                          }
+                          else if (w < 100 || h < 100) {
+                              $("#errorMessage").show();
+                              $('#errorMessageText').html("Please select an image larger than 100 x 100");
+                          }
+                          else {
+                              $("#errorMessage").hide();
+                              $("#successMessage").show();
+                              $('#successMessageText').html('<img id="jcrop_target" src="' + this.src + '"> ' + w + 'x' + h + ' ' + s + 'kb ' + ' ' + n + '<br>');
+                              $("#btnSubmit").show();
+                              $(function () {
+                                  $('#jcrop_target').Jcrop({
+                                      aspectRatio: 1,
+                                      minSize: [100, 100],
+                                      setSelect: [20, 20, 120, 120],
+                                      onChange: showCoords
+                                  });
                               });
-                          });
+                          }
 
-                          $("#btnSubmit").show();
+                        
                       };
                   };
 
 
               }
               else {
-
+                  $("#errorMessage").show();
+                  $('#errorMessageText').html("Please upload a valid image file.");
               }
-
-          
-
-              //if (file.size > 100) {
-                  
-                //  $("#errorMessage").show();
-                  //$("#errorMessageText").html('Filesize must 2.5mb or below');
-               
-              //}
-              //else {
-                  //document.getElementById("btnSubmit").click();
-              //}
           });
-
 
           function showCoords(c) {
               // variables can be accessed here as
@@ -133,16 +177,21 @@
               $('#y0').val(c.y);
               $('#x1').val(c.x2);
               $('#y1').val(c.y2);
-              
           };
 
           function uploadClick() {
-
               document.getElementById('fileUpload').click();
+              $("#btnSubmit").hide();
+              $('#successMessageText').html('');
+              $('#successMessage').hide('');
+          }
 
+          function getFile() {
+
+              document.getElementById("btnFile").click();
           }
       </script>
-          }
+     }
 
   </div>
 
@@ -153,14 +202,5 @@
 
 
 
-<form action="/secure/profile/create" method="post">
-    Name:<input name="Name" id="Name" type="text" /><br />
-    Email:<input name="Email" id="Email" type="text" /><br />
-    Bio:<input name="Bio" id="Bio" type="text" /><br />
-    Zip:<input name="Zip" id="Zip" type="text" /><br />
-   
 
-
-    <input type="submit" value="save" />
-</form>
 

@@ -221,10 +221,12 @@
     <Content Include="Bootstrap\css\bootstrap.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Bootstrap\css\datepicker.css" />
     <Content Include="Bootstrap\css\jquery.Jcrop.css" />
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Bootstrap\js\bootstrap-datepicker.js" />
     <Content Include="Bootstrap\js\bootstrap.file-input.js" />
     <Content Include="Bootstrap\js\bootstrap.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
