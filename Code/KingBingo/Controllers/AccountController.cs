@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using KingBingo.Filters;
 using KingBingo.Models;
+using KingBingo.DAL;
 
 namespace KingBingo.Controllers
 {
@@ -17,6 +18,7 @@ namespace KingBingo.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        private KingBingoContext db = new KingBingoContext();
         //
         // GET: /Account/Login
 
@@ -80,7 +82,13 @@ namespace KingBingo.Controllers
                 // Attempt to register the user
                 try
                 {
+                    
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+                    //use password to generate password hash for json authentication
+                    var user = db.UserProfiles.SingleOrDefault(u => u.UserName == model.UserName);
+                    user.PasswordHash = UserProfile.SHA1(model.Password);
+                    db.SaveChanges();
+                  
                     WebSecurity.Login(model.UserName, model.Password);
                     return RedirectToAction("Index", "Home");
                 }

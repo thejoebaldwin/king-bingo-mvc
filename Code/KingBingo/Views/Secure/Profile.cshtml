@@ -55,9 +55,13 @@
             </div>
             <div class="form-group">
                  <label>
-                        <input   id="ReceiveEmailsCheckbox" type="checkbox" />Receive Emails?
+                        <input   id="ReceiveEmailsCheckbox" type="checkbox" @if (user.ReceiveEmails)
+                                                                                        { @Html.Raw("checked") } />Receive Emails?
                  </label>
             </div>
+              <input type="hidden" id="ReceiveEmails" name="ReceiveEmails" value="@if (user.ReceiveEmails)
+                                                                                { @Html.Raw("true") } else 
+                                                                                                    { @Html.Raw("false")  }" />
              <div class="form-group">
                 <input class="btn btn-primary" type="submit" value="Save Changes" />
             </div>
@@ -100,6 +104,7 @@
                <input type="hidden" id="y0" name="y0" />
                <input type="hidden" id="x1" name="x1" />
                <input type="hidden" id="y1" name="y1"  />
+              
                <input class="btn btn-primary btn-lg" id="btnSubmit" type="submit" value="OK" style="display:none"   />
             </form>
         </div>
@@ -108,6 +113,18 @@
     </div>
     @section scripts {
       <script>
+
+          
+
+          $("#ReceiveEmailsCheckbox").change(function () {
+              if ($("#ReceiveEmailsCheckbox").attr("checked") == undefined) {
+                  $("#ReceiveEmails").val('false');
+              }
+              else {
+                  $("#ReceiveEmails").val('true');
+              }
+             
+          });
 
           $('#Birthdate').datepicker();
 

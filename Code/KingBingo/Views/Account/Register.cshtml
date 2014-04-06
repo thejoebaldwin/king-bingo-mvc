@@ -12,24 +12,23 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
 
-    <fieldset>
-        <legend>Registration Form</legend>
-        <ol>
-            <li>
+
+       
+           <div class="form-group">
                 @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName)
-            </li>
-            <li>
+                @Html.TextBoxFor(m => m.UserName ,null, new { @class= "form-control"})
+            </div>
+               <div class="form-group">
                 @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
-            </li>
-            <li>
+                @Html.PasswordFor(m => m.Password, new { @class= "form-control"})
+           </div>
+               <div class="form-group">
                 @Html.LabelFor(m => m.ConfirmPassword)
-                @Html.PasswordFor(m => m.ConfirmPassword)
-            </li>
-        </ol>
-        <input type="submit" value="Register" />
-    </fieldset>
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class= "form-control"})
+            </div>
+       
+        <input class="btn btn-primary" type="submit" value="Register" />
+  
 }
 
 @section Scripts {

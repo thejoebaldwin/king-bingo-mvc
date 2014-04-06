@@ -189,6 +189,12 @@ namespace KingBingo.Controllers
                                     ViewBag.operation = "allusers";
                                     ViewBag.message = "Successfully retrieved list of all users";
                                 }
+                                else if (operation == "updateprofileimage")
+                                {
+
+                                    //??
+
+                                }
                                 else if (operation == "getuser")
                                 {
                                     ViewBag.operation = "getuser";

@@ -29,11 +29,22 @@ namespace KingBingo.Controllers
             ViewData["gameCount"] = gameCount;
             ViewData["winCount"] = winCount;
             ViewData["User"] = user;
+
+            if (this.User != null)
+            {
+                ViewData["CurrentUserName"] = this.User.Identity.Name;
+            }
+
             return View();
         }
 
         public ActionResult Friends(string username)
         {
+
+            if (this.User != null)
+            {
+                ViewData["CurrentUserName"] = this.User.Identity.Name;
+            }
 
             var Username = username;
             var user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);

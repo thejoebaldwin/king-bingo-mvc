@@ -422,6 +422,7 @@
     <Content Include="Views\Service\docs\rejectfriend.md" />
     <Content Include="Views\Service\docs\getfriends.md" />
     <Content Include="Views\Secure\UploadComplete.cshtml" />
+    <Content Include="Views\Profile\ProfilePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

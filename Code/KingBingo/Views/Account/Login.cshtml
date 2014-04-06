@@ -11,46 +11,80 @@
 <section id="loginForm">
 
 @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-      
+        @Html.AntiForgeryToken()
+     <div id="summaryError" class="alert alert-danger">@Html.ValidationSummary(true)</div>
+    <div id="usernameError" class="alert alert-danger">@Html.ValidationMessageFor(m => m.UserName)</div>
+    <div id="passwordError" class="alert alert-danger">@Html.ValidationMessageFor(m => m.Password)</div>
        
-            <div class="control-group">
-                @Html.LabelFor(m => m.UserName)
-                 <div class="controls">
-                @Html.TextBoxFor(m => m.UserName)
-                @Html.ValidationMessageFor(m => m.UserName)
-                     </div>
-            </div>
-               <div class="control-group">
-                @Html.LabelFor(m => m.Password)
-                    <div class="controls">
-                @Html.PasswordFor(m => m.Password)
-                @Html.ValidationMessageFor(m => m.Password)
-                             </div>
+      
+        <div class="control-group">
+               @Html.LabelFor(m => m.UserName)
+           <div class="controls">
+               @Html.TextBoxFor(m => m.UserName,null, new { @class= "form-control", @id="username"})
+           </div>
+         </div>
+         <div class="control-group">
+               @Html.LabelFor(m => m.Password)
+               <div class="controls">
+                    @Html.PasswordFor(m => m.Password, new { @class= "form-control", @id="password"})
+               </div>
             </div>
           <div class="control-group">
-          Remember Me? @Html.CheckBoxFor(m => m.RememberMe)
-              
-                   </div>
-           
-             
-                        
-              
-          
-     
-        <input type="submit" value="Log in" />
-    </fieldset><br />
-    <p>
-        @Html.ActionLink("Sign Up", "Register") if you don't have an account.
-    </p>
+              Remember Me? @Html.CheckBoxFor(m => m.RememberMe)
+          </div>
+         <input type="submit" value="Log in" id="btnSubmit" class="btn btn-primary"  />
+         <br />
+        <p>
+            @Html.ActionLink("Sign Up", "Register") if you don't have an account.
+        </p>
 }
+
+   
 </section>
 
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+ 
+   
+
+    <script>
+
+        $('#usernameError').hide();
+        $('#passwordError').hide();
+        if ($('#summaryError').html() == '') {
+            $('#summaryError').hide();
+        }
+
+        $('#username').keypress(function () {
+           // $('#usernameError').hide();
+        });
+
+        $('#password').keypress(function () {
+           // $('#passwordError').hide();
+        });
+
+       
+        $('#usernameError').bind('DOMNodeInserted', function (event) {
+                $('#usernameError').show();
+        });
+        $('#usernameError').bind('DOMNodeRemoved', function (event) {
+            $('#usernameError').hide();
+        });
+
+        $('#passwordError').bind('DOMNodeInserted', function (event) {
+            $('#passwordError').show();
+        });
+        $('#passwordError').bind('DOMNodeRemoved', function (event) {
+            $('#passwordError').hide();
+        });
+
+        $('#summaryError').bind('DOMNodeInserted', function (event) {
+            $('#summaryError').show();
+        });
+        $('#summaryError').bind('DOMNodeRemoved', function (event) {
+            //$('#summaryError').hide();
+        });
+        </script>
 }

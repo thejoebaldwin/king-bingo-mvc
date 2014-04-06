@@ -137,7 +137,7 @@ namespace KingBingo.Controllers
 
 
 
-         public ActionResult UpdateProfile(string Name, string Email, string Bio, string Zip, DateTime BirthDate, string Sex)
+         public ActionResult UpdateProfile(string Name, string Email, string Bio, string Zip, DateTime BirthDate, string Sex, bool ReceiveEmails)
          {
 
 
@@ -148,6 +148,7 @@ namespace KingBingo.Controllers
              user.Bio = Bio;
              user.Zip = Zip;
              user.Birthdate = BirthDate;
+             user.ReceiveEmails = ReceiveEmails;
              if (Sex == "Male")
              {
                  user.Sex = Models.Sex.Male;
