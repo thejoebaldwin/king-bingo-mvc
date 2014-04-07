@@ -1,7 +1,8 @@
 ﻿
 @{
-    var user = @ViewBag.User;
-    ViewBag.Title = user.Name;
+    var user = @ViewBag.user;
+    var profileuser = @ViewBag.profileuser;
+    ViewBag.Title = profileuser.Name;
 }
 
        @Html.Partial("ProfilePartial", ViewData)
@@ -9,7 +10,7 @@
    Friends<br />
     
     
-@foreach (var f in user.Friends)
+@foreach (var f in profileuser.Friends)
 {
    <div> 
        @Html.Raw("<img  width=\"50px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( f.FriendUser.ProfileImage) + "\" />")
@@ -22,5 +23,5 @@
 }
      
 
-</article>
+
 

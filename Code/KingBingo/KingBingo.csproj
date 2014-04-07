@@ -423,6 +423,8 @@
     <Content Include="Views\Service\docs\getfriends.md" />
     <Content Include="Views\Secure\UploadComplete.cshtml" />
     <Content Include="Views\Profile\ProfilePartial.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Shared\_UsersPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

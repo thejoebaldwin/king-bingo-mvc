@@ -73,12 +73,18 @@
             this.label12 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label15 = new System.Windows.Forms.Label();
+            this.txtFriend_user_id = new System.Windows.Forms.TextBox();
+            this.txtFriend_friend_user_id = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.btnAddFriend = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabBarOperations.SuspendLayout();
             this.tabUser.SuspendLayout();
             this.tabGame.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGetAllGames
@@ -516,6 +522,11 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnAddFriend);
+            this.tabPage1.Controls.Add(this.label14);
+            this.tabPage1.Controls.Add(this.label13);
+            this.tabPage1.Controls.Add(this.txtFriend_friend_user_id);
+            this.tabPage1.Controls.Add(this.txtFriend_user_id);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Size = new System.Drawing.Size(794, 466);
@@ -531,6 +542,52 @@
             this.label15.Size = new System.Drawing.Size(29, 13);
             this.label15.TabIndex = 23;
             this.label15.Text = "Host";
+            // 
+            // txtFriend_user_id
+            // 
+            this.txtFriend_user_id.Location = new System.Drawing.Point(153, 98);
+            this.txtFriend_user_id.Name = "txtFriend_user_id";
+            this.txtFriend_user_id.Size = new System.Drawing.Size(100, 20);
+            this.txtFriend_user_id.TabIndex = 0;
+            this.txtFriend_user_id.Text = "1";
+            this.txtFriend_user_id.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // txtFriend_friend_user_id
+            // 
+            this.txtFriend_friend_user_id.Location = new System.Drawing.Point(153, 152);
+            this.txtFriend_friend_user_id.Name = "txtFriend_friend_user_id";
+            this.txtFriend_friend_user_id.Size = new System.Drawing.Size(100, 20);
+            this.txtFriend_friend_user_id.TabIndex = 1;
+            this.txtFriend_friend_user_id.Text = "2";
+            this.txtFriend_friend_user_id.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(58, 98);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(41, 13);
+            this.label13.TabIndex = 2;
+            this.label13.Text = "user_id";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(58, 159);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(73, 13);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "friend_user_id";
+            // 
+            // btnAddFriend
+            // 
+            this.btnAddFriend.Location = new System.Drawing.Point(168, 230);
+            this.btnAddFriend.Name = "btnAddFriend";
+            this.btnAddFriend.Size = new System.Drawing.Size(75, 23);
+            this.btnAddFriend.TabIndex = 4;
+            this.btnAddFriend.Text = "Add Friend";
+            this.btnAddFriend.UseVisualStyleBackColor = true;
+            this.btnAddFriend.Click += new System.EventHandler(this.btnAddFriend_Click);
             // 
             // frmTestJSON
             // 
@@ -557,6 +614,8 @@
             this.tabGame.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -609,6 +668,11 @@
         private System.Windows.Forms.Button btnGetNextNumber;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Button btnAddFriend;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox txtFriend_friend_user_id;
+        private System.Windows.Forms.TextBox txtFriend_user_id;
     }
 }
 

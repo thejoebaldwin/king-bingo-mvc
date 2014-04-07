@@ -202,5 +202,15 @@ namespace TestJSON
             txtRequest.Text = post_json;
             txtResponse.Text = PostDataWithOperation("getnumber", post_json); 
         }
+
+        private void btnAddFriend_Click(object sender, EventArgs e)
+        {
+            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
+            int friend_user_id = Convert.ToInt32(txtFriend_friend_user_id.Text);
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+            post_json += ", \"friend_id\":\"" + friend_user_id + "\"}";
+            txtRequest.Text = post_json;
+            txtResponse.Text = PostDataWithOperation("addfriend", post_json); 
+        }
     }
 }

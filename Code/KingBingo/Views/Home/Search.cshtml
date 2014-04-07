@@ -1,18 +1,15 @@
-﻿
-@{
-    var user = @ViewBag.user;
-    var profileuser = @ViewBag.profileuser;
-    ViewBag.Title = profileuser.Name;
+﻿@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var users = ViewBag.users;
 }
-@Html.Partial("ProfilePartial", ViewData)
-Badges<br />
-@foreach (var b in profileuser.Badges)
-{
-    <img src="@Url.Content(b.ImagePath)" alt="b.Name" />
-}
-     
 
-   @section scripts {
+<h2>Search</h2>
+
+
+@Html.Partial("_UsersPartial", ViewData)
+
+  @section scripts {
       <script>
 
           $(".friendForm").submit(function (event) {
@@ -47,5 +44,3 @@ Badges<br />
 
      </script>
    }
-
-

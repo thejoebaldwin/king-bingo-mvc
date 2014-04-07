@@ -144,8 +144,8 @@ namespace KingBingo.DAL
             user2.Friends.Add(friend2);
           
             context.SaveChanges();
-           
-            
+
+            UserProfile.GenerateRandomUsers(20);
 
             //GAMES
             var games = new List<Game>

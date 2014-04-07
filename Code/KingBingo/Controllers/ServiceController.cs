@@ -218,18 +218,30 @@ namespace KingBingo.Controllers
                                 else if (operation == "addfriend")
                                 {
                                     ViewBag.operation = "addfriend";
-                                    ViewBag.message = "Successfully added friend";
+                                   
                                     int friend_id = data.friend_id;
 
-                                    var friend_user = db.UserProfiles.SingleOrDefault(u => u.UserId == friend_id);
-                                    var friend1 = new Friend { User = user, FriendUser = friend_user, Status = RequestStatus.Requested };
-                                    var friend2 = new Friend { User = friend_user, FriendUser = user, Status = RequestStatus.Pending };
-                                    db.Friends.Add(friend1);
-                                    db.Friends.Add(friend2);
-                                    db.SaveChanges();
-                                    user.Friends.Add(friend1);
-                                    friend_user.Friends.Add(friend2);
-                                    db.SaveChanges();
+                                    var friendship = db.Friends.Include("User").Where(f => f.User.UserId == user.UserId && f.FriendUser.UserId == friend_id).FirstOrDefault();
+
+                                    //var friendship = db.Friends.SingleOrDefault(f => f.User == user);
+                                    if (friendship == null)
+                                    {
+                                        ViewBag.message = "Successfully added friend";
+                                        var friend_user = db.UserProfiles.SingleOrDefault(u => u.UserId == friend_id);
+                                        var friend1 = new Friend { User = user, FriendUser = friend_user, Status = RequestStatus.Requested };
+                                        var friend2 = new Friend { User = friend_user, FriendUser = user, Status = RequestStatus.Pending };
+                                        db.Friends.Add(friend1);
+                                        db.Friends.Add(friend2);
+                                        db.SaveChanges();
+                                        user.Friends.Add(friend1);
+                                        friend_user.Friends.Add(friend2);
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        ViewBag.message = "Friend request already has been added";
+                                        ViewBag.status = "error";
+                                    }
                                 }
                                 else if (operation == "acceptfriend")
                                 {
@@ -279,7 +291,7 @@ namespace KingBingo.Controllers
                     } // before this
                  
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     ViewBag.status = "error";
                     ViewBag.message = "check your json and documentation for proper format";

@@ -8,18 +8,12 @@ using System.Web.Security;
 using System.Security.Cryptography;
 using System.IO;
 using System.Text;
-
-
-
 using System.ComponentModel;
 using System.Data;
-
 using System.Linq;
-using System.Web.Security;
 using WebMatrix.WebData;
 using System.Threading.Tasks;
-
-
+using KingBingo.DAL;
 
 namespace KingBingo.Models
 {
@@ -44,6 +38,8 @@ namespace KingBingo.Models
     [Table("UserProfile")]
     public class UserProfile
     {
+         private KingBingoContext db = new KingBingoContext();
+
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
@@ -98,7 +94,95 @@ namespace KingBingo.Models
         public virtual ICollection<Result> Results { get; set; }
 
 
-        
+        static public void GenerateRandomUsers(int count)
+        {
+            Random r = new Random();
+
+            string[] firstNames = {
+                                      "john",
+                                      "rick",
+                                      "fred",
+                                      "tom",
+                                      "jake",
+                                      "suzy",
+                                      "tanya",
+                                      "beth",
+                                      "jeff",
+                                      "tony",
+                                      "paul",
+                                      "aaron"
+
+                                  };
+
+            string[] lastNames = {
+                                      "paulson",
+                                      "smith",
+                                      "richards",
+                                      "johnson",
+                                      "thompson",
+                                      "cooper",
+                                      "mcdonald",
+                                      "anderson",
+                                      "lee"
+                                  };
+
+            string[] emails = {
+                                  "fakemail.com",
+                                  "emailcity.com",
+                                  "downtownemails.com",
+                                  "emailpallooza.com"
+                              };
+
+            string[] bioFirsts = {
+                                    "lifelong",
+                                    "the best",
+                                    "the one and only",
+                                    "super"
+                                };
+
+            string[] bioLasts = {
+                                    "dog owner",
+                                    "knitter",
+                                    "sailor",
+                                    "dinosaur"
+                                };
+
+            int counter = 0;
+            KingBingoContext db = new KingBingoContext();
+            while (counter < count)
+            {
+
+                string name = firstNames[r.Next(firstNames.Length - 1)] + " " + lastNames[r.Next(lastNames.Length - 1)];
+                string username = name.Replace(" ", "");
+                string email = name + emails[r.Next(emails.Length - 1)];
+                string bio = bioFirsts[r.Next(bioFirsts.Length - 1)] + " " + bioLasts[r.Next(bioLasts.Length - 1)];
+                string password = "test!234";
+
+                var user = db.UserProfiles.Where(u => u.UserName == username).FirstOrDefault();
+                if (user == null)
+                {
+                    user = db.UserProfiles.Where(u => u.UserName == username).FirstOrDefault();
+                    if (user == null)
+                    {
+                        UserProfile.CreateUser(username, password, false);
+                        user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
+                        user.Name = name;
+                        user.Email = email;
+                        user.Bio = bio;
+                        user.PasswordHash = UserProfile.createAuthHash(password);
+                        user.Created = DateTime.Now;
+                        user.Birthdate = DateTime.Now.AddYears((r.Next(20) + 10) * -1);
+                        user.ProfileImage = UserProfile.GetProfileImage("crown-icon.png");
+                        db.SaveChanges();
+                    }
+                   
+                }
+                counter++;
+            }
+         
+            
+
+        }
 
         static public string SHA1(string cleartext)
         {
