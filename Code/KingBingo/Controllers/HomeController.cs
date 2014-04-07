@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using KingBingo.DAL;
+using KingBingo.Models;
+using System.Collections;
 
 namespace KingBingo.Controllers
 {
@@ -29,7 +31,19 @@ namespace KingBingo.Controllers
 
         public ActionResult Search()
         {
-            var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
+            //var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
+
+            Hashtable hash = new Hashtable();
+
+            var user = db.UserProfiles.Include("Friends").Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            foreach (Friend f in user.Friends)
+            {
+                hash.Add(f.FriendUser.UserId, f.Status);
+            }
+
+            ViewData["FriendHash"] = hash;
+
+
             ViewData["user"] = user;
             if (Request.QueryString["term"] != null)
             {

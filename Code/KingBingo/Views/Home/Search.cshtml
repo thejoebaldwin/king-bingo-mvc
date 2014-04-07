@@ -2,6 +2,7 @@
     ViewBag.Title = "Search";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var users = ViewBag.users;
+    
 }
 
 <h2>Search</h2>
@@ -27,12 +28,38 @@
               });
               console.log(o);
 
+
+             
+             
+              var operation =  o['operation'];
+              var url = '/service/v0/' + operation;
+
               $.ajax({
                   type: 'POST',
-                  url: '/service/v0/addfriend',
+                  url: url,
                   data: JSON.stringify(o), // or JSON.stringify ({name: 'jonas'}),
                   success: function (data) {
-                      alert('data: ' + data.message);
+                      if (data.status == 'ok') {
+                          if (operation == 'addfriend') {
+                              //change the button
+                             var button = $(event.target).children('.btn');
+                             $(button).prop('value', 'Requested');
+                             $(button).prop('type', 'button');
+                             $(button).removeClass('btn-success');
+                             $(button).addClass('btn-warning');
+                          }
+                          else if (operation == 'acceptfriend') {
+                              //change the button
+                            
+                              var button = $(event.target).children('.btn');
+                              $(button).prop('value', 'Accepted');
+                              $(button).removeClass('btn-warning');
+                              $(button).addClass('btn-primary');
+                              $(button).prop('type', 'button');
+
+                          }
+                      }
+                      
                   },
                   contentType: "text/html",
                   dataType: 'json'

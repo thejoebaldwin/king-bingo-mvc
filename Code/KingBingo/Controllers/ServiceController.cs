@@ -247,11 +247,30 @@ namespace KingBingo.Controllers
                                 {
                                     ViewBag.operation = "acceptfriend";
                                     ViewBag.message = "Successfully accepted friend";
+
+                                    int friend_id = data.friend_id;
+
+                                    var friendshipA = db.Friends.Include("User").Where(f => f.User.UserId == user.UserId && f.FriendUser.UserId == friend_id).FirstOrDefault();
+                                    var friendshipB = db.Friends.Include("User").Where(f => f.User.UserId == friend_id && f.FriendUser.UserId == user.UserId).FirstOrDefault();
+                                    friendshipA.Status = RequestStatus.Accepted;
+                                    friendshipB.Status = RequestStatus.Accepted;
+                                    db.SaveChanges();
+                                    //send out notifications
+
                                 }
                                 else if (operation == "rejectfriend")
                                 {
                                     ViewBag.operation = "rejectfriend";
-                                    ViewBag.message = "Successfully added friend";
+                                    ViewBag.message = "Successfully rejected friend";
+
+                                    int friend_id = data.friend_id;
+
+                                    var friendshipA = db.Friends.Include("User").Where(f => f.User.UserId == user.UserId && f.FriendUser.UserId == friend_id).FirstOrDefault();
+                                    var friendshipB = db.Friends.Include("User").Where(f => f.User.UserId == friend_id && f.FriendUser.UserId == user.UserId).FirstOrDefault();
+                                    friendshipA.Status = RequestStatus.Rejected;
+                                    friendshipB.Status = RequestStatus.Rejected;
+                                    db.SaveChanges();
+                                    //send out notifications
                                 }
                                 else if (operation == "getnumber")
                                 {

@@ -169,10 +169,13 @@ namespace KingBingo.Models
                         user.Name = name;
                         user.Email = email;
                         user.Bio = bio;
-                        user.PasswordHash = UserProfile.createAuthHash(password);
+                        user.PasswordHash = UserProfile.SHA1(password);
                         user.Created = DateTime.Now;
                         user.Birthdate = DateTime.Now.AddYears((r.Next(20) + 10) * -1);
                         user.ProfileImage = UserProfile.GetProfileImage("crown-icon.png");
+                        user.Friends = new List<Friend>();
+                        user.Results = new List<Result>();
+                        user.Badges = new List<Badge>();
                         db.SaveChanges();
                     }
                    

@@ -40,6 +40,9 @@ namespace KingBingo.Controllers
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 //return RedirectToLocal(returnUrl);
+                var user = db.UserProfiles.SingleOrDefault(u => u.UserName == model.UserName);
+                user.GenerateAuthenticationToken();
+                db.SaveChanges();
                 return RedirectToAction("Index", "Secure");
             }
 
@@ -87,6 +90,7 @@ namespace KingBingo.Controllers
                     //use password to generate password hash for json authentication
                     var user = db.UserProfiles.SingleOrDefault(u => u.UserName == model.UserName);
                     user.PasswordHash = UserProfile.SHA1(model.Password);
+                    user.GenerateAuthenticationToken();
                     db.SaveChanges();
                   
                     WebSecurity.Login(model.UserName, model.Password);

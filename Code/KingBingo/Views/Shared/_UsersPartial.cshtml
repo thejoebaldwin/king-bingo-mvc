@@ -3,6 +3,8 @@
     
     
    var users = ViewBag.users;
+
+   System.Collections.Hashtable hash = ViewBag.FriendHash;
     
 }
 
@@ -26,12 +28,35 @@
             @u.Bio
      </div>
      <div class='col-md-3'>
-       
+        
             <form  class="friendForm">
                 <input type="hidden" name="user_id" value="@ViewBag.user.UserId" />
                 <input type="hidden" name="friend_id" value="@u.UserId" />
+                 
                 <input type="hidden" name="authentication_token" value="@ViewBag.user.AuthenticationToken" />
-                <input class="btn btn-primary" type="submit" value="Add Friend" />
+                @if (hash.Contains(u.UserId))
+                {
+                    if (hash[u.UserId] == KingBingo.Models.RequestStatus.Requested)
+                    {
+                     <input class="btn btn-warning" type="submit" value="Requested" />
+                  
+                    }
+                    else if (hash[u.UserId] == KingBingo.Models.RequestStatus.Pending)
+                    {
+                         <input class="btn btn-warning" type="submit" value="Pending" />
+                         <input type="hidden" name="operation" value="acceptfriend" />
+                    }
+                    else
+                    {
+                         <input class="btn btn-primary" type="button" value="Accepted" />
+                    }
+                }
+                else
+                {
+                      <input class="btn btn-success" type="submit" value="Add Friend" />
+                      <input type="hidden" name="operation" value="addfriend" />
+                }
+               
             </form>
         
      </div>

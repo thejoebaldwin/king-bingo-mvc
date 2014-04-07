@@ -16,11 +16,17 @@
 
 @foreach (var f in user.Friends)
 {
-   <div> @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null)</div>
-  
-    
-    
-    
-   
+         <div  class='row'>
+            <div class='col-md-3'>
+                @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( f.FriendUser.ProfileImage) + "\" />")
+            </div>
+            <div class='col-md-6'>
+                <h3>  @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null) </h3>
+                    @f.FriendUser.Bio
+            </div>
+            <div class='col-md-3'>
+                    <input class="btn btn-primary" type="button" value="@f.Status" />
+            </div>
+        </div>
 }
      
