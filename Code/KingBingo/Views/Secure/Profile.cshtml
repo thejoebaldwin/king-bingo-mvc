@@ -89,7 +89,7 @@
              <h4 class="modal-title" id="myModalLabel">Change your picture</h4>
         </div>
         <div class="modal-body">
-           <form action="/secure/UploadImages" method="post" enctype="multipart/form-data">
+           <form action="@Url.Action("UploadImages", "Secure")" method="post" enctype="multipart/form-data">
                <div class="alert alert-danger"  id="errorMessage" style="display:none">
                     <a href="#" class="alert-link" id="errorMessageText"></a>
                </div>

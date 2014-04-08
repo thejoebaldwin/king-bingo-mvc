@@ -36,15 +36,19 @@ namespace KingBingo.Controllers
             Hashtable hash = new Hashtable();
 
             var user = db.UserProfiles.Include("Friends").Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
-            foreach (Friend f in user.Friends)
+            if (user != null)
             {
-                hash.Add(f.FriendUser.UserId, f.Status);
+                foreach (Friend f in user.Friends)
+                {
+                    hash.Add(f.FriendUser.UserId, f.Status);
+                }
+             
             }
-
-            ViewData["FriendHash"] = hash;
 
 
             ViewData["user"] = user;
+            ViewData["friendhash"] = hash;
+          
             if (Request.QueryString["term"] != null)
             {
                 var term = Request.QueryString["term"];

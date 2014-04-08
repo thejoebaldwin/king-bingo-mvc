@@ -44,7 +44,7 @@
                      <div class="navbar-collapse collapse">
                          <ul class="nav navbar-nav">
             			    <li>
-			                	<form class="navbar-form navbar-left" action="/search" role="search">
+			                	<form class="navbar-form navbar-left" action='@Url.Action("Search", "Home")' role="search">
 				                    <div class="form-group">
 				                        <input type="text" class="form-control" name="term" placeholder="Search">
 				                    </div>
@@ -105,7 +105,7 @@
                 @RenderSection("featured", required: false)
                 @RenderBody()
             </div> 
-                @RenderSection("sub", required: false)
+             
         <div id="push"></div>
         </div> <!-- /container -->
        </div> <!-- wrap -->

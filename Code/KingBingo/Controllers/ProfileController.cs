@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using KingBingo.DAL;
 using KingBingo.Models;
+using System.Collections;
 
 namespace KingBingo.Controllers
 {
@@ -52,11 +53,25 @@ namespace KingBingo.Controllers
 
 
 
-            if (this.User != null)
+          
+
+
+            Hashtable hash = new Hashtable();
+
+            var user = db.UserProfiles.Include("Friends").Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            if (user != null)
             {
-                var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
-                ViewData["user"] = user;
+                foreach (Friend f in user.Friends)
+                {
+                    hash.Add(f.FriendUser.UserId, f.Status);
+                }
+
             }
+
+
+            ViewData["user"] = user;
+            ViewData["friendhash"] = hash;
+
 
             var Username = username;
             var profileuser = db.UserProfiles.SingleOrDefault(u => u.UserName == username);

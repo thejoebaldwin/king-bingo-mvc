@@ -8,11 +8,14 @@
 Badges<br />
 @foreach (var b in profileuser.Badges)
 {
-    <img src="@Url.Content(b.ImagePath)" alt="b.Name" />
+    
+    
+    @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( b.Image) + "\" alt=\"" + b.Name + "\"  />")
+    
 }
      
 
-   @section scripts {
+ @section scripts {
       <script>
 
           $(".friendForm").submit(function (event) {
@@ -30,12 +33,38 @@ Badges<br />
               });
               console.log(o);
 
+
+             
+             
+              var operation =  o['operation'];
+              var url = '@Url.Action("v0", "Service",  new {operation = ""})/' + operation;
+
               $.ajax({
                   type: 'POST',
-                  url: '/service/v0/addfriend',
+                  url: url,
                   data: JSON.stringify(o), // or JSON.stringify ({name: 'jonas'}),
                   success: function (data) {
-                      alert('data: ' + data.message);
+                      if (data.status == 'ok') {
+                          if (operation == 'addfriend') {
+                              //change the button
+                             var button = $(event.target).children('.btn');
+                             $(button).prop('value', 'Requested');
+                             $(button).prop('type', 'button');
+                             $(button).removeClass('btn-success');
+                             $(button).addClass('btn-warning');
+                          }
+                          else if (operation == 'acceptfriend') {
+                              //change the button
+                            
+                              var button = $(event.target).children('.btn');
+                              $(button).prop('value', 'Accepted');
+                              $(button).removeClass('btn-warning');
+                              $(button).addClass('btn-primary');
+                              $(button).prop('type', 'button');
+
+                          }
+                      }
+                      
                   },
                   contentType: "text/html",
                   dataType: 'json'
@@ -47,5 +76,6 @@ Badges<br />
 
      </script>
    }
-
+     
+   
 

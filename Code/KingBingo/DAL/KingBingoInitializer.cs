@@ -32,21 +32,36 @@ namespace KingBingo.DAL
             var badgesUser1 = new List<Badge>
             {
 
-                new Badge{Name = "Badge1", ImagePath = "/Images/Badges/badge1.png", Description = "This is a description for badge1"},
-                new Badge{Name = "Badge2", ImagePath = "/Images/Badges/badge2.png", Description = "This is a description for badge2"}
+                new Badge{Name = "Badge1",  Description = "This is a description for badge1"},
+                new Badge{Name = "Badge2", Description = "This is a description for badge2"}
 
             };
-            badgesUser1.ForEach(b => context.Badges.Add(b));
+
+
+            foreach (Badge b in badgesUser1)
+            {
+                b.Image = Badge.GetImage(b.Name + ".png");
+                context.Badges.Add(b);
+            }
+
+         
             context.SaveChanges();
 
             var badgesUser2 = new List<Badge>
             {
 
-                new Badge{Name = "Badge1", ImagePath = "/Images/Badges/badge1.png", Description = "This is a description for badge1"},
-                new Badge{Name = "Badge2", ImagePath = "/Images/Badges/badge2.png", Description = "This is a description for badge2"}
+                new Badge{Name = "Badge1", Description = "This is a description for badge1"},
+                new Badge{Name = "Badge2", Description = "This is a description for badge2"}
 
             };
-            badgesUser2.ForEach(b => context.Badges.Add(b));
+
+            foreach (Badge b in badgesUser2)
+            {
+                b.Image = Badge.GetImage(b.Name + ".png");
+                context.Badges.Add(b);
+            }
+
+        
             context.SaveChanges();
 
             //GAMECARD

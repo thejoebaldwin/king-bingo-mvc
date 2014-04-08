@@ -3,6 +3,7 @@
     var user = @ViewBag.user;
     var profileuser = @ViewBag.profileuser;
     ViewBag.Title = profileuser.Name;
+    var hash = ViewBag.friendhash;
 }
 
        @Html.Partial("ProfilePartial", ViewData)
@@ -10,18 +11,120 @@
    Friends<br />
     
     
+
 @foreach (var f in profileuser.Friends)
 {
-   <div> 
-       @Html.Raw("<img  width=\"50px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( f.FriendUser.ProfileImage) + "\" />")
-
-       @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null)
-
-   </div>
-   
-   
+         <div  class='row'>
+            <div class='col-md-3'>
+                @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( f.FriendUser.ProfileImage) + "\" />")
+            </div>
+            <div class='col-md-6'>
+                <h3>  @Html.ActionLink((string) f.FriendUser.Name, "Index",new { controller = "Profile", username= f.FriendUser.UserName }, null) </h3>
+                    @f.FriendUser.Bio
+            </div>
+           <div class='col-md-3'>
+        @if (user != null)
+         {
+            <form  class="friendForm">
+                <input type="hidden" name="user_id" value="@user.UserId" />
+                <input type="hidden" name="friend_id" value="@f.FriendUser.UserId" />
+                 
+                <input type="hidden" name="authentication_token" value="@user.AuthenticationToken" />
+                @if (hash.Contains(f.FriendUser.UserId))
+                {
+                    if (hash[f.FriendUser.UserId] == KingBingo.Models.RequestStatus.Requested)
+                    {
+                     <input class="btn btn-warning" type="submit" value="Requested" />
+                  
+                    }
+                    else if (hash[f.FriendUser.UserId] == KingBingo.Models.RequestStatus.Pending)
+                    {
+                         <input class="btn btn-warning" type="submit" value="Pending" />
+                         <input type="hidden" name="operation" value="acceptfriend" />
+                    }
+                    else
+                    {
+                         <input class="btn btn-primary" type="button" value="Accepted" />
+                    }
+                }
+                else
+                {
+                      <input class="btn btn-success" type="submit" value="Add Friend" />
+                      <input type="hidden" name="operation" value="addfriend" />
+                }
+               
+            </form>
+        }
+     </div>
+        </div>
 }
+
+
+ @section scripts {
+      <script>
+
+          $(".friendForm").submit(function (event) {
+              var o = {};
+              var a = $(this).serializeArray();
+              $.each(a, function () {
+                  if (o[this.name]) {
+                      if (!o[this.name].push) {
+                          o[this.name] = [o[this.name]];
+                      }
+                      o[this.name].push(this.value || '');
+                  } else {
+                      o[this.name] = this.value || '';
+                  }
+              });
+              console.log(o);
+
+
+             
+             
+              var operation =  o['operation'];
+              var url = '@Url.Action("v0", "Service",  new {operation = ""})/' + operation;
+
+              $.ajax({
+                  type: 'POST',
+                  url: url,
+                  data: JSON.stringify(o), // or JSON.stringify ({name: 'jonas'}),
+                  success: function (data) {
+                      if (data.status == 'ok') {
+                          if (operation == 'addfriend') {
+                              //change the button
+                             var button = $(event.target).children('.btn');
+                             $(button).prop('value', 'Requested');
+                             $(button).prop('type', 'button');
+                             $(button).removeClass('btn-success');
+                             $(button).addClass('btn-warning');
+                          }
+                          else if (operation == 'acceptfriend') {
+                              //change the button
+                            
+                              var button = $(event.target).children('.btn');
+                              $(button).prop('value', 'Accepted');
+                              $(button).removeClass('btn-warning');
+                              $(button).addClass('btn-primary');
+                              $(button).prop('type', 'button');
+
+                          }
+                      }
+                      
+                  },
+                  contentType: "text/html",
+                  dataType: 'json'
+              });
+
+
+            event.preventDefault();
+        });
+
+     </script>
+   }
      
+   
+   
+
 
 
 

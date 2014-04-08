@@ -1,26 +1,32 @@
 ﻿@{
     
-    
-    
+   var hash = ViewBag.friendhash;
    var users = ViewBag.users;
-
-   System.Collections.Hashtable hash = ViewBag.FriendHash;
     
-}
+ 
+   var username = "";
+   var user = ViewBag.user;
+   if (user != null) 
+   {
+       username = user.UserName;   
+       
+   }
+   }
+  
+
 
 
 
 @foreach (var u in users)
 {
-    
 
 
-      if (ViewBag.user != null)
-         {
-        if (ViewBag.user.UserName != u.UserName)
+
+
+    if (username != u.UserName)
          {
         <div  class='row'>
-    <div class='col-md-3'>
+   <div class='col-md-3'>
         @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( u.ProfileImage) + "\" />")
     </div>
     <div class='col-md-6'>
@@ -28,12 +34,13 @@
             @u.Bio
      </div>
      <div class='col-md-3'>
-        
+        @if (user != null)
+         {
             <form  class="friendForm">
-                <input type="hidden" name="user_id" value="@ViewBag.user.UserId" />
+                <input type="hidden" name="user_id" value="@user.UserId" />
                 <input type="hidden" name="friend_id" value="@u.UserId" />
                  
-                <input type="hidden" name="authentication_token" value="@ViewBag.user.AuthenticationToken" />
+                <input type="hidden" name="authentication_token" value="@user.AuthenticationToken" />
                 @if (hash.Contains(u.UserId))
                 {
                     if (hash[u.UserId] == KingBingo.Models.RequestStatus.Requested)
@@ -58,10 +65,10 @@
                 }
                
             </form>
-        
+        }
      </div>
 </div>
 
-         }
+       
          }
 }

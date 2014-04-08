@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Search";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var users = ViewBag.users;
+
     
 }
 
@@ -32,7 +32,7 @@
              
              
               var operation =  o['operation'];
-              var url = '/service/v0/' + operation;
+              var url = '@Url.Action("v0", "Service",  new {operation = ""})/' + operation;
 
               $.ajax({
                   type: 'POST',

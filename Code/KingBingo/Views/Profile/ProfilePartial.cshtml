@@ -1,5 +1,6 @@
 ﻿@{
     var profileuser = @ViewBag.profileuser;
+    var hash = ViewBag.friendhash;
 }
 
 <div class="panel panel-default">
@@ -17,12 +18,16 @@
          {
         if (ViewBag.user.UserName != profileuser.UserName)
          {
+            if (hash != null && !hash.Contains(profileuser.UserId))
+            {
             <form  class="friendForm">
                 <input type="hidden" name="user_id" value="@ViewBag.user.UserId" />
                 <input type="hidden" name="friend_id" value="@ViewBag.profileuser.UserId" />
                 <input type="hidden" name="authentication_token" value="@ViewBag.user.AuthenticationToken" />
+                  <input type="hidden" name="operation" value="addfriend" />
                 <input class="btn btn-primary" type="submit" value="Add Friend" />
             </form>
+           }
          }
          }
      </div>
