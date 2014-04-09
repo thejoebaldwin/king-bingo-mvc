@@ -88,6 +88,8 @@ namespace KingBingo.Models
         {
             int count = 0;
             Hashtable hash = new Hashtable();
+            int max_cards = UserLimit * 2;
+            if (max_cards < 20) max_cards = 20;
             while (count < UserLimit * 2)
             {
                 GameCard gc = GameCard.GenerateGameCard();
@@ -134,8 +136,13 @@ namespace KingBingo.Models
 
         public GameCard GetNextGameCard()
         {
-            GameCard gc = GameCards.Last();
-            GameCards.Remove(gc);
+            GameCard gc = null;
+            if (GameCards.Count > 0)
+            {
+               gc = GameCards.Last();
+                GameCards.Remove(gc);
+                return gc;
+            }
             return gc;
         }
 
@@ -144,14 +151,16 @@ namespace KingBingo.Models
             int number = -1;
             if (NumbersIndex < 70)
             {
-          
-               
                 if (DateTime.Now > NextNumberTime)
                 {
                     NumbersIndex++;
-                    NextNumberTime = DateTime.Now.AddSeconds(30);
+                    double delay = 100 - Speed;
+                    NextNumberTime = DateTime.Now.AddSeconds(60 * (delay/100.0));
                 }
-                number = Numbers.ElementAt(NumbersIndex);
+                if (NumbersIndex < 70)
+                {
+                    number = Numbers.ElementAt(NumbersIndex);
+                }
             }
             return number;
         }

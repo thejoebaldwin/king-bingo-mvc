@@ -18,6 +18,7 @@ namespace TestJSON
 
         public string authentication_token = "";
         public int user_id = -1;
+        public int gameSpeed = 0;
         public frmTestJSON()
         {
             InitializeComponent();
@@ -61,6 +62,7 @@ namespace TestJSON
             //read response body
             StreamReader response_reader = new StreamReader(response);
             string response_json = response_reader.ReadToEnd();
+            processResponse(response_json);
             return response_json;
 
         }
@@ -89,15 +91,202 @@ namespace TestJSON
             {
                 dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(response_json);
                 var user = data.user;
-                user_id = user.user_id;
+                if (user != null)
+                {
+                    user_id = user.user_id;
+                    authentication_token = user.authentication_token;
+                }
+                if (data.operation == "joingame")
+                {
+                    var gamecard = data.game_card;
+                    var gamespeed = data.game_speed;
+                    string[] splitString = {","};
+                    string[] numbers = ((string)gamecard).Split(splitString, StringSplitOptions.None);
+                    for (int i = 0; i < numbers.Length; i++)
+                    {
+                        Label tempLabel = getNumberLabelByNumber(i);
+                        tempLabel.Text =  numbers[i];
+                    }
 
-                authentication_token = user.authentication_token;
+                    timerNumbers.Enabled = true;
+                    double delay = ((100 - gamespeed) / 100.0) * 60.0 ;
+                    timerNumbers.Interval = (int) delay * 1000;
+
+                }
+                else if (data.operation == "getnumber")
+                {
+                    string bingoNumber = data.number;
+                    if (bingoNumber != "-1")
+                    {
+                        int number = UnBingofyNumber(bingoNumber);
+                        for (int i = 0; i < 25; i++)
+                        {
+
+                            Label lblTemp = getNumberLabelByNumber(i);
+                            if (lblTemp.Text == number.ToString())
+                            {
+                                lblTemp.BackColor = Color.Yellow;
+                                verifyWin();
+                            }
+
+
+                        }
+                    }
+                    else
+                    {
+                        timerNumbers.Enabled = false;
+                        timerNumbers.Stop();
+                    }
+                    lblBingoNumber.Text = bingoNumber;
+                   
+                }
             }
             catch (Exception ex)
             {
 
             }
+        }
 
+
+        void verifyWin()
+        {
+            //check columns
+            //check rows
+            //check diagonals
+
+            bool win = false;
+            for (int i = 0; i < 5; i++)
+            {
+                win = rowWin(i);
+                if (win) break;
+            }
+            if (!win)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    win = columnWin(i);
+                    if (win) break;
+                }
+            }
+            if (!win)
+            {
+                win = forwardDiagonalWin();
+            }
+            if (!win)
+            {
+                win = backwardDiagonalWin();
+            }
+            if (win)
+            {
+                timerNumbers.Enabled = false;
+                timerNumbers.Stop();
+                MessageBox.Show("BINGO!");
+                
+            }
+
+        }
+
+
+        bool rowWin(int row)
+        {
+            bool win = false;
+            if (getNumberLabelByNumber(0 + row).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(5 + row).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(10 + row).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(15 + row).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(20 + row).BackColor == Color.Yellow)
+            {
+
+                win = true;
+            }
+            return win;
+
+        }
+
+        bool columnWin(int column)
+        {
+            column = column * 5;
+            bool win = false;
+            if (getNumberLabelByNumber(0 + column).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(1 + column).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(2 + column).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(3 + column).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(4 + column).BackColor == Color.Yellow)
+            {
+
+                win = true;
+            }
+            return win;
+        }
+        bool forwardDiagonalWin()
+        {
+           //0, 6, 12, 18, 24
+           
+            bool win = false;
+            if (getNumberLabelByNumber(0).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(6).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(12).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(18).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(24).BackColor == Color.Yellow)
+            {
+
+                win = true;
+            }
+            return win;
+
+        }
+        bool backwardDiagonalWin()
+        {
+            //4,8, 12, 16, 20
+        
+
+            bool win = false;
+            if (getNumberLabelByNumber(4).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(8).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(12).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(16).BackColor == Color.Yellow &&
+                getNumberLabelByNumber(20).BackColor == Color.Yellow)
+            {
+
+                win = true;
+            }
+            return win;
+        }
+
+        private int UnBingofyNumber(string bingoNumber)
+        {
+            int number = -1;
+            bingoNumber = bingoNumber.Substring(1);
+            number = System.Convert.ToInt32(bingoNumber);
+            return number;
+        }
+
+        private string BingofyNumber(string number)
+        {
+            int n = System.Convert.ToInt32(number);
+            string bingoNumber = number;
+
+            if (n <= 15)
+            {
+                bingoNumber = "B" + bingoNumber;
+            }
+            else if (n <= 30)
+            {
+                bingoNumber = "I" + bingoNumber;
+            }
+            else if (n <= 45)
+            {
+                bingoNumber = "N" + bingoNumber;
+            }
+            else if (n <= 60)
+            {
+                bingoNumber = "G" + bingoNumber;
+            }
+            else if (n <= 70)
+            {
+                bingoNumber = "0" + bingoNumber;
+            }
+            return bingoNumber;
         }
 
         private void btnGetUser_Click(object sender, EventArgs e)
@@ -154,9 +343,28 @@ namespace TestJSON
             lblHash.Text = createAuthHash(txtPassword.Text.Trim());
         }
 
+
+      
+
         private void frmTestJSON_Load(object sender, EventArgs e)
         {
             cbTarget.SelectedIndex = 0;
+
+
+            foreach (Control c in tabBarOperations.TabPages["tabGame"].Controls)
+            {
+                if (c.GetType() ==  (new Label()).GetType())
+                {
+                    if (c.Name.Contains("lbl_"))
+                    {
+                        c.Click += new EventHandler(numberLabel_Click);
+                    }
+
+                }
+
+            }
+
+
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)
@@ -211,6 +419,61 @@ namespace TestJSON
             post_json += ", \"friend_id\":\"" + friend_user_id + "\"}";
             txtRequest.Text = post_json;
             txtResponse.Text = PostDataWithOperation("addfriend", post_json); 
+        }
+
+        public Label getNumberLabel(string letter, int row)
+        {
+            Label numberLabel = (Label) this.Controls.Find("lbl_" + letter + row.ToString(), true)[0];
+            return numberLabel;
+        }
+
+        public Label getNumberLabelByNumber(int index)
+        {
+            string letter = "";
+            int row = index % 5;
+            if (index < 5)
+            {
+                letter = "b";
+            }
+            else if (index < 10)
+            {
+                letter = "i";
+             
+            }
+            else if (index < 15)
+            {
+                letter = "n";
+            }
+            else if (index < 20)
+            {
+                letter = "g";
+            }
+            else if (index < 25)
+            {
+                letter = "o";
+            }
+            Label numberLabel = (Label)this.Controls.Find("lbl_" + letter + row.ToString(), true)[0];
+            return numberLabel;
+        }
+
+        protected void numberLabel_Click(object sender, EventArgs e)
+        {
+            Label numberLabel = (Label)sender;
+            numberLabel.BackColor = Color.Red;
+
+
+
+
+        }
+
+        private void timerNumbers_Tick(object sender, EventArgs e)
+        {
+            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
+            int friend_user_id = Convert.ToInt32(txtFriend_friend_user_id.Text);
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+            post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
+            txtRequest.Text = post_json;
+            txtResponse.Text = PostDataWithOperation("getnumber", post_json); 
         }
     }
 }

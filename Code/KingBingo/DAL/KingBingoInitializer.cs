@@ -165,7 +165,7 @@ namespace KingBingo.DAL
             //GAMES
             var games = new List<Game>
             {
-                new Game{Name = "New Game 1", Description="New game description", WinLimit=1,UserLimit=3,   Speed=50, Created=DateTime.Now, Private=false, Players = players}
+                new Game{Name = "New Game 1", Description="New game description", WinLimit=1,UserLimit=3,   Speed=99, Created=DateTime.Now, Private=false, Players = players}
             };
 
             games[0].GenerateGameCards();

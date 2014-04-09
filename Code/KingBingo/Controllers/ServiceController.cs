@@ -324,6 +324,9 @@ namespace KingBingo.Controllers
             }
         }
 
+
+      
+
         void getNumber(dynamic data)
         {
             ViewBag.operation = "getnumber";
@@ -414,13 +417,22 @@ namespace KingBingo.Controllers
                 }
                 ViewData["game"] = game;
                 GameCard gamecard = game.GetNextGameCard();
-                gamecard = db.GameCards.SingleOrDefault(gc => gc.GameCardID == gamecard.GameCardID);
-                ViewData["gamecard"] = gamecard;
-                user.GameCard = gamecard;
-                user.Game = game;
-                if (game.Players == null) game.Players = new List<UserProfile>();
-                game.Players.Add(user);
-                db.SaveChanges();
+                if (gamecard == null)
+                {
+                    ViewBag.message = "No gamecards left to play";
+                    ViewBag.status = "error";
+                }
+                else
+                {
+                    gamecard = db.GameCards.SingleOrDefault(gc => gc.GameCardID == gamecard.GameCardID);
+                    ViewData["gamecard"] = gamecard;
+                    user.GameCard = gamecard;
+                    ViewBag.gamespeed = game.Speed;
+                    user.Game = game;
+                    if (game.Players == null) game.Players = new List<UserProfile>();
+                    game.Players.Add(user);
+                    db.SaveChanges();
+                }
             }
         }
 
