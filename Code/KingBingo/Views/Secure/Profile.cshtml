@@ -22,7 +22,7 @@
         <a onclick="getFile()">Change Picture</a>
     </div>
     <div class="col-md-9">
-        <form action="/secure/updateprofile" method="post" role="form">
+        <form action="@Url.Action("UpdateProfile", "Secure")" method="post" role="form">
              <div class="form-group">
                 <label for="Name">Name</label>
                 <input class="form-control" name="Name" id="Name" type="text" value="@user.Name" />
@@ -201,6 +201,8 @@
               $("#btnSubmit").hide();
               $('#successMessageText').html('');
               $('#successMessage').hide('');
+
+           
           }
 
           function getFile() {

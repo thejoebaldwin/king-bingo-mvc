@@ -482,7 +482,7 @@ namespace KingBingo.Controllers
 
             string[] splitString = { "," };
             string temp = data.player_ids;
-            string[] playerIDs = temp.Split(splitString, StringSplitOptions.None);
+            string[] playerIDs = temp.Split(splitString, StringSplitOptions.RemoveEmptyEntries);
             //loop through request users
             foreach (string player_id in playerIDs)
             {

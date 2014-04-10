@@ -31,30 +31,69 @@
       <div class="modal-body">
           <form class="gameForm">
                 <input type="hidden" name="user_id" value="@user.UserId" />
-                <input type="hidden" name="auth_token" value="@user.AuthenticationToken" />
+                <input type="hidden" name="authentication_token" value="@user.AuthenticationToken" />
                 <input type="hidden" name="operation" value="creategame" />
+                <input class="form-control" name="private" id="private" type="hidden" value="false"  />
+                <input class="form-control" name="player_ids" id="player_ids" type="hidden" value=""  />
+                <input class="form-control" name="win_limit" id="win_limit" type="hidden" value="10"  />
+                <input class="form-control" name="user_limit" id="user_limit" type="hidden"  value="10"  />
+                <input class="form-control" type="hidden" name="game_speed" id="game_speed" value="75" />
+
+                <div id="stepOne">
+                        <div class="form-group">
+                      <label for="name">Name</label>
+                               <input class="form-control" type="text" name="name" id="name"  />
+                            </div>
+                           <div class="form-group">
+                      <label for="description">Description</label>
+                               <input class="form-control" type="text" name="description" id="description"  />
+                            </div>
                 <div class="form-group">
                     <label for="Name">Win Limit</label>
-                    <input class="form-control" name="win_limit" id="win_limit" type="text"  />
+                        <div id="winlimit" type="text" value="3" data-slider-min="1" data-slider-max="10" data-slider-step="1"
+               data-slider-value="3" data-slider-tooltip="hide"  data-slider-orientation="horizontal" data-slider-id="winlimitSlider" ></div>
+                     <span id="winlimitlabel">3</span>
                 </div>
                 <div class="form-group">
                     <label for="Name">User Limit</label>
-                    <input class="form-control" name="user_limit" id="user_limit" type="text"  />
+                       <div id="userlimit" type="text" value="5" data-slider-min="1" data-slider-max="100" data-slider-step="1"
+               data-slider-value="5" data-slider-tooltip="hide"  data-slider-orientation="horizontal" data-slider-id="userlimitSlider" ></div>
+                      <span id="userlimitlabel">3</span>
                 </div>
                 <div class="form-group">
                     <label for="Name">Game Speed</label>
-                    <input class="form-control" name="game_speed" id="game_speed" type="text"  />
+                    <div id="speed" type="text" value="75" data-slider-min="1" data-slider-max="99" data-slider-step="1"
+               data-slider-value="75" data-slider-tooltip="hide"  data-slider-orientation="horizontal" data-slider-id="speedSlider" ></div>
+                      <span id="speedlabel">75</span>
+                </div>
+              
+                <div class="form-group">
+                      <input id="PrivateCheckbox" type="checkbox" />Private
+                </div>
+              
+             </div>
+      
+                 <div class="form-group" id="inviteFriends" style="display:none;">
+                      <label for="inviteFriends">Invite Friends to Join</label>
+                  <ol id="selectable">
+
+                @foreach (var f in user.Friends)
+                {
+                     <li class="ui-widget-content" data-user_id="@f.FriendUser.UserId" >
+                           <span class="glyphicon glyphicon-plus"></span>
+                             <span class="glyphicon glyphicon-ok" style="display:none;"></span>
+                             @Html.Raw("<img width=\"50px\" style=\"margin-left:5px;\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( f.FriendUser.ProfileImage) + "\" />")  
+                             @f.FriendUser.Name 
+                           
+                         </li>
+                }
+                 </ol>  
                 </div>
                 <div class="form-group">
-                    <label for="Name">Description</label>
-                    <input class="form-control" name="description" id="description" type="text"  />
+                    <button type="button" class="btn btn-primary" id="gameWizardButton"  >Next</button>
+                    <input class="btn btn-primary" type="submit" id="createGameButton" value="Create Game" style="display:none;" />
                 </div>
-                <div class="form-group">
-                    <label for="Name">Private</label>
-                    <input class="form-control" name="private" id="private" type="text"  />
-                </div>
-                <button type="button" class="btn btn-primary" id="NextButton"  >Next</button>
-                <input class="btn btn-primary" type="submit" value="Create Game" />
+              
             </form>
           </div>
 
@@ -128,6 +167,7 @@
 }
     </ul>
 
+ @section scripts {
 
 <script type="text/javascript">
 
@@ -141,4 +181,167 @@
         $("#CreateGameStepTwo").hide();
     });
 
+ 
+    $("#selectable").selectable({
+        
+    });
+
+    $('#speed').slider();
+    $('#speed').slider().on('slide', function (event) {
+        $('#speedlabel').text(event.value);
+        $('#game_speed').val(event.value);
+      
+    });
+
+    $('#userlimit').slider();
+    $('#userlimit').slider().on('slide', function (event) {
+        $('#userlimitlabel').text(event.value);
+        $('#user_limit').val(event.value);
+
+    });
+
+    $('#winlimit').slider();
+    $('#winlimit').slider().on('slide', function (event) {
+        $('#winlimitlabel').text(event.value);
+        $('#win_limit').val(event.value);
+
+    });
+
+
+
+    var sliderWidth = '500px';
+    $('.slider').width(sliderWidth);
+
+   
+
+
+
+
+    $('#selectable').on('selectableselected', function (event, ui) {
+        var user_id = $("li[class$='ui-selected']").attr('data-user_id');
+        var player_ids = $('#player_ids').val();
+        if ($("li[class$='ui-selected'] > .glyphicon-plus").is(':visible')) {
+            $("li[class$='ui-selected'] > .glyphicon-plus").hide();
+            $("li[class$='ui-selected'] > .glyphicon-ok").show();
+      
+            if (player_ids != '') {
+                var temp = player_ids.split(",");
+                //if (temp.length == 0) {
+                //    temp[0] = player_ids;
+                //}
+                var exists = false;
+                for (var i = 0; i < temp.length; i++) {
+                    if (temp[i] == user_id) {
+                        exists = true;
+                    }
+                }
+                if (!exists) {
+                    player_ids += ',' + user_id;
+                }
+            }
+            else
+            {
+                player_ids += user_id;
+            }
+        }
+        else {
+            $("li[class$='ui-selected'] > .glyphicon-plus").show();
+            $("li[class$='ui-selected'] > .glyphicon-ok").hide();
+
+            if (player_ids != '') {
+
+                var temp = player_ids.split(",");
+                player_ids = '';
+                for (var i = 0; i < temp.length; i++) {
+                    if (temp[i] != user_id) {
+                        if (player_ids != '') {
+                            player_ids += ',';
+                        }
+                        player_ids += temp[i];
+                    }
+                }
+            }
+            else {
+                player_ids = '';
+            }
+
+        }
+        $('#player_ids').val(player_ids);
+      
+    });
+  
+    $("#PrivateCheckbox").change(function () {
+        if ($("#PrivateCheckbox").attr("checked") == undefined) {
+            $("#private").val('false');
+        }
+        else {
+            $("#private").val('true');
+        }
+
+    });
+
+    $("#gameWizardButton").click(function () {
+        if ($("#gameWizardButton").text() == 'Next') {
+            $('#stepOne').hide();
+            $('#inviteFriends').show();
+            $("#gameWizardButton").text("Previous");
+            $('#createGameButton').show();
+        }
+        else {
+            $("#gameWizardButton").text("Next");
+            $('#stepOne').show();
+            $('#inviteFriends').hide();
+            $('#createGameButton').hide();
+            
+        }   
+       
+
+    });
+
+
+
+
+    $(".gameForm").submit(function (event) {
+        var o = {};
+        var a = $(this).serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        console.log(o);
+
+
+
+
+        var operation = o['operation'];
+        var url = '@Url.Action("v0", "Service",  new {operation = "creategame"})';
+        
+        $.ajax({
+                  type: 'POST',
+                  url: url,
+                  data: JSON.stringify(o),
+                  success: function (data) {
+                      console.log(data);
+                      if (data.status == 'ok') {
+                        
+                      }
+                      else {
+
+                      }
+                  },
+                  contentType: "text/html",
+                  dataType: 'json'
+              });
+              event.preventDefault();
+          });
+
+
+
 </script>
+     }

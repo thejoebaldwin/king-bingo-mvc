@@ -222,11 +222,29 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Bootstrap\css\datepicker.css" />
+    <Content Include="Bootstrap\css\images\animated-overlay.gif" />
+    <Content Include="Bootstrap\css\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Bootstrap\css\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Bootstrap\css\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Bootstrap\css\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Bootstrap\css\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Bootstrap\css\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Bootstrap\css\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Bootstrap\css\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Bootstrap\css\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Bootstrap\css\images\ui-icons_222222_256x240.png" />
+    <Content Include="Bootstrap\css\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Bootstrap\css\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Bootstrap\css\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Bootstrap\css\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Bootstrap\css\jquery-ui-1.10.4.min.css" />
     <Content Include="Bootstrap\css\jquery.Jcrop.css" />
+    <Content Include="Bootstrap\css\slider.css" />
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Bootstrap\js\bootstrap-datepicker.js" />
+    <Content Include="Bootstrap\js\bootstrap-slider.js" />
     <Content Include="Bootstrap\js\bootstrap.file-input.js" />
     <Content Include="Bootstrap\js\bootstrap.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -234,6 +252,7 @@
     <Content Include="Bootstrap\js\bootstrap.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Bootstrap\js\jquery-ui-1.10.4.min.js" />
     <Content Include="Bootstrap\js\jquery.color.js" />
     <Content Include="Bootstrap\js\jquery.Jcrop.min.js" />
     <Content Include="Bootstrap\js\jquery.min.js" />

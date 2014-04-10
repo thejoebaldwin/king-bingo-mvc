@@ -20,14 +20,23 @@
        @Styles.Render("~/Bootstrap/css/bootstrap-theme.min.css")
        @Styles.Render("~/Bootstrap/css/jquery.Jcrop.css")
        @Styles.Render("~/Bootstrap/css/datepicker.css")
+                  @Styles.Render("~/Bootstrap/css/jquery-ui-1.10.4.min.css")
+          @Styles.Render("~/Bootstrap/css/slider.css")
+
        @Styles.Render("~/Content/Site.css")
+   
+
+
+
 
        @Scripts.Render("~/bundles/jquery")
        @Scripts.Render("~/Bootstrap/js/bootstrap.min.js")
        @Scripts.Render("~/Bootstrap/js/jquery.Jcrop.min.js")
        @Scripts.Render("~/Bootstrap/js/jquery.color.js")
        @Scripts.Render("~/Bootstrap/js/bootstrap-datepicker.js")
-      
+
+
+    
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -36,6 +45,17 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+ 
+
+  <style>
+  #feedback { font-size: 1.4em; }
+  #selectable .ui-selecting { background: #FECA40; }
+  #selectable .ui-selected { background: #F39814; color: white; }
+  #selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em;  }
+  </style>
+
+ 
   </head>
   <body>
       <div id="wrap">
@@ -127,14 +147,10 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
  
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-      
-            <script src="~/Bootstrap/js/jquery.Jcrop.min.js"></script>
-        <script src="~/Bootstrap/js/jquery.color.js"></script>
-      
-      @RenderSection("scripts", required: false)
-
-
-    
-
+       <script src="~/Bootstrap/js/jquery-ui-1.10.4.min.js"></script>
+       <script src="~/Bootstrap/js/jquery.Jcrop.min.js"></script>
+       <script src="~/Bootstrap/js/jquery.color.js"></script>
+       <script src="~/Bootstrap/js/bootstrap-slider.js"></script>
+       @RenderSection("scripts", required: false)
   </body>
 </html>
