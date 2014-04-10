@@ -22,11 +22,6 @@ namespace KingBingo.Controllers
         [Authorize]
         public ActionResult Index()
         {
-
-            //    var membership = (SimpleMembershipProvider)Membership.Provider;
-
-            //  db.UserProfiles.SingleOrDefault(u => u.UserName == "test2");
-
             return View();
         }
 
@@ -42,9 +37,6 @@ namespace KingBingo.Controllers
         [Authorize]
         public ActionResult Notifications()
         {
-
-
-
             return View();
         }
 
@@ -53,6 +45,8 @@ namespace KingBingo.Controllers
         {
             DbSet<Game> games = db.Games;
             ViewData["Games"] = games;
+            var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
+            ViewData["user"] = user;
             return View();
         }
 
@@ -84,15 +78,7 @@ namespace KingBingo.Controllers
         [HttpPost]
         public ActionResult UploadImages(HttpPostedFileBase file, int user_id, int x0, int y0, int x1, int y1)
         {
-           /*
-             if (file.Count() <= 1)
-            {
-                return RedirectToAction("BrowseImages");
-            }
-             */
-            //foreach (var image in uploadImages)
-            //{
-            if (file.ContentLength > 0)
+              if (file.ContentLength > 0)
                 {
                     byte[] imageData = null;
                     using (var binaryReader = new BinaryReader(file.InputStream))
@@ -106,26 +92,14 @@ namespace KingBingo.Controllers
                     }
 
                     img = cropImage(img, new Rectangle(x0, y0, x1-x0, y1-y0));
-                    
-                   MemoryStream newstream = new MemoryStream();
-           
-             
-           
+                    MemoryStream newstream = new MemoryStream();
                     img.Save(newstream, System.Drawing.Imaging.ImageFormat.Png);
-           
-          
-          
-
-                 imageData = newstream.ToArray();
-
+                    imageData = newstream.ToArray();
                     var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
                     user.ProfileImage = imageData;
                     db.SaveChanges();
-                 
                 }
-           // }
            return RedirectToAction("Profile");
-
         }
 
          private static Image cropImage(Image img, Rectangle cropArea)
@@ -139,10 +113,7 @@ namespace KingBingo.Controllers
 
          public ActionResult UpdateProfile(string Name, string Email, string Bio, string Zip, DateTime BirthDate, string Sex, bool ReceiveEmails)
          {
-
-
              var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
-           
              user.Email = Email;
              user.Name = Name;
              user.Bio = Bio;
@@ -157,14 +128,10 @@ namespace KingBingo.Controllers
              {
                  user.Sex = Models.Sex.Female;
              }
-
              db.SaveChanges();
              ViewData["user"] = user;
              ViewBag.Updated = true;
-
-
              return RedirectToAction("Profile", new { status = "updated" });
-      
          }
 
     }

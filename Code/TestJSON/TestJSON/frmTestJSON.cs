@@ -90,13 +90,18 @@ namespace TestJSON
             try
             {
                 dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(response_json);
-                var user = data.user;
-                if (user != null)
+              
+                if (data.operation == "auth")
                 {
-                    user_id = user.user_id;
-                    authentication_token = user.authentication_token;
+                    var user = data.user;
+                    if (user != null)
+                    {
+                        user_id = user.user_id;
+                        authentication_token = user.authentication_token;
+                    }
+
                 }
-                if (data.operation == "joingame")
+                else if (data.operation == "joingame")
                 {
                     var gamecard = data.game_card;
                     var gamespeed = data.game_speed;
@@ -392,7 +397,15 @@ namespace TestJSON
             string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
             post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
             txtRequest.Text = post_json;
-            txtResponse.Text = PostDataWithOperation("joingame", post_json); 
+            txtResponse.Text = PostDataWithOperation("joingame", post_json);
+
+
+            for (int i = 0; i <25; i++)
+            {
+                Label tempLabel = getNumberLabelByNumber(i);
+                tempLabel.BackColor = Color.Silver;
+            }
+
         }
 
         private void btnQuitGame_Click(object sender, EventArgs e)

@@ -6,10 +6,12 @@ Supported Operations
 - [Authenticate](v0/auth "Authenticate")
 - [Get All Games](v0/allgames "Get All Games")
 - [Get All Users](v0/allusers "Get All Users")
+- [Create Game](v0/creategame "Create Game")
 - [Join Game](v0/joingame "Join Game")
 - [Quit Game](v0/quitgame "Quit Game")
 - [Get Number](v0/getnumber "Get Number")
 - [Get User](v0/getuser "Get User")
+
 
 
 

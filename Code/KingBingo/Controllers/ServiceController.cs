@@ -81,12 +81,12 @@ namespace KingBingo.Controllers
                             db.SaveChanges();
                             ViewData["user"] = user;
 
-                            ViewBag.message = "Successfully authenticated";
+                            ViewBag.message = "successfully authenticated";
                         }
                         else
                         {
                             ViewBag.status = "error";
-                            ViewBag.message = "Password hash did not match with given user_id";
+                            ViewBag.message = "password hash did not match with given user_id";
                         }
                     }
                     else if (operation == "createuser")
@@ -136,7 +136,7 @@ namespace KingBingo.Controllers
                                 user.Badges = new List<Badge>(); ;
                                 db.SaveChanges();
                                 ViewData["user"] = user;
-                                ViewBag.message = "Successfully created user";
+                                ViewBag.message = "successfully created user";
                             }
                             else
                             {
@@ -160,7 +160,7 @@ namespace KingBingo.Controllers
                             string authenticationToken = data.authentication_token;
                             if (user.AuthenticationToken != authenticationToken)
                             {
-                                ViewBag.message = "Authentication Token Invalid";
+                                ViewBag.message = "authentication token invalid";
                                 ViewBag.status = "error";
                             }
                             else
@@ -175,7 +175,7 @@ namespace KingBingo.Controllers
                                     }
                                     ViewData["games"] = db.Games.OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allgames";
-                                    ViewBag.message = "Successfully retrieved list of all games";
+                                    ViewBag.message = "successfully retrieved list of all games";
                                 }
                                 if (operation == "allusers")
                                 {
@@ -187,7 +187,7 @@ namespace KingBingo.Controllers
                                     }
                                     ViewData["users"] = db.UserProfiles.OrderBy(u => u.UserName).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allusers";
-                                    ViewBag.message = "Successfully retrieved list of all users";
+                                    ViewBag.message = "successfully retrieved list of all users";
                                 }
                                 else if (operation == "updateprofileimage")
                                 {
@@ -198,7 +198,7 @@ namespace KingBingo.Controllers
                                 else if (operation == "getuser")
                                 {
                                     ViewBag.operation = "getuser";
-                                    ViewBag.message = "Successfully retrieved user";
+                                    ViewBag.message = "auccessfully retrieved user";
                                     int query_user_id = data.query_user_id;
                                     var users = new List<UserProfile>();
                                     users.Add(db.UserProfiles.SingleOrDefault(u => u.UserId == query_user_id));
@@ -211,7 +211,7 @@ namespace KingBingo.Controllers
                                 else if (operation == "inviteusers")
                                 {
                                     ViewBag.operation = "inviteusers";
-                                    ViewBag.message = "Successfully invited users";
+                                    ViewBag.message = "successfully invited users";
                                     //CREATE NOTIFICATIONS
 
                                 }
@@ -226,7 +226,7 @@ namespace KingBingo.Controllers
                                     //var friendship = db.Friends.SingleOrDefault(f => f.User == user);
                                     if (friendship == null)
                                     {
-                                        ViewBag.message = "Successfully added friend";
+                                        ViewBag.message = "successfully added friend";
                                         var friend_user = db.UserProfiles.SingleOrDefault(u => u.UserId == friend_id);
                                         var friend1 = new Friend { User = user, FriendUser = friend_user, Status = RequestStatus.Requested };
                                         var friend2 = new Friend { User = friend_user, FriendUser = user, Status = RequestStatus.Pending };
@@ -239,14 +239,14 @@ namespace KingBingo.Controllers
                                     }
                                     else
                                     {
-                                        ViewBag.message = "Friend request already has been added";
+                                        ViewBag.message = "friend request already has been added";
                                         ViewBag.status = "error";
                                     }
                                 }
                                 else if (operation == "acceptfriend")
                                 {
                                     ViewBag.operation = "acceptfriend";
-                                    ViewBag.message = "Successfully accepted friend";
+                                    ViewBag.message = "successfully accepted friend";
 
                                     int friend_id = data.friend_id;
 
@@ -261,7 +261,7 @@ namespace KingBingo.Controllers
                                 else if (operation == "rejectfriend")
                                 {
                                     ViewBag.operation = "rejectfriend";
-                                    ViewBag.message = "Successfully rejected friend";
+                                    ViewBag.message = "successfully rejected friend";
 
                                     int friend_id = data.friend_id;
 
@@ -287,12 +287,12 @@ namespace KingBingo.Controllers
                                 else if (operation == "updateuser")
                                 {
                                     ViewBag.operation = "updateuser";
-                                    ViewBag.message = "Successfully updated user";
+                                    ViewBag.message = "successfully updated user";
                                 }
                                 else if (operation == "getfriends")
                                 {
                                     ViewBag.operation = "getfriends";
-                                    ViewBag.message = "Successfully retrieved list of friends";
+                                    ViewBag.message = "successfully retrieved list of friends";
                                     //get all friendship requests
                                     var friends = db.Friends.Include("FriendUser").Where(f => f.User == user);
                                     ViewData["friends"] = friends;
@@ -310,7 +310,7 @@ namespace KingBingo.Controllers
                     } // before this
                  
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     ViewBag.status = "error";
                     ViewBag.message = "check your json and documentation for proper format";
@@ -330,7 +330,7 @@ namespace KingBingo.Controllers
         void getNumber(dynamic data)
         {
             ViewBag.operation = "getnumber";
-            ViewBag.message = "Successfully retrieved number";
+            ViewBag.message = "successfully retrieved number";
             int game_id = data.game_id;
 
 
@@ -342,11 +342,16 @@ namespace KingBingo.Controllers
             if (!game.Players.Contains(user))
             {
                 ViewBag.Status = "error";
-                ViewBag.message = "User not joined to game.";
+                ViewBag.message = "user not joined to game.";
+            }
+            else if (game.Closed)
+            {
+                ViewBag.status = "error";
+                ViewBag.message = "game is closed";
             }
             else
             {
-                ViewBag.message = "Successfully retrieved number";
+                ViewBag.message = "successfully retrieved number";
                 int number = game.GetNextNumber();
                 ViewBag.nextnumbertime = game.NextNumberTime;
                 if (number > -1)
@@ -356,7 +361,7 @@ namespace KingBingo.Controllers
                 else
                 {
                     ViewBag.status = "error";
-                    ViewBag.message = "All Numbers have been drawn for this game";
+                    ViewBag.message = "all numbers have been drawn for this game";
                     ViewBag.number = -1;
                 }
                 db.SaveChanges();
@@ -384,11 +389,11 @@ namespace KingBingo.Controllers
                 //is game empty then close it
                 user.Game = null;
                 db.SaveChanges();
-                ViewBag.message = "Successfully quit game";
+                ViewBag.message = "successfully quit game";
             }
             else
             {
-                ViewBag.message = "User was not joined to the game";
+                ViewBag.message = "user was not joined to the game";
                 ViewBag.Status = "error";
             }
             
@@ -402,15 +407,25 @@ namespace KingBingo.Controllers
             int game_id = data.game_id;
             var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
             var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
-          
-            if (game.Players != null && game.Players.Contains(user))
+
+            if (game.Closed)
             {
                 ViewBag.status = "error";
-                ViewBag.message = "User is already joined to game";
+                ViewBag.message = "game is closed";
+            }
+            else if (game.Players != null && game.Players.Contains(user))
+            {
+                ViewBag.status = "error";
+                ViewBag.message = "user is already joined to game";
+            }
+            else if (game.Players != null && game.Players.Count == game.UserLimit)
+            {
+                ViewBag.status = "error";
+                ViewBag.message = "game is full";
             }
             else
             {
-                ViewBag.message = "Successfully joined game";
+                ViewBag.message = "successfully joined game";
                 if (user.Game != null)
                 {
                     user.Game.Players.Remove(user);
@@ -419,7 +434,7 @@ namespace KingBingo.Controllers
                 GameCard gamecard = game.GetNextGameCard();
                 if (gamecard == null)
                 {
-                    ViewBag.message = "No gamecards left to play";
+                    ViewBag.message = "no gamecards left to play";
                     ViewBag.status = "error";
                 }
                 else
@@ -439,13 +454,13 @@ namespace KingBingo.Controllers
         void createGame(dynamic data)
         {
             ViewBag.operation = "creategame";
-            ViewBag.message = "Successfully created game";
+            ViewBag.message = "successfully created game";
             Game game = new Game();
             game.Name = data.name;
             game.Description = data.description;
             game.WinLimit = data.win_limit;
             game.UserLimit = data.user_limit;
-            game.Speed = data.speed;
+            game.Speed = data.game_speed;
             game.Created = DateTime.Now;
             game.Private = data["private"];
             game.NumbersIndex = 0;

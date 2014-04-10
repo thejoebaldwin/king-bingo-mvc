@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Games";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = ViewBag.user;
 }
 <ol class="breadcrumb">
   <li>@Html.ActionLink("Home", "Index", "Secure")</li>
@@ -22,64 +23,58 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Step 1 -->
-        <div id="CreateGameStepOne">
+      
         <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Create Game</h4>
       </div>
       <div class="modal-body">
-        <p>Description: </p>
-        Created: Players: Wins: Speed:
-      </div>
+          <form class="gameForm">
+                <input type="hidden" name="user_id" value="@user.UserId" />
+                <input type="hidden" name="auth_token" value="@user.AuthenticationToken" />
+                <input type="hidden" name="operation" value="creategame" />
+                <div class="form-group">
+                    <label for="Name">Win Limit</label>
+                    <input class="form-control" name="win_limit" id="win_limit" type="text"  />
+                </div>
+                <div class="form-group">
+                    <label for="Name">User Limit</label>
+                    <input class="form-control" name="user_limit" id="user_limit" type="text"  />
+                </div>
+                <div class="form-group">
+                    <label for="Name">Game Speed</label>
+                    <input class="form-control" name="game_speed" id="game_speed" type="text"  />
+                </div>
+                <div class="form-group">
+                    <label for="Name">Description</label>
+                    <input class="form-control" name="description" id="description" type="text"  />
+                </div>
+                <div class="form-group">
+                    <label for="Name">Private</label>
+                    <input class="form-control" name="private" id="private" type="text"  />
+                </div>
+                <button type="button" class="btn btn-primary" id="NextButton"  >Next</button>
+                <input class="btn btn-primary" type="submit" value="Create Game" />
+            </form>
+          </div>
+
       <div class="modal-footer">
 
-        <button type="button" class="btn btn-primary" id="NextButton"  >Next</button>
+     
       </div>
-            </div>
-     <!-- Step 2 -->
-          <div id="CreateGameStepTwo" style="display:none">
-         <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">New Game</h4>
-      </div>
-      <div class="modal-body">
-        <p>Invite: </p>
-        
-      </div>
-      <div class="modal-footer">
-   
-        <button type="button" class="btn btn-primary" id="BackButton">Back</button>
-        <button type="button" class="btn btn-primary" >Start Game</button>
-      </div>
-                </div>
+            
     </div>
   </div>
 </div>
-
-
-
-
 
 <h2>Games</h2>
 @{
    var games = ViewBag.Games;
 }
 
-
-    
-
-
-
 <ul>
 @foreach (var g in games)
 {
-  
-  
-    
-
-
-
-    
     <!-- Button trigger modal -->
 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
   @g.Name
@@ -94,8 +89,29 @@
         <h4 class="modal-title" id="myModalLabel">@g.Name</h4>
       </div>
       <div class="modal-body">
-        <p>Description: @g.Description</p>
-        Created: Players: Wins: Speed:
+        
+          <div  class='row'>
+              <div class='col-md-4'>
+                 Wins
+              </div>
+              <div class='col-md-4'>
+                 Players
+              </div>
+              <div class='col-md-4'>
+                 Speed
+              </div>
+           </div>
+          <div class="row">
+               <div class='col-md-4'>
+                 @g.WinCount() / @g.WinLimit
+              </div>
+              <div class='col-md-4'>
+                 @g.UserCount() / @g.UserLimit
+              </div>
+              <div class='col-md-4'>
+                 @g.Speed
+              </div>
+         </div>
       </div>
       <div class="modal-footer">
           <form action='@Url.Action("GameDetail", "Secure",  new { id = g.GameID})' >

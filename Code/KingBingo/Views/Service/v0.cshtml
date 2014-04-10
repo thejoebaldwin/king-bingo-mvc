@@ -14,6 +14,7 @@
     var gamecard = ViewBag.gamecard;
     var gamespeed = ViewBag.gamespeed;
     var nextnumbertime = ViewBag.nextnumbertime;
+    var gameclosed = ViewBag.gameclosed;
 }
 @functions {
     public string ToUnixTime(DateTime date)
@@ -22,7 +23,7 @@
         return Convert.ToInt64((date.ToUniversalTime() - epoch).TotalSeconds).ToString();
     }
    }
-{
+   {  
     "status": "@ViewBag.Status",
     "operation": "@ViewBag.Operation",
     "message": "@ViewBag.Message"
@@ -30,6 +31,7 @@
     {
          @String.Format(",\"numbers\": \"{0}\"", numbers)
     }
+    
     @if (gamespeed != null)
     {
            @Html.Raw(String.Format(",\"game_speed\": \"{0}\"", gamespeed))
@@ -135,6 +137,7 @@
             @Html.Raw(String.Format("\"name\": \"{0}\",", g.Name))
             @Html.Raw(String.Format("\"description\": \"{0}\",", g.Description))
             @Html.Raw(String.Format("\"win_limit\": \"{0}\",", g.WinLimit)  ) 
+            @Html.Raw(String.Format("\"game_speed\": \"{0}\",", g.Speed)  ) 
             @Html.Raw(String.Format("\"win_count\": \"{0}\",", g.WinCount())  ) 
             @Html.Raw(String.Format("\"user_limit\": \"{0}\",", g.UserLimit)   )
             @Html.Raw(String.Format("\"user_count\":\"{0}\",", g.UserCount())   )
