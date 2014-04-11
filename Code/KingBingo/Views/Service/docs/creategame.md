@@ -1,6 +1,6 @@
 ##Create Game
 
-####POST Request to http://itweb.fvtc.edu/service/v0/creategame
+####*POST Request to http://itweb.fvtc.edu/service/v0/creategame*
 
 Use this command to create a new game. 
 

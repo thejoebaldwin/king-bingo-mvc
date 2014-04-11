@@ -320,6 +320,7 @@ namespace KingBingo.Controllers
             else
             {
                 ViewBag.markdown = MarkdownForOperation(operation);
+                ViewBag.title = operation;
                 return View("Help");
             }
         }
