@@ -407,6 +407,8 @@ namespace KingBingo.Controllers
             int game_id = data.game_id;
             var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
             var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
+         
+          
 
             if (game.Closed)
             {
@@ -426,9 +428,11 @@ namespace KingBingo.Controllers
             else
             {
                 ViewBag.message = "successfully joined game";
+              
                 if (user.Game != null)
                 {
                     user.Game.Players.Remove(user);
+                    user.Game = null;
                 }
                 ViewData["game"] = game;
                 GameCard gamecard = game.GetNextGameCard();
@@ -469,9 +473,17 @@ namespace KingBingo.Controllers
             game.Players = new List<UserProfile>();
 
             UserProfile createdByUser = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
+
+            
+            if (createdByUser.Game != null)
+            {
+                //quit the user from any other game
+                //create result that the user quit the game
+                createdByUser.Game.Players.Remove(createdByUser);
+                createdByUser.Game = null;
+            }
             createdByUser.Game = game;
             game.Players.Add(createdByUser);
-        
 
             //generate unique gamecards
             game.GenerateGameCards();

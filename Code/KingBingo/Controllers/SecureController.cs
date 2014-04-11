@@ -53,7 +53,10 @@ namespace KingBingo.Controllers
         [Authorize]
         public ActionResult GameDetail(int id)
         {
-            var game = db.Games.SingleOrDefault(g => g.GameID == id);
+
+            var game = db.Games.Include("Players").Where(g => g.GameID == id).FirstOrDefault();
+
+            //var game = db.Games.SingleOrDefault(g => g.GameID == id);
             ViewData["Game"] = game;
             return View();
         }

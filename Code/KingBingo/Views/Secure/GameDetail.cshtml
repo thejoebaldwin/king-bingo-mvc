@@ -10,7 +10,13 @@
   <li class="active">@game.Name</li>
 </ol>
 
-<h2>@game.Name</h2>
+@foreach (var u in game.Players)
+{
+    @u.UserName <br/>
+
+
+
+}
 
 
 

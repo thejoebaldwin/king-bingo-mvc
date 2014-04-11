@@ -1,19 +1,25 @@
 ﻿@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>Contact</h1>
-              
-            </hgroup>
-           
-        </div>
-    </section>
+
 }
-
-
+<ol class="breadcrumb">
+  <li>@Html.ActionLink("Home", "Index", "Secure")</li>
+  <li class="active">Contact</li>
+</ol>
+<h3>Contact Us</h3>
 <form action="/contact/create" method="post">
-     Name:<input name="Name" id="Name" type="text" /><br />
-    Email:<input name="Email" id="Email" type="text" /><br />
-    Comments:<input name="Comments" id="Comments" type="text" /><br />
-    <input type="submit" value="save" />
+      <div class="form-group">
+           <label for="name">Name</label>
+           <input  class="form-control" name="Name" id="Name" type="text" />
+      </div>
+      <div class="form-group">
+           <label for="name">Email</label>
+            <input  class="form-control" name="Email" id="Email" type="text" />
+      </div>
+      <div class="form-group">
+           <label for="name">Comments</label>
+            <input  class="form-control" name="Comments" id="Comments" type="text" />
+      </div>
+     <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="Submit" />
+     </div>
 </form>
