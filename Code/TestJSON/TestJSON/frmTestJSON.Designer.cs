@@ -79,6 +79,7 @@
             this.txtFriend_friend_user_id = new System.Windows.Forms.TextBox();
             this.txtFriend_user_id = new System.Windows.Forms.TextBox();
             this.tabGame = new System.Windows.Forms.TabPage();
+            this.lblBingoNumber = new System.Windows.Forms.Label();
             this.label45 = new System.Windows.Forms.Label();
             this.label44 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
@@ -111,7 +112,10 @@
             this.lbl_b0 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.timerNumbers = new System.Windows.Forms.Timer(this.components);
-            this.lblBingoNumber = new System.Windows.Forms.Label();
+            this.picProfileImage = new System.Windows.Forms.PictureBox();
+            this.btnUploadProfileImage = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.chkIncludeProfileImages = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabBarOperations.SuspendLayout();
@@ -120,6 +124,7 @@
             this.groupBox3.SuspendLayout();
             this.tabFriends.SuspendLayout();
             this.tabGame.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGetAllGames
@@ -468,6 +473,9 @@
             // 
             // tabUser
             // 
+            this.tabUser.Controls.Add(this.chkIncludeProfileImages);
+            this.tabUser.Controls.Add(this.btnUploadProfileImage);
+            this.tabUser.Controls.Add(this.picProfileImage);
             this.tabUser.Controls.Add(this.groupBox1);
             this.tabUser.Controls.Add(this.btnHash);
             this.tabUser.Controls.Add(this.lblHash);
@@ -655,6 +663,15 @@
             this.tabGame.TabIndex = 3;
             this.tabGame.Text = "GameCard";
             this.tabGame.UseVisualStyleBackColor = true;
+            // 
+            // lblBingoNumber
+            // 
+            this.lblBingoNumber.AutoSize = true;
+            this.lblBingoNumber.Location = new System.Drawing.Point(710, 53);
+            this.lblBingoNumber.Name = "lblBingoNumber";
+            this.lblBingoNumber.Size = new System.Drawing.Size(41, 13);
+            this.lblBingoNumber.TabIndex = 29;
+            this.lblBingoNumber.Text = "label16";
             // 
             // label45
             // 
@@ -1025,14 +1042,38 @@
             // 
             this.timerNumbers.Tick += new System.EventHandler(this.timerNumbers_Tick);
             // 
-            // lblBingoNumber
+            // picProfileImage
             // 
-            this.lblBingoNumber.AutoSize = true;
-            this.lblBingoNumber.Location = new System.Drawing.Point(710, 53);
-            this.lblBingoNumber.Name = "lblBingoNumber";
-            this.lblBingoNumber.Size = new System.Drawing.Size(41, 13);
-            this.lblBingoNumber.TabIndex = 29;
-            this.lblBingoNumber.Text = "label16";
+            this.picProfileImage.Location = new System.Drawing.Point(567, 186);
+            this.picProfileImage.Name = "picProfileImage";
+            this.picProfileImage.Size = new System.Drawing.Size(148, 125);
+            this.picProfileImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picProfileImage.TabIndex = 20;
+            this.picProfileImage.TabStop = false;
+            // 
+            // btnUploadProfileImage
+            // 
+            this.btnUploadProfileImage.Location = new System.Drawing.Point(388, 272);
+            this.btnUploadProfileImage.Name = "btnUploadProfileImage";
+            this.btnUploadProfileImage.Size = new System.Drawing.Size(132, 23);
+            this.btnUploadProfileImage.TabIndex = 21;
+            this.btnUploadProfileImage.Text = "Update Profile Image";
+            this.btnUploadProfileImage.UseVisualStyleBackColor = true;
+            this.btnUploadProfileImage.Click += new System.EventHandler(this.btnUploadProfileImage_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // chkIncludeProfileImages
+            // 
+            this.chkIncludeProfileImages.AutoSize = true;
+            this.chkIncludeProfileImages.Location = new System.Drawing.Point(96, 272);
+            this.chkIncludeProfileImages.Name = "chkIncludeProfileImages";
+            this.chkIncludeProfileImages.Size = new System.Drawing.Size(142, 17);
+            this.chkIncludeProfileImages.TabIndex = 22;
+            this.chkIncludeProfileImages.Text = "chkIncludeProfileImages";
+            this.chkIncludeProfileImages.UseVisualStyleBackColor = true;
             // 
             // frmTestJSON
             // 
@@ -1063,6 +1104,7 @@
             this.tabFriends.PerformLayout();
             this.tabGame.ResumeLayout(false);
             this.tabGame.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1153,6 +1195,10 @@
         private System.Windows.Forms.Label lbl_b0;
         private System.Windows.Forms.Timer timerNumbers;
         private System.Windows.Forms.Label lblBingoNumber;
+        private System.Windows.Forms.PictureBox picProfileImage;
+        private System.Windows.Forms.Button btnUploadProfileImage;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.CheckBox chkIncludeProfileImages;
     }
 }
 

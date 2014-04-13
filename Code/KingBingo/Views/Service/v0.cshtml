@@ -15,6 +15,7 @@
     var gamespeed = ViewBag.gamespeed;
     var nextnumbertime = ViewBag.nextnumbertime;
     var gameclosed = ViewBag.gameclosed;
+    var profileimage = ViewBag.profileimage;
 }
 @functions {
     public string ToUnixTime(DateTime date)
@@ -35,6 +36,10 @@
     @if (gamespeed != null)
     {
            @Html.Raw(String.Format(",\"game_speed\": \"{0}\"", gamespeed))
+    }
+    @if (profileimage != null)
+    {
+           @Html.Raw(String.Format(",\"profile_image\": \"{0}\"", profileimage))
     }
     @if (number != null)
     {
@@ -65,7 +70,7 @@
              @Html.Raw(String.Format("\"authentication_token_expires\": \"{0}\"", ToUnixTime(user.AuthenticationTokenExpires)))
              if (user.ProfileImage != null)
              {
-              @Html.Raw(String.Format(",\"profile_image\": \"{0}\"", user.ProfileImage))
+              @Html.Raw(String.Format(",\"profile_image\": \"{0}\"", Convert.ToBase64String(user.ProfileImage)))
              } 
              if (user.Game != null)
              {
@@ -110,6 +115,10 @@
                @Html.Raw(String.Format("\"rank\": \"{0}\",", u.Rank))
                @Html.Raw(String.Format("\"friends\": \"{0}\",", u.FriendCount))
                @Html.Raw(String.Format("\"games\": \"{0}\"", u.GameCount))
+               if (ViewBag.includeprofileimages != null &&  ViewBag.includeprofileimages == true)
+               {
+                     @Html.Raw(String.Format("\"profile_image\": \"{0}\"", Convert.ToBase64String(u.ProfileImage)))
+               }
             userCount++;
             @Html.Raw("}")
         }

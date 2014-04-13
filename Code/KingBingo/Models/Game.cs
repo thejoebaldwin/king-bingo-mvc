@@ -163,10 +163,6 @@ namespace KingBingo.Models
                 {
                     number = Numbers.ElementAt(NumbersIndex);
                 }
-                else
-                {
-                    Closed = true;
-                }
             }
             return number;
         }

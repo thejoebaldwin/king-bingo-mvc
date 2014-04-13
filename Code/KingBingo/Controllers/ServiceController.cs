@@ -107,7 +107,7 @@ namespace KingBingo.Controllers
                                 user.PasswordHash = UserProfile.SHA1(password);
                                 user.Created = DateTime.Now;
                                 user.Friends = new List<Friend>();
-                                user.Results = new List<Result>();
+                                //user.Results = new List<Result>();
                                 user.Name = username;
                                 user.Email = email;
                                 user.Bio = "";
@@ -187,13 +187,44 @@ namespace KingBingo.Controllers
                                     }
                                     ViewData["users"] = db.UserProfiles.OrderBy(u => u.UserName).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allusers";
+                                    if (data.include_profile_images != null)
+                                    {
+                                        if (data.include_profile_images == "true")
+                                        {
+                                            ViewBag.includeprofileimages = true;
+                                        }
+                                    }
                                     ViewBag.message = "successfully retrieved list of all users";
                                 }
                                 else if (operation == "updateprofileimage")
                                 {
-
-                                    //??
-
+                                    //need error checking
+                                    ViewBag.operation = "updateprofileimage";
+                                    string profileimage = data.profile_image;
+                                    byte[] buffer = Convert.FromBase64String(profileimage);
+                                    MemoryStream ms = new MemoryStream(buffer);
+                                    System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                                    if (img.Width > 200 || img.Height > 200)
+                                    {
+                                        ViewBag.status = "error";
+                                        ViewBag.message = "image cannot be larger than 200 x 200";
+                                    }
+                                    else if (img.Width != img.Height)
+                                    {
+                                        ViewBag.status = "error";
+                                        ViewBag.message = "image must have equal width and height";
+                                    }
+                                    else
+                                    {
+                                        ViewBag.message = "successfully updated user profile image";
+                                        user.ProfileImage = buffer;
+                                        db.SaveChanges();
+                                    }
+                                }
+                                else if (operation == "updateuser")
+                                {
+                                    ViewBag.operation = "updateuser";
+                                    ViewBag.message = "successfully updated user";
                                 }
                                 else if (operation == "getuser")
                                 {
@@ -213,12 +244,11 @@ namespace KingBingo.Controllers
                                     ViewBag.operation = "inviteusers";
                                     ViewBag.message = "successfully invited users";
                                     //CREATE NOTIFICATIONS
-
                                 }
                                 else if (operation == "addfriend")
                                 {
                                     ViewBag.operation = "addfriend";
-                                   
+
                                     int friend_id = data.friend_id;
 
                                     var friendship = db.Friends.Include("User").Where(f => f.User.UserId == user.UserId && f.FriendUser.UserId == friend_id).FirstOrDefault();
@@ -361,9 +391,32 @@ namespace KingBingo.Controllers
                 }
                 else
                 {
+                    game.Closed = true;
                     ViewBag.status = "error";
                     ViewBag.message = "all numbers have been drawn for this game";
                     ViewBag.number = -1;
+                    //give a loss to all users who didn't win
+                    foreach (UserProfile u in game.Players)
+                    {
+                        bool hadWin = false;
+                        foreach (Result r in game.Results)
+                        {
+                            if (r.User == u && r.Outcome == OutcomeType.Win)
+                            {
+                                hadWin = true;
+                            }
+                        }
+                        if (!hadWin)
+                        {
+                            Result loss = new Result();
+                            loss.Game = game;
+                            loss.User = u;
+                            loss.Outcome = OutcomeType.Loss;
+                            db.Results.Add(loss);
+                            u.Results.Add(loss);
+                            game.Results.Add(loss);
+                        }
+                    }
                 }
                 db.SaveChanges();
             }
@@ -388,8 +441,17 @@ namespace KingBingo.Controllers
             {
                 game.Players.Remove(user);
                 //is game empty then close it
+                Result r = new Result();
+                r.Game = user.Game;
+                r.Outcome = OutcomeType.Quit;
+                r.Points = 0;
+                r.User = user;
+                db.Results.Add(r);
+                user.Results.Add(r);
+                r.Game.Results.Add(r);
+
                 user.Game = null;
-                db.SaveChanges();
+                //db.SaveChanges();
                 ViewBag.message = "successfully quit game";
             }
             else
@@ -433,8 +495,26 @@ namespace KingBingo.Controllers
                 if (user.Game != null)
                 {
                     user.Game.Players.Remove(user);
+                    Result r = new Result();
+                    r.Game = user.Game;
+                    r.Outcome = OutcomeType.Quit;
+                    r.Points = 0;
+                    r.User = user;
+                    db.Results.Add(r);
+                    user.Results.Add(r);
+                    r.Game.Results.Add(r);
                     user.Game = null;
+
                 }
+
+                Result join = new Result();
+                join.Outcome = OutcomeType.Join;
+                join.Game = game;
+                join.User = user;
+                db.Results.Add(join);
+                game.Results.Add(join);
+                user.Results.Add(join);
+
                 ViewData["game"] = game;
                 GameCard gamecard = game.GetNextGameCard();
                 if (gamecard == null)
@@ -481,10 +561,28 @@ namespace KingBingo.Controllers
                 //quit the user from any other game
                 //create result that the user quit the game
                 createdByUser.Game.Players.Remove(createdByUser);
+                Result r = new Result();
+                r.Game = createdByUser.Game;
+                r.Outcome = OutcomeType.Quit;
+                r.Points = 0;
+                r.User = createdByUser;
+                db.Results.Add(r);
+                db.SaveChanges();
+                createdByUser.Results.Add(r);
+                r.Game.Results.Add(r);
+
                 createdByUser.Game = null;
             }
             createdByUser.Game = game;
             game.Players.Add(createdByUser);
+            
+            Result join = new Result();
+            join.Outcome = OutcomeType.Join;
+            join.Game = game;
+            join.User = createdByUser;
+            db.Results.Add(join);
+            game.Results.Add(join);
+            createdByUser.Results.Add(join);
 
             //generate unique gamecards
             game.GenerateGameCards();
@@ -512,7 +610,7 @@ namespace KingBingo.Controllers
 
             ViewData["gamecard"] = createdByUser.GameCard;
            
-            game.Results = new List<Result>();
+            //game.Results = new List<Result>();
             db.Games.Add(game);
             db.SaveChanges();
             List<Game> games = new List<Game>();

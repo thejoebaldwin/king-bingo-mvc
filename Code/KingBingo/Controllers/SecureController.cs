@@ -22,6 +22,10 @@ namespace KingBingo.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            int resultSize = 10;
+            ViewData["users"] = db.UserProfiles.OrderByDescending(u => u.Created).Take(resultSize);
+            //ViewData["games"] = db.Games.OrderBy(g => g.Created).Take(resultSize);
+            ViewData["results"] = db.Results.Include("User").Include("Game").OrderByDescending(r => r.Created).Take(resultSize);
             return View();
         }
 

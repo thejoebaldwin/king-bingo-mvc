@@ -9,7 +9,7 @@ namespace KingBingo.Models
 {
     public enum OutcomeType
     {
-        Quit, Loss, Win
+        Join, Quit, Loss, Win
     }
 
     public class Result
@@ -20,9 +20,17 @@ namespace KingBingo.Models
         public OutcomeType? Outcome { get;  set; }
         public DateTime Created { get; set; }
         public int Points { get; set; }
-
+        public int UserId { get; set; }
+        public int GameID { get; set; }
+        [ForeignKey("UserId")] 
         public virtual UserProfile User { get; set; }
+        [ForeignKey("GameID")] 
         public virtual Game Game { get; set; }
-     
+
+        public Result()
+        {
+            Created = DateTime.Now;
+        }
+
     }
 }

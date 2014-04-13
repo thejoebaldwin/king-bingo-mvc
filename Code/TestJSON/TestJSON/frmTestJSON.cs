@@ -14,7 +14,7 @@ namespace TestJSON
 {
     public partial class frmTestJSON : Form
     {
-      
+
 
         public string authentication_token = "";
         public int user_id = -1;
@@ -29,8 +29,8 @@ namespace TestJSON
             string targetURL = "";
             if (cbTarget.SelectedIndex == 0)
             {
-               targetURL = "http://localhost:22986/service/v0";
-              
+                targetURL = "http://localhost:22986/service/v0";
+
             }
             else if (cbTarget.SelectedIndex == 1)
             {
@@ -42,7 +42,7 @@ namespace TestJSON
 
         private string PostDataWithOperation(string operation, string JSON)
         {
-          
+
 
             //build request
             System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}/{1}", getTargetUrl(), operation));
@@ -77,8 +77,11 @@ namespace TestJSON
 
         private void btnGetAllUsers_Click(object sender, EventArgs e)
         {
-         
-            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token +  "\"";
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+            if (chkIncludeProfileImages.Checked)
+            {
+                post_json += ",\"include_profile_images\":\"true\"";
+            }
             post_json += ",\"page\":\"0\"}";
             txtRequest.Text = post_json;
             txtResponse.Text = PostDataWithOperation("allusers", post_json); ;
@@ -86,11 +89,11 @@ namespace TestJSON
 
         private void processResponse(string response_json)
         {
-          
+
             try
             {
                 dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(response_json);
-              
+
                 if (data.operation == "auth")
                 {
                     var user = data.user;
@@ -98,6 +101,13 @@ namespace TestJSON
                     {
                         user_id = user.user_id;
                         authentication_token = user.authentication_token;
+
+                        string profileimage = user.profile_image;
+                        byte[] buffer = Convert.FromBase64String(profileimage);
+                        MemoryStream ms = new MemoryStream(buffer);
+                        picProfileImage.Image = Image.FromStream(ms);
+
+
                     }
 
                 }
@@ -105,18 +115,25 @@ namespace TestJSON
                 {
                     var gamecard = data.game_card;
                     var gamespeed = data.game_speed;
-                    string[] splitString = {","};
+                    string[] splitString = { "," };
                     string[] numbers = ((string)gamecard).Split(splitString, StringSplitOptions.None);
                     for (int i = 0; i < numbers.Length; i++)
                     {
                         Label tempLabel = getNumberLabelByNumber(i);
-                        tempLabel.Text =  numbers[i];
+                        tempLabel.Text = numbers[i];
                     }
 
                     timerNumbers.Enabled = true;
-                    double delay = ((100 - gamespeed) / 100.0) * 60.0 ;
-                    timerNumbers.Interval = (int) delay * 1000;
+                    double delay = ((100 - gamespeed) / 100.0) * 60.0;
+                    timerNumbers.Interval = (int)delay * 1000;
 
+                }
+                else if (data.operation == "getprofileimage")
+                {
+                    string profileimage = data.profile_image;
+                    byte[] buffer = Convert.FromBase64String(profileimage);
+                    MemoryStream ms = new MemoryStream(buffer);
+                    picProfileImage.Image = Image.FromStream(ms);
                 }
                 else if (data.operation == "getnumber")
                 {
@@ -143,7 +160,7 @@ namespace TestJSON
                         timerNumbers.Stop();
                     }
                     lblBingoNumber.Text = bingoNumber;
-                   
+
                 }
             }
             catch (Exception ex)
@@ -186,7 +203,7 @@ namespace TestJSON
                 timerNumbers.Enabled = false;
                 timerNumbers.Stop();
                 MessageBox.Show("BINGO!");
-                
+
             }
 
         }
@@ -225,8 +242,8 @@ namespace TestJSON
         }
         bool forwardDiagonalWin()
         {
-           //0, 6, 12, 18, 24
-           
+            //0, 6, 12, 18, 24
+
             bool win = false;
             if (getNumberLabelByNumber(0).BackColor == Color.Yellow &&
                 getNumberLabelByNumber(6).BackColor == Color.Yellow &&
@@ -243,7 +260,7 @@ namespace TestJSON
         bool backwardDiagonalWin()
         {
             //4,8, 12, 16, 20
-        
+
 
             bool win = false;
             if (getNumberLabelByNumber(4).BackColor == Color.Yellow &&
@@ -296,15 +313,15 @@ namespace TestJSON
 
         private void btnGetUser_Click(object sender, EventArgs e)
         {
-          
+
             string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\", \"query_user_id\":\"1\"}";
             txtRequest.Text = post_json;
-            txtResponse.Text = PostDataWithOperation("getuser", post_json); 
+            txtResponse.Text = PostDataWithOperation("getuser", post_json);
         }
 
         private void btnAuth_Click(object sender, EventArgs e)
         {
-          
+
             string hash = createAuthHash(txtPassword.Text.Trim());
             string post_json = "{\"username\":\"" + txtUserName.Text.Trim() + "\", \"hash\":\"" + hash + "\"}";
             string response_json = PostDataWithOperation("auth", post_json);
@@ -315,12 +332,12 @@ namespace TestJSON
 
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-           
+
             string post_json = "{\"username\":\"" + txtUserName.Text.Trim() + "\", \"password\":\"" + txtPassword.Text.Trim() + "\",\"email\":\"" + txtEmail.Text.Trim() + "\"}";
             txtRequest.Text = post_json;
 
-            txtResponse.Text = PostDataWithOperation("createuser", post_json); 
-          
+            txtResponse.Text = PostDataWithOperation("createuser", post_json);
+
         }
 
         static private string SHA1(string cleartext)
@@ -349,7 +366,7 @@ namespace TestJSON
         }
 
 
-      
+
 
         private void frmTestJSON_Load(object sender, EventArgs e)
         {
@@ -358,7 +375,7 @@ namespace TestJSON
 
             foreach (Control c in tabBarOperations.TabPages["tabGame"].Controls)
             {
-                if (c.GetType() ==  (new Label()).GetType())
+                if (c.GetType() == (new Label()).GetType())
                 {
                     if (c.Name.Contains("lbl_"))
                     {
@@ -389,7 +406,7 @@ namespace TestJSON
 
             txtRequest.Text = post_json;
 
-            txtResponse.Text = PostDataWithOperation("creategame", post_json); 
+            txtResponse.Text = PostDataWithOperation("creategame", post_json);
         }
 
         private void btnJoinGame_Click(object sender, EventArgs e)
@@ -400,7 +417,7 @@ namespace TestJSON
             txtResponse.Text = PostDataWithOperation("joingame", post_json);
 
 
-            for (int i = 0; i <25; i++)
+            for (int i = 0; i < 25; i++)
             {
                 Label tempLabel = getNumberLabelByNumber(i);
                 tempLabel.BackColor = Color.Silver;
@@ -413,7 +430,7 @@ namespace TestJSON
             string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
             post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
             txtRequest.Text = post_json;
-            txtResponse.Text = PostDataWithOperation("quitgame", post_json); 
+            txtResponse.Text = PostDataWithOperation("quitgame", post_json);
         }
 
         private void btnGetNextNumber_Click(object sender, EventArgs e)
@@ -421,7 +438,7 @@ namespace TestJSON
             string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
             post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
             txtRequest.Text = post_json;
-            txtResponse.Text = PostDataWithOperation("getnumber", post_json); 
+            txtResponse.Text = PostDataWithOperation("getnumber", post_json);
         }
 
         private void btnAddFriend_Click(object sender, EventArgs e)
@@ -431,12 +448,12 @@ namespace TestJSON
             string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
             post_json += ", \"friend_id\":\"" + friend_user_id + "\"}";
             txtRequest.Text = post_json;
-            txtResponse.Text = PostDataWithOperation("addfriend", post_json); 
+            txtResponse.Text = PostDataWithOperation("addfriend", post_json);
         }
 
         public Label getNumberLabel(string letter, int row)
         {
-            Label numberLabel = (Label) this.Controls.Find("lbl_" + letter + row.ToString(), true)[0];
+            Label numberLabel = (Label)this.Controls.Find("lbl_" + letter + row.ToString(), true)[0];
             return numberLabel;
         }
 
@@ -451,7 +468,7 @@ namespace TestJSON
             else if (index < 10)
             {
                 letter = "i";
-             
+
             }
             else if (index < 15)
             {
@@ -486,7 +503,51 @@ namespace TestJSON
             string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
             post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
             txtRequest.Text = post_json;
-            txtResponse.Text = PostDataWithOperation("getnumber", post_json); 
+            txtResponse.Text = PostDataWithOperation("getnumber", post_json);
+        }
+
+        private void btnGetProfileImage_Click(object sender, EventArgs e)
+        {
+            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
+
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"}";
+            txtRequest.Text = post_json;
+            txtResponse.Text = PostDataWithOperation("getprofileimage", post_json);
+        }
+
+        private void btnUploadProfileImage_Click(object sender, EventArgs e)
+        {
+            Stream fileStream = null;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((fileStream = openFileDialog1.OpenFile()) != null)
+                    {
+                        using (fileStream)
+                        {
+                            byte[] buffer;
+                            using (var streamReader = new MemoryStream())
+                            {
+                                fileStream.CopyTo(streamReader);
+                                buffer = streamReader.ToArray();
+                            }
+                            string profileimage = Convert.ToBase64String(buffer);
+                            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
+                            int friend_user_id = Convert.ToInt32(txtFriend_friend_user_id.Text);
+                            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+                            post_json += ", \"profile_image\":\"" + profileimage + "\"}";
+                            txtRequest.Text = post_json;
+                            txtResponse.Text = PostDataWithOperation("updateprofileimage", post_json);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
         }
     }
 }
+

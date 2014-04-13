@@ -1,13 +1,47 @@
 ﻿@{
     ViewBag.Title = "Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var users = ViewBag.Users;
+    var games = ViewBag.Games;
+    var results = ViewBag.results;
 }
 <ol class="breadcrumb">
   <li class="active">Home</li>
 </ol>
 
-<h2>Home</h2>
- <ul>
-  <li>@Html.ActionLink("Friends", "Friends", "Secure")</li>
-  <li>@Html.ActionLink("Games", "Games", "Secure")</li>
-</ul>
+  <div  class='row'>
+            <div class='col-md-6'>
+                <h3>Activity</h3>
+                @foreach(var r in results) 
+                {
+                    @Html.ActionLink((string) r.User.UserName, "Index",new { controller = "Profile", id= r.User.UserId }, null)
+                    if (r.Outcome == KingBingo.Models.OutcomeType.Win)
+                    {
+                        @Html.Raw(" won in ")
+                    }
+                    else if (r.Outcome == KingBingo.Models.OutcomeType.Loss)
+                    {
+                           @Html.Raw(" lost in ")
+                    }
+                    else if (r.Outcome == KingBingo.Models.OutcomeType.Quit)
+                    {
+                           @Html.Raw(" quit ")
+                    }
+                    else if (r.Outcome == KingBingo.Models.OutcomeType.Join)
+                    {
+                           @Html.Raw(" joined ")
+                    }
+                    @Html.ActionLink((string) r.Game.Name, "GameDetail",new { controller = "Secure", id= r.Game.GameID }, null)<br />
+                }
+            </div>
+            <div class='col-md-6'>
+                <h3>Newest Players</h3>
+                @foreach(var u in users) 
+                {
+                           @Html.ActionLink((string) u.Name, "Index",new { controller = "Profile", id= u.UserId }, null)<br />
+                }
+            </div>
+ </div>
+
+
+

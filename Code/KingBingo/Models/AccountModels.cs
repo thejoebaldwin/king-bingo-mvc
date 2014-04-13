@@ -174,8 +174,12 @@ namespace KingBingo.Models
                         user.Birthdate = DateTime.Now.AddYears((r.Next(20) + 10) * -1);
                         user.ProfileImage = UserProfile.GetProfileImage("crown-icon.png");
                         user.Friends = new List<Friend>();
-                        user.Results = new List<Result>();
+                        user.FriendCount = 0;
+                        user.GameCount = 0;
+                        //user.Results = new List<Result>();
                         user.Badges = new List<Badge>();
+                        user.WinCount = 0;
+                        user.Rank = 0;
                         db.SaveChanges();
                     }
                    

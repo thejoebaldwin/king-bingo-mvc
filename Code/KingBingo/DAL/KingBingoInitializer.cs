@@ -190,7 +190,7 @@ namespace KingBingo.DAL
             games[0].Results.Add(results[0]);
             games[0].Results.Add(results[1]);
             user1.Results = new List<Result>();
-            user2.Results = new List<Result>();
+           user2.Results = new List<Result>();
             user1.Results.Add(results[0]);
             user2.Results.Add(results[1]);
             context.SaveChanges();

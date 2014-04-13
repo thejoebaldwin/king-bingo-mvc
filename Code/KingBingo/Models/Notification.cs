@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace KingBingo.Models
 {
 
-    public enum NotificationType
+    public enum NotificationMethodType
     {
         Email, Push, Web
     }
@@ -22,8 +22,7 @@ namespace KingBingo.Models
         public string Message { get; set; }
         public bool Sent { get; set; }
         public DateTime Expires { get; set; }
-        public NotificationType Method {get;set;}
-
+        public NotificationMethodType Method { get; set; }
         public virtual UserProfile User { get; set; }
     }
 }

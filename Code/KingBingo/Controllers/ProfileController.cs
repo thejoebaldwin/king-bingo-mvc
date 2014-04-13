@@ -23,12 +23,12 @@ namespace KingBingo.Controllers
             //var game = db.Games.Include("Players").Where(g => g.GameID == game_id).FirstOrDefault();
 
             int friendCount = profileuser.Friends.Count;
-            int gameCount = profileuser.Results.Count;
+            int gameCount = 0;// profileuser.Results.Count;
             int winCount = 0;
-            foreach (Result r in profileuser.Results)
-            {
-                if (r.Outcome == OutcomeType.Win) winCount++;
-            }
+            //foreach (Result r in profileuser.Results)
+            //{
+            //    if (r.Outcome == OutcomeType.Win) winCount++;
+           // }
             ViewData["friendCount"] = friendCount;
             ViewData["gameCount"] = gameCount;
             ViewData["winCount"] = winCount;
@@ -80,12 +80,12 @@ namespace KingBingo.Controllers
 
             //var user = db.UserProfiles.Include("Friends").Where(g => g.GameID == game_id).FirstOrDefault();
 
-            int gameCount = profileuser.Results.Count;
+            int gameCount = 0;// profileuser.Results.Count;
             int winCount = 0;
-            foreach (Result r in profileuser.Results)
-            {
-                if (r.Outcome == OutcomeType.Win) winCount++;
-            }
+            //foreach (Result r in profileuser.Results)
+            //{
+            //    if (r.Outcome == OutcomeType.Win) winCount++;
+            //}
             ViewData["friendCount"] = friendCount;
             ViewData["gameCount"] = gameCount;
             ViewData["winCount"] = winCount;

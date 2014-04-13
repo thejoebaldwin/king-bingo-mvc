@@ -446,6 +446,8 @@
     <Content Include="Views\Shared\_UsersPartial.cshtml" />
     <Content Include="Views\Service\docs\callbingo.md" />
     <Content Include="Views\Service\docs\allnotifications.md" />
+    <Content Include="Views\Shared\_ProgressBar.cshtml" />
+    <Content Include="Views\Service\docs\updateprofileimage.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
