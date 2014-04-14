@@ -448,6 +448,7 @@
     <Content Include="Views\Service\docs\allnotifications.md" />
     <Content Include="Views\Shared\_ProgressBar.cshtml" />
     <Content Include="Views\Service\docs\updateprofileimage.md" />
+    <Content Include="Views\Service\docs\updateuser.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

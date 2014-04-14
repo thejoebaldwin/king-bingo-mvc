@@ -79,10 +79,9 @@
              @Html.Raw(String.Format(",\"active\": \"{0}\"", user.Active))
              @Html.Raw(String.Format(",\"sex\": \"{0}\"", user.Sex))
              @Html.Raw(String.Format(",\"confirmed\": \"{0}\"", user.Confirmed))
-             if (user.Location != null)
-             {
-                @Html.Raw(String.Format(",\"location\": \"{0},{1}\"", user.Location[0], user.Location[1]))
-             }
+          
+                @Html.Raw(String.Format(",\"location\": \"{0}\"", user.Location))
+             
             @Html.Raw("}")
     }
     @if (friends != null)
@@ -119,6 +118,10 @@
                {
                      @Html.Raw(String.Format("\"profile_image\": \"{0}\"", Convert.ToBase64String(u.ProfileImage)))
                }
+              if (u.Location != null)
+             {
+                @Html.Raw(String.Format(",\"location\": \"{0},{1}\"", u.Location[0], u.Location[1]))
+             }
             userCount++;
             @Html.Raw("}")
         }

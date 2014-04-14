@@ -51,7 +51,15 @@ namespace KingBingo.Controllers
 
         }
 
-       
+
+        public DateTime FromUnixTime(string timestamp)
+        {
+            // Unix timestamp is seconds past epoch
+            double timestampSeconds = Convert.ToDouble(timestamp);
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(timestampSeconds).ToLocalTime();
+            return dtDateTime;
+        }
 
         public ActionResult V0(string operation)
         {
@@ -131,7 +139,7 @@ namespace KingBingo.Controllers
                                 user.Active = true;
                                 user.Sex = Sex.Female;
                                 user.Confirmed = true;
-                                user.Location = new Decimal?[2] { 88, -120 };
+                                user.Location = "88,-120";
                                 user.GameCard = null;
                                 user.Badges = new List<Badge>(); ;
                                 db.SaveChanges();
@@ -199,32 +207,74 @@ namespace KingBingo.Controllers
                                 else if (operation == "updateprofileimage")
                                 {
                                     //need error checking
-                                    ViewBag.operation = "updateprofileimage";
-                                    string profileimage = data.profile_image;
-                                    byte[] buffer = Convert.FromBase64String(profileimage);
-                                    MemoryStream ms = new MemoryStream(buffer);
-                                    System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
-                                    if (img.Width > 200 || img.Height > 200)
-                                    {
-                                        ViewBag.status = "error";
-                                        ViewBag.message = "image cannot be larger than 200 x 200";
-                                    }
-                                    else if (img.Width != img.Height)
-                                    {
-                                        ViewBag.status = "error";
-                                        ViewBag.message = "image must have equal width and height";
-                                    }
-                                    else
-                                    {
-                                        ViewBag.message = "successfully updated user profile image";
-                                        user.ProfileImage = buffer;
-                                        db.SaveChanges();
-                                    }
+                                   
                                 }
                                 else if (operation == "updateuser")
                                 {
+                                    //need more error messages
                                     ViewBag.operation = "updateuser";
-                                    ViewBag.message = "successfully updated user";
+                                    var updateUser = data.user;
+                                    if (updateUser != null )
+                                    {
+                                        if (updateUser.profile_image != null)
+                                        {
+                                            string profileimage = updateUser.profile_image;
+                                            byte[] buffer = Convert.FromBase64String(profileimage);
+                                            MemoryStream ms = new MemoryStream(buffer);
+                                            System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                                            if (img.Width > 200 || img.Height > 200)
+                                            {
+                                                ViewBag.status = "error";
+                                                ViewBag.message = "profile image cannot be larger than 200 x 200";
+                                            }
+                                            else if (img.Width != img.Height)
+                                            {
+                                                ViewBag.status = "error";
+                                                ViewBag.message = "profile image must have equal width and height";
+                                            }
+                                            else
+                                            {
+                                               
+                                                user.ProfileImage = buffer;
+                                            }
+                                        }
+                                        if (updateUser.birthdate != null)
+                                        {
+                                         
+                                            string timestamp = (string)updateUser.birthdate;
+                                            user.Birthdate = FromUnixTime(timestamp);
+                                        }
+                                        if (updateUser.name != null)
+                                        {
+                                            user.Name = updateUser.name;
+                                        }
+                                        if (updateUser.bio != null)
+                                        {
+                                            user.Bio = updateUser.bio;
+                                        }
+                                        if (updateUser.zip != null)
+                                        {
+                                            user.Zip = updateUser.zip;
+                                        }
+                                        if (updateUser.sex != null)
+                                        {
+                                            if (updateUser.sex == "Male" || updateUser.sex == "male")
+                                            {
+                                                updateUser.Sex = Sex.Male;
+                                            }
+                                            else
+                                            {
+                                                updateUser.Sex = Sex.Female;
+                                            }
+                                        }
+                                        if (updateUser.location != null)
+                                        {
+                                            user.Location = updateUser.location;
+                                        }
+                                        ViewBag.message = "successfully updated user profile";
+                                        db.SaveChanges();
+                                    }
+                                
                                 }
                                 else if (operation == "getuser")
                                 {

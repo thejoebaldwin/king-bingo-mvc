@@ -65,6 +65,21 @@
             this.btnCreateGame = new System.Windows.Forms.Button();
             this.tabBarOperations = new System.Windows.Forms.TabControl();
             this.tabUser = new System.Windows.Forms.TabPage();
+            this.rbUpdateUser_Female = new System.Windows.Forms.RadioButton();
+            this.rbUpdateUser_Male = new System.Windows.Forms.RadioButton();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.dateUpdateUser_Birthdate = new System.Windows.Forms.DateTimePicker();
+            this.label18 = new System.Windows.Forms.Label();
+            this.txtUpdateUser_Zip = new System.Windows.Forms.TextBox();
+            this.btnUpdateProfile = new System.Windows.Forms.Button();
+            this.txtUpdateUser_Bio = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtUpdateUser_Name = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.chkIncludeProfileImages = new System.Windows.Forms.CheckBox();
+            this.btnUploadProfileImage = new System.Windows.Forms.Button();
+            this.picProfileImage = new System.Windows.Forms.PictureBox();
             this.tabGames = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnGetNextNumber = new System.Windows.Forms.Button();
@@ -112,19 +127,20 @@
             this.lbl_b0 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.timerNumbers = new System.Windows.Forms.Timer(this.components);
-            this.picProfileImage = new System.Windows.Forms.PictureBox();
-            this.btnUploadProfileImage = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.chkIncludeProfileImages = new System.Windows.Forms.CheckBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.txtUpdateUser_Latitude = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.txtUpdateUser_Longitude = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabBarOperations.SuspendLayout();
             this.tabUser.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).BeginInit();
             this.tabGames.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tabFriends.SuspendLayout();
             this.tabGame.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGetAllGames
@@ -148,21 +164,21 @@
             // 
             // btnGetAllUsers
             // 
-            this.btnGetAllUsers.Location = new System.Drawing.Point(86, 234);
+            this.btnGetAllUsers.Location = new System.Drawing.Point(306, 11);
             this.btnGetAllUsers.Name = "btnGetAllUsers";
-            this.btnGetAllUsers.Size = new System.Drawing.Size(75, 23);
+            this.btnGetAllUsers.Size = new System.Drawing.Size(109, 23);
             this.btnGetAllUsers.TabIndex = 2;
-            this.btnGetAllUsers.Text = "getallusers";
+            this.btnGetAllUsers.Text = "Get All Users";
             this.btnGetAllUsers.UseVisualStyleBackColor = true;
             this.btnGetAllUsers.Click += new System.EventHandler(this.btnGetAllUsers_Click);
             // 
             // btnGetUser
             // 
-            this.btnGetUser.Location = new System.Drawing.Point(237, 234);
+            this.btnGetUser.Location = new System.Drawing.Point(624, 15);
             this.btnGetUser.Name = "btnGetUser";
             this.btnGetUser.Size = new System.Drawing.Size(75, 23);
             this.btnGetUser.TabIndex = 3;
-            this.btnGetUser.Text = "getuser";
+            this.btnGetUser.Text = "Get User";
             this.btnGetUser.UseVisualStyleBackColor = true;
             this.btnGetUser.Click += new System.EventHandler(this.btnGetUser_Click);
             // 
@@ -247,7 +263,7 @@
             // 
             // btnHash
             // 
-            this.btnHash.Location = new System.Drawing.Point(70, 186);
+            this.btnHash.Location = new System.Drawing.Point(24, 6);
             this.btnHash.Name = "btnHash";
             this.btnHash.Size = new System.Drawing.Size(144, 23);
             this.btnHash.TabIndex = 14;
@@ -258,7 +274,7 @@
             // lblHash
             // 
             this.lblHash.AutoSize = true;
-            this.lblHash.Location = new System.Drawing.Point(248, 191);
+            this.lblHash.Location = new System.Drawing.Point(184, 11);
             this.lblHash.Name = "lblHash";
             this.lblHash.Size = new System.Drawing.Size(103, 13);
             this.lblHash.TabIndex = 15;
@@ -292,7 +308,7 @@
             this.groupBox1.Controls.Add(this.btnCreateUser);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.btnAuth);
-            this.groupBox1.Location = new System.Drawing.Point(24, 36);
+            this.groupBox1.Location = new System.Drawing.Point(24, 49);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(725, 115);
             this.groupBox1.TabIndex = 18;
@@ -473,6 +489,22 @@
             // 
             // tabUser
             // 
+            this.tabUser.Controls.Add(this.label22);
+            this.tabUser.Controls.Add(this.txtUpdateUser_Longitude);
+            this.tabUser.Controls.Add(this.label21);
+            this.tabUser.Controls.Add(this.txtUpdateUser_Latitude);
+            this.tabUser.Controls.Add(this.rbUpdateUser_Female);
+            this.tabUser.Controls.Add(this.rbUpdateUser_Male);
+            this.tabUser.Controls.Add(this.label20);
+            this.tabUser.Controls.Add(this.label19);
+            this.tabUser.Controls.Add(this.dateUpdateUser_Birthdate);
+            this.tabUser.Controls.Add(this.label18);
+            this.tabUser.Controls.Add(this.txtUpdateUser_Zip);
+            this.tabUser.Controls.Add(this.btnUpdateProfile);
+            this.tabUser.Controls.Add(this.txtUpdateUser_Bio);
+            this.tabUser.Controls.Add(this.label17);
+            this.tabUser.Controls.Add(this.txtUpdateUser_Name);
+            this.tabUser.Controls.Add(this.label16);
             this.tabUser.Controls.Add(this.chkIncludeProfileImages);
             this.tabUser.Controls.Add(this.btnUploadProfileImage);
             this.tabUser.Controls.Add(this.picProfileImage);
@@ -488,6 +520,140 @@
             this.tabUser.TabIndex = 0;
             this.tabUser.Text = "User";
             this.tabUser.UseVisualStyleBackColor = true;
+            // 
+            // rbUpdateUser_Female
+            // 
+            this.rbUpdateUser_Female.AutoSize = true;
+            this.rbUpdateUser_Female.Location = new System.Drawing.Point(432, 337);
+            this.rbUpdateUser_Female.Name = "rbUpdateUser_Female";
+            this.rbUpdateUser_Female.Size = new System.Drawing.Size(59, 17);
+            this.rbUpdateUser_Female.TabIndex = 34;
+            this.rbUpdateUser_Female.TabStop = true;
+            this.rbUpdateUser_Female.Text = "Female";
+            this.rbUpdateUser_Female.UseVisualStyleBackColor = true;
+            // 
+            // rbUpdateUser_Male
+            // 
+            this.rbUpdateUser_Male.AutoSize = true;
+            this.rbUpdateUser_Male.Location = new System.Drawing.Point(348, 337);
+            this.rbUpdateUser_Male.Name = "rbUpdateUser_Male";
+            this.rbUpdateUser_Male.Size = new System.Drawing.Size(48, 17);
+            this.rbUpdateUser_Male.TabIndex = 33;
+            this.rbUpdateUser_Male.TabStop = true;
+            this.rbUpdateUser_Male.Text = "Male";
+            this.rbUpdateUser_Male.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(287, 339);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(25, 13);
+            this.label20.TabIndex = 32;
+            this.label20.Text = "Sex";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(263, 297);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(49, 13);
+            this.label19.TabIndex = 31;
+            this.label19.Text = "Birthdate";
+            // 
+            // dateUpdateUser_Birthdate
+            // 
+            this.dateUpdateUser_Birthdate.Location = new System.Drawing.Point(348, 293);
+            this.dateUpdateUser_Birthdate.Name = "dateUpdateUser_Birthdate";
+            this.dateUpdateUser_Birthdate.Size = new System.Drawing.Size(200, 20);
+            this.dateUpdateUser_Birthdate.TabIndex = 30;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(290, 260);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(22, 13);
+            this.label18.TabIndex = 29;
+            this.label18.Text = "Zip";
+            // 
+            // txtUpdateUser_Zip
+            // 
+            this.txtUpdateUser_Zip.Location = new System.Drawing.Point(348, 256);
+            this.txtUpdateUser_Zip.Name = "txtUpdateUser_Zip";
+            this.txtUpdateUser_Zip.Size = new System.Drawing.Size(246, 20);
+            this.txtUpdateUser_Zip.TabIndex = 28;
+            // 
+            // btnUpdateProfile
+            // 
+            this.btnUpdateProfile.Location = new System.Drawing.Point(432, 429);
+            this.btnUpdateProfile.Name = "btnUpdateProfile";
+            this.btnUpdateProfile.Size = new System.Drawing.Size(162, 23);
+            this.btnUpdateProfile.TabIndex = 27;
+            this.btnUpdateProfile.Text = "Update Profile";
+            this.btnUpdateProfile.UseVisualStyleBackColor = true;
+            this.btnUpdateProfile.Click += new System.EventHandler(this.btnProfile_Click);
+            // 
+            // txtUpdateUser_Bio
+            // 
+            this.txtUpdateUser_Bio.Location = new System.Drawing.Point(348, 221);
+            this.txtUpdateUser_Bio.Name = "txtUpdateUser_Bio";
+            this.txtUpdateUser_Bio.Size = new System.Drawing.Size(246, 20);
+            this.txtUpdateUser_Bio.TabIndex = 26;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(290, 225);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(22, 13);
+            this.label17.TabIndex = 25;
+            this.label17.Text = "Bio";
+            // 
+            // txtUpdateUser_Name
+            // 
+            this.txtUpdateUser_Name.Location = new System.Drawing.Point(348, 185);
+            this.txtUpdateUser_Name.Name = "txtUpdateUser_Name";
+            this.txtUpdateUser_Name.Size = new System.Drawing.Size(246, 20);
+            this.txtUpdateUser_Name.TabIndex = 24;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(277, 189);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(35, 13);
+            this.label16.TabIndex = 23;
+            this.label16.Text = "Name";
+            // 
+            // chkIncludeProfileImages
+            // 
+            this.chkIncludeProfileImages.AutoSize = true;
+            this.chkIncludeProfileImages.Location = new System.Drawing.Point(449, 15);
+            this.chkIncludeProfileImages.Name = "chkIncludeProfileImages";
+            this.chkIncludeProfileImages.Size = new System.Drawing.Size(130, 17);
+            this.chkIncludeProfileImages.TabIndex = 22;
+            this.chkIncludeProfileImages.Text = "Include Profile Images";
+            this.chkIncludeProfileImages.UseVisualStyleBackColor = true;
+            // 
+            // btnUploadProfileImage
+            // 
+            this.btnUploadProfileImage.Location = new System.Drawing.Point(58, 329);
+            this.btnUploadProfileImage.Name = "btnUploadProfileImage";
+            this.btnUploadProfileImage.Size = new System.Drawing.Size(132, 23);
+            this.btnUploadProfileImage.TabIndex = 21;
+            this.btnUploadProfileImage.Text = "Update Profile Image";
+            this.btnUploadProfileImage.UseVisualStyleBackColor = true;
+            this.btnUploadProfileImage.Click += new System.EventHandler(this.btnUploadProfileImage_Click);
+            // 
+            // picProfileImage
+            // 
+            this.picProfileImage.Location = new System.Drawing.Point(42, 186);
+            this.picProfileImage.Name = "picProfileImage";
+            this.picProfileImage.Size = new System.Drawing.Size(148, 125);
+            this.picProfileImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picProfileImage.TabIndex = 20;
+            this.picProfileImage.TabStop = false;
             // 
             // tabGames
             // 
@@ -1042,38 +1208,43 @@
             // 
             this.timerNumbers.Tick += new System.EventHandler(this.timerNumbers_Tick);
             // 
-            // picProfileImage
-            // 
-            this.picProfileImage.Location = new System.Drawing.Point(567, 186);
-            this.picProfileImage.Name = "picProfileImage";
-            this.picProfileImage.Size = new System.Drawing.Size(148, 125);
-            this.picProfileImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picProfileImage.TabIndex = 20;
-            this.picProfileImage.TabStop = false;
-            // 
-            // btnUploadProfileImage
-            // 
-            this.btnUploadProfileImage.Location = new System.Drawing.Point(388, 272);
-            this.btnUploadProfileImage.Name = "btnUploadProfileImage";
-            this.btnUploadProfileImage.Size = new System.Drawing.Size(132, 23);
-            this.btnUploadProfileImage.TabIndex = 21;
-            this.btnUploadProfileImage.Text = "Update Profile Image";
-            this.btnUploadProfileImage.UseVisualStyleBackColor = true;
-            this.btnUploadProfileImage.Click += new System.EventHandler(this.btnUploadProfileImage_Click);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // chkIncludeProfileImages
+            // label21
             // 
-            this.chkIncludeProfileImages.AutoSize = true;
-            this.chkIncludeProfileImages.Location = new System.Drawing.Point(96, 272);
-            this.chkIncludeProfileImages.Name = "chkIncludeProfileImages";
-            this.chkIncludeProfileImages.Size = new System.Drawing.Size(142, 17);
-            this.chkIncludeProfileImages.TabIndex = 22;
-            this.chkIncludeProfileImages.Text = "chkIncludeProfileImages";
-            this.chkIncludeProfileImages.UseVisualStyleBackColor = true;
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(267, 369);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(45, 13);
+            this.label21.TabIndex = 36;
+            this.label21.Text = "Latitude";
+            // 
+            // txtUpdateUser_Latitude
+            // 
+            this.txtUpdateUser_Latitude.Location = new System.Drawing.Point(348, 365);
+            this.txtUpdateUser_Latitude.Name = "txtUpdateUser_Latitude";
+            this.txtUpdateUser_Latitude.Size = new System.Drawing.Size(246, 20);
+            this.txtUpdateUser_Latitude.TabIndex = 35;
+            this.txtUpdateUser_Latitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(258, 401);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(54, 13);
+            this.label22.TabIndex = 38;
+            this.label22.Text = "Longitude";
+            // 
+            // txtUpdateUser_Longitude
+            // 
+            this.txtUpdateUser_Longitude.Location = new System.Drawing.Point(348, 397);
+            this.txtUpdateUser_Longitude.Name = "txtUpdateUser_Longitude";
+            this.txtUpdateUser_Longitude.Size = new System.Drawing.Size(246, 20);
+            this.txtUpdateUser_Longitude.TabIndex = 37;
+            this.txtUpdateUser_Longitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // frmTestJSON
             // 
@@ -1097,6 +1268,7 @@
             this.tabBarOperations.ResumeLayout(false);
             this.tabUser.ResumeLayout(false);
             this.tabUser.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).EndInit();
             this.tabGames.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1104,7 +1276,6 @@
             this.tabFriends.PerformLayout();
             this.tabGame.ResumeLayout(false);
             this.tabGame.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1199,6 +1370,22 @@
         private System.Windows.Forms.Button btnUploadProfileImage;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.CheckBox chkIncludeProfileImages;
+        private System.Windows.Forms.TextBox txtUpdateUser_Bio;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox txtUpdateUser_Name;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button btnUpdateProfile;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.DateTimePicker dateUpdateUser_Birthdate;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox txtUpdateUser_Zip;
+        private System.Windows.Forms.RadioButton rbUpdateUser_Female;
+        private System.Windows.Forms.RadioButton rbUpdateUser_Male;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox txtUpdateUser_Longitude;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox txtUpdateUser_Latitude;
     }
 }
 

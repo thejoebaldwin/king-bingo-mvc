@@ -15,6 +15,7 @@ Supported Operations
 - [Invite Users](v0/inviteusers "Invite Users")
 - [Get Notifications](v0/allnotifications "Get Notifications")
 - [Update Profile Image](v0/updateprofileimage "Update Profile Image")
+- [Update User](v0/updateuser "Update User")
 
 Usage  
 

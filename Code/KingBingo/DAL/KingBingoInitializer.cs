@@ -99,7 +99,7 @@ namespace KingBingo.DAL
             user1.Active = true;
             user1.Sex = Sex.Male;
             user1.Confirmed = true;
-            user1.Location = new Decimal?[2] { 88, -120 };
+            user1.Location = "88,-120";
             user1.GameCard = gameCards[0];
             user1.Badges = badgesUser1;
 
@@ -133,7 +133,7 @@ namespace KingBingo.DAL
             user2.Active = true;
             user2.Sex = Sex.Female;
             user2.Confirmed = true;
-            user2.Location = new Decimal?[2] { 88, -120 };
+            user2.Location = "88,-120";
             user2.GameCard = gameCards[1];
             user2.Badges = badgesUser2;
 

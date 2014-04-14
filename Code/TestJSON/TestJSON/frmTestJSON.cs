@@ -19,6 +19,7 @@ namespace TestJSON
         public string authentication_token = "";
         public int user_id = -1;
         public int gameSpeed = 0;
+        public string profileImage = "";
         public frmTestJSON()
         {
             InitializeComponent();
@@ -87,6 +88,22 @@ namespace TestJSON
             txtResponse.Text = PostDataWithOperation("allusers", post_json); ;
         }
 
+
+        public string ToUnixTime(DateTime date)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return Convert.ToInt64((date.ToUniversalTime() - epoch).TotalSeconds).ToString();
+        }
+
+        public DateTime FromUnixTime(string timestamp)
+        {
+            // Unix timestamp is seconds past epoch
+            double timestampSeconds = Convert.ToDouble(timestamp);
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(timestampSeconds).ToLocalTime();
+            return dtDateTime;
+        }
+
         private void processResponse(string response_json)
         {
 
@@ -107,7 +124,31 @@ namespace TestJSON
                         MemoryStream ms = new MemoryStream(buffer);
                         picProfileImage.Image = Image.FromStream(ms);
 
+                        txtUpdateUser_Bio.Text = user.bio;
+                        txtUpdateUser_Name.Text = user.name;
+                        txtUpdateUser_Zip.Text = user.zip;
+                        if (user.sex == "Male")
+                        {
+                            rbUpdateUser_Male.Checked = true;
+                            rbUpdateUser_Female.Checked = false;
+                        }
+                        else
+                        {
+                            rbUpdateUser_Male.Checked = false;
+                            rbUpdateUser_Female.Checked = true;
+                        }
 
+                        DateTime birthdate = FromUnixTime((string) user.birthdate);
+                        dateUpdateUser_Birthdate.Value = birthdate;
+                        string location = user.location;
+                        if (location != "")
+                        {
+                            string[] splitString = { "," };
+                            double latitude = Convert.ToDouble(location.Split(splitString, StringSplitOptions.None)[0]);
+                            double longitude = Convert.ToDouble(location.Split(splitString, StringSplitOptions.None)[1]);
+                            txtUpdateUser_Latitude.Text = latitude.ToString();
+                            txtUpdateUser_Longitude.Text = longitude.ToString();
+                        }
                     }
 
                 }
@@ -532,13 +573,8 @@ namespace TestJSON
                                 fileStream.CopyTo(streamReader);
                                 buffer = streamReader.ToArray();
                             }
-                            string profileimage = Convert.ToBase64String(buffer);
-                            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
-                            int friend_user_id = Convert.ToInt32(txtFriend_friend_user_id.Text);
-                            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
-                            post_json += ", \"profile_image\":\"" + profileimage + "\"}";
-                            txtRequest.Text = post_json;
-                            txtResponse.Text = PostDataWithOperation("updateprofileimage", post_json);
+                            profileImage = Convert.ToBase64String(buffer);
+                        
                         }
                     }
                 }
@@ -547,6 +583,26 @@ namespace TestJSON
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
+        }
+
+        private void btnProfile_Click(object sender, EventArgs e)
+        {
+            string post_json = "{\"user_id\":\"" + user_id.ToString() + "\", \"authentication_token\":\"" + authentication_token + "\"";
+            post_json += " ,\"user\": {";
+            string sub_json = "";
+            if (profileImage != "")
+            {
+                sub_json += " \"profile_image\":\"" + profileImage + "\"";
+            }
+            if (txtUpdateUser_Latitude.Text != "" && txtUpdateUser_Longitude.Text != "")
+            {
+                if (sub_json != "") sub_json += ",";
+                sub_json += string.Format("\"location\":\"{0},{1}\"", txtUpdateUser_Latitude.Text, txtUpdateUser_Longitude.Text);
+            }
+           
+            post_json += sub_json + "}}";
+            txtRequest.Text = post_json;
+            txtResponse.Text = PostDataWithOperation("updateuser", post_json);
         }
     }
 }

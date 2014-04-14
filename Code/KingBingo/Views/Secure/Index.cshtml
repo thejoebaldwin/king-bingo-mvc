@@ -38,7 +38,7 @@
                 <h3>Newest Players</h3>
                 @foreach(var u in users) 
                 {
-                           @Html.ActionLink((string) u.Name, "Index",new { controller = "Profile", id= u.UserId }, null)<br />
+                           @Html.ActionLink((string) u.Name, "Index",new { controller = "Profile", username= u.UserName }, null)<br />
                 }
             </div>
  </div>

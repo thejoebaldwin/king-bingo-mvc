@@ -60,7 +60,7 @@ namespace KingBingo.Models
         public Sex? Sex { get; set; }
         public string Bio { get; set; }
         public bool? Confirmed { get; set; }
-        public decimal?[] Location { get; set; }
+        public string Location { get; set; }
 
         public virtual ICollection<Result> Players { get; set; }
         public virtual GameCard GameCard { get; set; }
