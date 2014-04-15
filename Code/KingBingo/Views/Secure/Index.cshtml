@@ -14,7 +14,7 @@
                 <h3>Activity</h3>
                 @foreach(var r in results) 
                 {
-                    @Html.ActionLink((string) r.User.UserName, "Index",new { controller = "Profile", id= r.User.UserId }, null)
+                    @Html.ActionLink((string) r.User.UserName, "Index",new { controller = "Profile", username= r.User.UserName }, null)
                     if (r.Outcome == KingBingo.Models.OutcomeType.Win)
                     {
                         @Html.Raw(" won in ")

@@ -13,8 +13,6 @@ Supported Operations
 - [Get Number](v0/getnumber "Get Number")
 - [Call Bingo](v0/callbingo "Call Bingo")
 - [Invite Users](v0/inviteusers "Invite Users")
-- [Get Notifications](v0/allnotifications "Get Notifications")
-- [Update Profile Image](v0/updateprofileimage "Update Profile Image")
 - [Update User](v0/updateuser "Update User")
 
 Usage  

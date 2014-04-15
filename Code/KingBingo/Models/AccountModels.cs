@@ -175,7 +175,14 @@ namespace KingBingo.Models
                         user.ProfileImage = UserProfile.GetProfileImage("crown-icon.png");
                         user.Friends = new List<Friend>();
                         user.FriendCount = 0;
+                        user.Zip = "";
                         user.GameCount = 0;
+                        user.ReceiveEmails = false;
+                        user.Active = false;
+                        user.Confirmed = false;
+                        user.DeviceToken = "";
+                        user.Sex = Models.Sex.Male;
+                        user.Location = "0,0";
                         //user.Results = new List<Result>();
                         user.Badges = new List<Badge>();
                         user.WinCount = 0;
