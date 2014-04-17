@@ -110,7 +110,20 @@ namespace KingBingo.Models
                                       "jeff",
                                       "tony",
                                       "paul",
-                                      "aaron"
+                                      "aaron",
+                                      "mr",
+                                      "ms",
+                                      "mrs",
+                                      "professor",
+                                      "dr",
+                                      "king",
+                                      "silver",
+                                      "golden",
+                                      "liquid",
+                                      "solid",
+                                      "laser",
+                                      "atomic",
+                                      "dark"
 
                                   };
 
@@ -123,7 +136,19 @@ namespace KingBingo.Models
                                       "cooper",
                                       "mcdonald",
                                       "anderson",
-                                      "lee"
+                                      "lee",
+                                      "robot",
+                                      "ninja",
+                                      "pirate",
+                                      "wizard",
+                                      "warlock",
+                                      "unicorn",
+                                      "volcano",
+                                      "tornado",
+                                      "earthquake",
+                                      "skeleton",
+                                      "phoenix",
+                                      "baldwin"
                                   };
 
             string[] emails = {
@@ -137,16 +162,47 @@ namespace KingBingo.Models
                                     "lifelong",
                                     "the best",
                                     "the one and only",
-                                    "super"
+                                    "super",
+                                    "cold",
+                                    "fire",
+                                    "poison",
+                                    "wind",
+                                    "laser",
+                                    "unflappable",
+                                    "experienced",
+                                    "long lost",
+                                    "curious",
+                                    "precocious",
+                                    "atomic"
                                 };
 
             string[] bioLasts = {
                                     "dog owner",
                                     "knitter",
                                     "sailor",
-                                    "dinosaur"
-                                };
+                                    "dinosaur",
+                                    "engineer",
+                                    "shaman",
+                                    "doctor",
+                                    "student",
+                                    "biologist",
+                                    "physicist",
+                                    "teacher",
+                                    "geologist",
+                                    "mechanic",
+                                    "antagonist",
+                                    "protagonist",
+                                    "secret agent"
 
+                                   
+                                };
+            List<string> profileImages = new List<string>();
+            string[] splitString = { "\\" };
+            foreach (string file in Directory.EnumerateFiles(System.Web.HttpContext.Current.Server.MapPath("~/Images/profiles")))
+            {
+                string[] temp = file.Split(splitString, StringSplitOptions.None);
+                profileImages.Add(temp.Last());
+            }
             int counter = 0;
             KingBingoContext db = new KingBingoContext();
             while (counter < count)
@@ -172,7 +228,7 @@ namespace KingBingo.Models
                         user.PasswordHash = UserProfile.SHA1(password);
                         user.Created = DateTime.Now;
                         user.Birthdate = DateTime.Now.AddYears((r.Next(20) + 10) * -1);
-                        user.ProfileImage = UserProfile.GetProfileImage("crown-icon.png");
+                        user.ProfileImage = UserProfile.GetProfileImage(profileImages[r.Next(profileImages.Count())]);
                         user.Friends = new List<Friend>();
                         user.FriendCount = 0;
                         user.Zip = "";

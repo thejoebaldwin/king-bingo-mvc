@@ -94,7 +94,7 @@ namespace KingBingo.DAL
             user1.ReceiveEmails = true;
             user1.AuthenticationToken = "0123456789ABCDEF";
             user1.AuthenticationTokenExpires = DateTime.Now.Add(new TimeSpan(7, 0, 0, 0));
-            user1.ProfileImage = UserProfile.GetProfileImage("crown-icon.png"); ;
+            user1.ProfileImage = UserProfile.GetProfileImage("crown.png"); ;
             user1.ConfirmationKey = "0123456789ABCDEF";
             user1.Active = true;
             user1.Sex = Sex.Male;
@@ -128,7 +128,7 @@ namespace KingBingo.DAL
             user2.ReceiveEmails = true;
             user2.AuthenticationToken = "0123456789ABCDEF";
             user2.AuthenticationTokenExpires = DateTime.Now.Add(new TimeSpan(7, 0, 0, 0));
-            user2.ProfileImage =  UserProfile.GetProfileImage("crown-icon.png"); ;
+            user2.ProfileImage =  UserProfile.GetProfileImage("crown.png"); ;
             user2.ConfirmationKey = "0123456789ABCDEF";
             user2.Active = true;
             user2.Sex = Sex.Female;
@@ -160,7 +160,7 @@ namespace KingBingo.DAL
           
             context.SaveChanges();
 
-            UserProfile.GenerateRandomUsers(20);
+            UserProfile.GenerateRandomUsers(50);
 
             //GAMES
             var games = new List<Game>
