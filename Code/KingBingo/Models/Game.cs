@@ -40,11 +40,12 @@ namespace KingBingo.Models
             }
         }
 
-        public ICollection<int> DrawnNumbers()
+        public int[] DrawnNumbers()
         {
            //CRASHING HERE
            int[] arr = Array.ConvertAll(InternalData.Split(','), Int32.Parse);
-           return (int[]) arr.Take(NumbersIndex);         
+           Array.Copy(arr, arr, NumbersIndex);
+           return arr;
         }
 
         public ICollection<UserProfile> Players { get; set; }
