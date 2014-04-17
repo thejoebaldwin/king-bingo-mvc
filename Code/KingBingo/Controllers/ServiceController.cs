@@ -352,6 +352,52 @@ namespace KingBingo.Controllers
                                 {
                                     getNumber(data);
                                 }
+                                else if (operation == "callbingo")
+                                {
+                                    ViewBag.operation = "callbingo";
+                                    string gamecard = data.game_card;
+                                    
+                                    if (gamecard == user.GameCard.Hash())
+                                    {
+                                        string winningNumbers = data.winning_numbers;
+                                        int game_id = data.game_id;
+                                        var game = db.Games.Where(g => g.GameID == game_id).FirstOrDefault();
+                                        if (game != user.Game)
+                                        {
+                                            ViewBag.status = "error";
+                                            ViewBag.message = "user is not joined to that game";
+                                        }
+                                        bool win = game.VerifyWin(winningNumbers, gamecard);
+                                        if (win)
+                                        {
+                                            //add to result
+                                            //add to user win count
+                                            Result r = new Result();
+                                            r.Game = user.Game;
+                                            r.Outcome = OutcomeType.Win;
+                                            r.Points = 0;
+                                            r.User = user;
+                                            db.Results.Add(r);
+                                            user.Results.Add(r);
+                                            r.Game.Results.Add(r);
+                                            user.WinCount++;
+                                            //check if wincount should close the game.
+                                            ViewBag.status = "ok";
+                                            ViewBag.message = "you won a game!";
+                                        }
+                                        else
+                                        {
+                                            ViewBag.status = "error";
+                                            ViewBag.message = "invalid winning sequence";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ViewBag.status = "error";
+                                        ViewBag.message = "submitted game card does not match user game card at server";
+                                    }
+                                  
+                                }
                                 else if (operation == "joingame")
                                 {
                                     joinGame(data);
@@ -474,6 +520,9 @@ namespace KingBingo.Controllers
             }
          
         }
+
+
+
 
         //public string ToUnixTime(DateTime date)
         //{

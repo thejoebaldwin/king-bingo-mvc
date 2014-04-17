@@ -65,6 +65,10 @@
             this.btnCreateGame = new System.Windows.Forms.Button();
             this.tabBarOperations = new System.Windows.Forms.TabControl();
             this.tabUser = new System.Windows.Forms.TabPage();
+            this.label22 = new System.Windows.Forms.Label();
+            this.txtUpdateUser_Longitude = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.txtUpdateUser_Latitude = new System.Windows.Forms.TextBox();
             this.rbUpdateUser_Female = new System.Windows.Forms.RadioButton();
             this.rbUpdateUser_Male = new System.Windows.Forms.RadioButton();
             this.label20 = new System.Windows.Forms.Label();
@@ -128,10 +132,9 @@
             this.label15 = new System.Windows.Forms.Label();
             this.timerNumbers = new System.Windows.Forms.Timer(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.label21 = new System.Windows.Forms.Label();
-            this.txtUpdateUser_Latitude = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.txtUpdateUser_Longitude = new System.Windows.Forms.TextBox();
+            this.btnAuto = new System.Windows.Forms.Button();
+            this.btnDrawNumber = new System.Windows.Forms.Button();
+            this.btnCheckWin = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabBarOperations.SuspendLayout();
@@ -401,8 +404,9 @@
             this.txtSpeed.Name = "txtSpeed";
             this.txtSpeed.Size = new System.Drawing.Size(150, 20);
             this.txtSpeed.TabIndex = 8;
-            this.txtSpeed.Text = "5";
+            this.txtSpeed.Text = "99";
             this.txtSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtSpeed.TextChanged += new System.EventHandler(this.txtSpeed_TextChanged);
             // 
             // txtPlayers
             // 
@@ -520,6 +524,40 @@
             this.tabUser.TabIndex = 0;
             this.tabUser.Text = "User";
             this.tabUser.UseVisualStyleBackColor = true;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(258, 401);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(54, 13);
+            this.label22.TabIndex = 38;
+            this.label22.Text = "Longitude";
+            // 
+            // txtUpdateUser_Longitude
+            // 
+            this.txtUpdateUser_Longitude.Location = new System.Drawing.Point(348, 397);
+            this.txtUpdateUser_Longitude.Name = "txtUpdateUser_Longitude";
+            this.txtUpdateUser_Longitude.Size = new System.Drawing.Size(246, 20);
+            this.txtUpdateUser_Longitude.TabIndex = 37;
+            this.txtUpdateUser_Longitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(267, 369);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(45, 13);
+            this.label21.TabIndex = 36;
+            this.label21.Text = "Latitude";
+            // 
+            // txtUpdateUser_Latitude
+            // 
+            this.txtUpdateUser_Latitude.Location = new System.Drawing.Point(348, 365);
+            this.txtUpdateUser_Latitude.Name = "txtUpdateUser_Latitude";
+            this.txtUpdateUser_Latitude.Size = new System.Drawing.Size(246, 20);
+            this.txtUpdateUser_Latitude.TabIndex = 35;
+            this.txtUpdateUser_Latitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // rbUpdateUser_Female
             // 
@@ -792,6 +830,9 @@
             // 
             // tabGame
             // 
+            this.tabGame.Controls.Add(this.btnCheckWin);
+            this.tabGame.Controls.Add(this.btnDrawNumber);
+            this.tabGame.Controls.Add(this.btnAuto);
             this.tabGame.Controls.Add(this.lblBingoNumber);
             this.tabGame.Controls.Add(this.label45);
             this.tabGame.Controls.Add(this.label44);
@@ -1212,39 +1253,35 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // label21
+            // btnAuto
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(267, 369);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(45, 13);
-            this.label21.TabIndex = 36;
-            this.label21.Text = "Latitude";
+            this.btnAuto.Location = new System.Drawing.Point(45, 125);
+            this.btnAuto.Name = "btnAuto";
+            this.btnAuto.Size = new System.Drawing.Size(75, 23);
+            this.btnAuto.TabIndex = 30;
+            this.btnAuto.Text = "Auto Off";
+            this.btnAuto.UseVisualStyleBackColor = true;
+            this.btnAuto.Click += new System.EventHandler(this.btnAuto_Click);
             // 
-            // txtUpdateUser_Latitude
+            // btnDrawNumber
             // 
-            this.txtUpdateUser_Latitude.Location = new System.Drawing.Point(348, 365);
-            this.txtUpdateUser_Latitude.Name = "txtUpdateUser_Latitude";
-            this.txtUpdateUser_Latitude.Size = new System.Drawing.Size(246, 20);
-            this.txtUpdateUser_Latitude.TabIndex = 35;
-            this.txtUpdateUser_Latitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.btnDrawNumber.Location = new System.Drawing.Point(13, 189);
+            this.btnDrawNumber.Name = "btnDrawNumber";
+            this.btnDrawNumber.Size = new System.Drawing.Size(123, 23);
+            this.btnDrawNumber.TabIndex = 31;
+            this.btnDrawNumber.Text = "Draw Number";
+            this.btnDrawNumber.UseVisualStyleBackColor = true;
+            this.btnDrawNumber.Click += new System.EventHandler(this.btnDrawNumber_Click);
             // 
-            // label22
+            // btnCheckWin
             // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(258, 401);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(54, 13);
-            this.label22.TabIndex = 38;
-            this.label22.Text = "Longitude";
-            // 
-            // txtUpdateUser_Longitude
-            // 
-            this.txtUpdateUser_Longitude.Location = new System.Drawing.Point(348, 397);
-            this.txtUpdateUser_Longitude.Name = "txtUpdateUser_Longitude";
-            this.txtUpdateUser_Longitude.Size = new System.Drawing.Size(246, 20);
-            this.txtUpdateUser_Longitude.TabIndex = 37;
-            this.txtUpdateUser_Longitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.btnCheckWin.Location = new System.Drawing.Point(13, 245);
+            this.btnCheckWin.Name = "btnCheckWin";
+            this.btnCheckWin.Size = new System.Drawing.Size(123, 23);
+            this.btnCheckWin.TabIndex = 32;
+            this.btnCheckWin.Text = "Check Win";
+            this.btnCheckWin.UseVisualStyleBackColor = true;
+            this.btnCheckWin.Click += new System.EventHandler(this.btnCheckWin_Click);
             // 
             // frmTestJSON
             // 
@@ -1386,6 +1423,9 @@
         private System.Windows.Forms.TextBox txtUpdateUser_Longitude;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox txtUpdateUser_Latitude;
+        private System.Windows.Forms.Button btnAuto;
+        private System.Windows.Forms.Button btnDrawNumber;
+        private System.Windows.Forms.Button btnCheckWin;
     }
 }
 

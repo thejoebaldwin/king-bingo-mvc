@@ -40,6 +40,12 @@ namespace KingBingo.Models
             }
         }
 
+        public ICollection<int> DrawnNumbers()
+        {
+           //CRASHING HERE
+           int[] arr = Array.ConvertAll(InternalData.Split(','), Int32.Parse);
+           return (int[]) arr.Take(NumbersIndex);         
+        }
 
         public ICollection<UserProfile> Players { get; set; }
         public virtual ICollection<Result> Results { get; set; }
@@ -107,6 +113,99 @@ namespace KingBingo.Models
                 gamecards.Add((GameCard)pair.Value);
             }
             GameCards = gamecards;
+        }
+
+
+        public bool VerifyWin(string winningNumbers, string gamecard)
+        {
+            string[] splitString = { "," };
+            string[] userNumbers = winningNumbers.Split(splitString, StringSplitOptions.None);
+            string[] userGameCard = gamecard.Split(splitString, StringSplitOptions.None);
+            bool win = true;
+            int[] drawnNumbers = (int[]) DrawnNumbers();
+            //first check that these numbers were drawn
+            foreach (string number in userNumbers)
+            {
+                int n = System.Convert.ToInt32(number);
+                if (!drawnNumbers.Contains(n))
+                {
+                    win = false;
+                    break;
+                }
+                else
+                {
+                    for (int i = 0; i < userGameCard.Length; i++)
+                    {
+                        if (userGameCard[i] == number)
+                        {
+                            userGameCard[i] = "x";
+                        }
+                    }
+                }
+            }
+            //if all the claimed winning numbers have been drawn, check for each winning scenario
+            if (win)
+            {
+                win = false;
+                for (int row = 0; row < 5; row++)
+                {
+                    //check all rows
+                    if (userGameCard[0 + row] == "x" &&
+                       userGameCard[5 + row] == "x" &&
+                       userGameCard[10 + row] == "x" &&
+                       userGameCard[15 + row] == "x" &&
+                       userGameCard[20 + row] == "x")
+                    {
+                        win = true;
+                        break;
+                    }
+                }
+                if (!win)
+                {
+                    //check all columns
+                    for (int column = 0; column < 5; column++)
+                    {
+                        int offsetColumn = column * 5;
+                        if (
+                          userGameCard[0 + offsetColumn] == "x" &&
+                          userGameCard[1 + offsetColumn] == "x" &&
+                          userGameCard[2 + offsetColumn] == "x" &&
+                          userGameCard[3 + offsetColumn] == "x" &&
+                          userGameCard[4 + offsetColumn] == "x")
+                        {
+                            win = true;
+                            break;
+                        }
+                    }
+                }
+                if (!win)
+                {
+                    //backwards diagonal
+                    if (
+                        userGameCard[0] == "x" &&
+                        userGameCard[6] == "x" &&
+                        userGameCard[12] == "x" &&
+                        userGameCard[18] == "x" &&
+                        userGameCard[24] == "x")
+                    {
+                        win = true;
+                    }
+                }
+                if (!win)
+                {
+                    //forwards diagonal
+                    if (
+                        userGameCard[4] == "x" &&
+                        userGameCard[8] == "x" &&
+                        userGameCard[12] == "x" &&
+                        userGameCard[16] == "x" &&
+                        userGameCard[20] == "x")
+                    {
+                        win = true;
+                    }
+                }
+            }
+            return win;
         }
 
         public static string BingofyNumber(int number)
