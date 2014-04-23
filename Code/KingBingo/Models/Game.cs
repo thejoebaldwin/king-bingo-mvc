@@ -24,6 +24,8 @@ namespace KingBingo.Models
         public int NumbersIndex { get; set; }
         public DateTime NextNumberTime { get; set; }
         public bool Closed { get; set; }
+        public int WinCount { get; set; }
+        public int UserCount { get; set; }
 
 
         public string InternalData { get; set; }
@@ -52,21 +54,8 @@ namespace KingBingo.Models
         public virtual ICollection<Result> Results { get; set; }
         public virtual ICollection<GameCard> GameCards { get; set; }
 
-        public int WinCount()
-        {
-            return 0;
-        }
-        public int UserCount()
-        {
-            if (Players == null)
-            {
-                return 0;
-            }
-            else
-            {
-                return Players.Count;
-            }
-        }
+     
+    
 
         public Game()
         {
@@ -91,6 +80,8 @@ namespace KingBingo.Models
             NumbersIndex = -1;
             Closed = false;
             NextNumberTime = DateTime.Now;
+            WinCount = 0;
+            UserCount = 0;
         }
 
         public void GenerateGameCards()

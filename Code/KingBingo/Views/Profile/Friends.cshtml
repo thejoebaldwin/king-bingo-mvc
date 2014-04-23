@@ -27,7 +27,7 @@
          {
             <form  class="friendForm">
                 <input type="hidden" name="user_id" value="@user.UserId" />
-                <input type="hidden" name="friend_id" value="@f.FriendUser.UserId" />
+                <input type="hidden" name="friend_user_id" value="@f.FriendUser.UserId" />
                  
                 <input type="hidden" name="authentication_token" value="@user.AuthenticationToken" />
                 @if (hash.Contains(f.FriendUser.UserId))

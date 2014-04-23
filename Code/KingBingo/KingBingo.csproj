@@ -452,7 +452,7 @@
     <Content Include="Views\Service\docs\addfriend.md" />
     <Content Include="Views\Service\docs\acceptfriend.md" />
     <Content Include="Views\Service\docs\rejectfriend.md" />
-    <Content Include="Views\Service\docs\getfriends.md" />
+    <Content Include="Views\Service\docs\allfriends.md" />
     <Content Include="Views\Secure\UploadComplete.cshtml" />
     <Content Include="Views\Profile\ProfilePartial.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />

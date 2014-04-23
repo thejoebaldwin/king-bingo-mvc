@@ -30,6 +30,34 @@ namespace KingBingo.Models
             Created = DateTime.Now;
         }
 
-        
+        public static Friend FromData(dynamic data)
+        {
+            Friend f = new Friend();
+            UserProfile friendUser = new UserProfile();
+            friendUser.UserName = data.username;
+            friendUser.Name = data.name;
+            friendUser.Bio = data.bio;
+            friendUser.UserId = data.friend_user_id;
+            f.FriendUser = friendUser;
+            f.FriendID = data.friend_id;
+            if (data.status == "Accepted")
+            {
+                f.Status = RequestStatus.Accepted;                                  
+            }
+            else if (data.status == "Pending")
+            {
+                f.Status = RequestStatus.Pending;
+            }
+            else if (data.status == "Requested")
+            {
+                f.Status = RequestStatus.Requested;
+            }
+            else if (data.status == "Rejected")
+            {
+                f.Status = RequestStatus.Rejected;
+            }
+
+            return f;
+        }
     }
 }

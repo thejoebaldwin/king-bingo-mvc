@@ -4,6 +4,7 @@
     var users = ViewBag.users;
     var gameCount = 0;
     var userCount = 0;
+    var friendCount = 0;
     var numbers = ViewBag.numbers;
     var number = ViewBag.number;
     var timestamp = ViewBag.timestamp;
@@ -89,10 +90,19 @@
          @Html.Raw(",\"friends\":[")  
          foreach(var f in friends) 
          {
-               @Html.Raw(String.Format("{\"username\": \"{0}\",", f.FriendUser.UserName))
+               if (friendCount > 0) 
+               {
+                @Html.Raw(",")
+               }
+               @Html.Raw("{")
+               @Html.Raw(String.Format("\"friend_id\": \"{0}\",", f.FriendID))
+               @Html.Raw(String.Format("\"friend_user_id\": \"{0}\",", f.FriendUser.UserId))
+               @Html.Raw(String.Format("\"username\": \"{0}\",", f.FriendUser.UserName))
                @Html.Raw(String.Format("\"name\": \"{0}\",", f.FriendUser.Name))
-               @Html.Raw(String.Format("\"bio\": \"{0}\"}", f.FriendUser.Status))
-               @Html.Raw(String.Format("\"bio\": \"{0}\"}", f.FriendUser.Bio))
+               @Html.Raw(String.Format("\"status\": \"{0}\",", f.Status))
+               @Html.Raw(String.Format("\"bio\": \"{0}\"", f.FriendUser.Bio))
+               @Html.Raw("}")
+               friendCount++;
          }
          @Html.Raw("]")
     }
@@ -150,9 +160,9 @@
             @Html.Raw(String.Format("\"description\": \"{0}\",", g.Description))
             @Html.Raw(String.Format("\"win_limit\": \"{0}\",", g.WinLimit)  ) 
             @Html.Raw(String.Format("\"game_speed\": \"{0}\",", g.Speed)  ) 
-            @Html.Raw(String.Format("\"win_count\": \"{0}\",", g.WinCount())  ) 
+            @Html.Raw(String.Format("\"win_count\": \"{0}\",", g.WinCount)  ) 
             @Html.Raw(String.Format("\"user_limit\": \"{0}\",", g.UserLimit)   )
-            @Html.Raw(String.Format("\"user_count\":\"{0}\",", g.UserCount())   )
+            @Html.Raw(String.Format("\"user_count\":\"{0}\",", g.UserCount)   )
             @Html.Raw(String.Format("\"created\":\"{0}\"", ToUnixTime(g.Created)))
             if (g.Players != null)
             {

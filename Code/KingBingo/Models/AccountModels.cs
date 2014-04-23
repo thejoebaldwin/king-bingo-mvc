@@ -93,6 +93,36 @@ namespace KingBingo.Models
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Result> Results { get; set; }
 
+        static public UserProfile FromData(dynamic data)
+        {
+            var user = new UserProfile();
+            user.Name = data.name;
+            user.UserName = data.username;
+            user.WinCount = data.win_count;
+            user.UserId = data.user_id;
+            user.ProfileImage = data.profile_image;
+            user.Rank = data.rank;
+            user.AuthenticationToken = data.authentication_token;
+            user.AuthenticationTokenExpires = UserProfile.FromUnixTime((string) data.authentication_token_expires);
+            user.Bio = data.bio;
+            user.Birthdate = UserProfile.FromUnixTime((string) data.birth_date);
+            user.Confirmed = data.confirmed;
+            user.Created = UserProfile.FromUnixTime((string)data.created);
+            user.DeviceToken = data.device_token;
+            user.Email = data.email;
+            user.FriendCount = data.friend_count;
+            
+            return user;
+        }
+
+        private static DateTime FromUnixTime(string timestamp)
+        {
+            // Unix timestamp is seconds past epoch
+            double timestampSeconds = Convert.ToDouble(timestamp);
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(timestampSeconds).ToLocalTime();
+            return dtDateTime;
+        }
 
         static public void GenerateRandomUsers(int count)
         {

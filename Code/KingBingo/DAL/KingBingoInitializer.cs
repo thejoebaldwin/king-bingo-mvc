@@ -142,6 +142,7 @@ namespace KingBingo.DAL
               user1,
               user2
             };
+      
             context.SaveChanges();
 
             var friend1 = new Friend { User = user1, FriendUser = user2, Status = RequestStatus.Accepted };
@@ -157,7 +158,8 @@ namespace KingBingo.DAL
 
             user1.Friends.Add(friend1);
             user2.Friends.Add(friend2);
-          
+            user1.FriendCount++;
+            user2.FriendCount++;
             context.SaveChanges();
 
             UserProfile.GenerateRandomUsers(50);
@@ -167,13 +169,14 @@ namespace KingBingo.DAL
             {
                 new Game{Name = "Test Game 1", Description="Test Game Description", WinLimit=1,UserLimit=10,   Speed=99, Created=DateTime.Now, Private=false, Players = players}
             };
-
+            user1.GameCount++;
+            user2.GameCount++;
             games[0].GenerateGameCards();
             foreach (GameCard gc in games[0].GameCards)
             {
                 context.GameCards.Add(gc);
             }
-
+            //NEED TO GIVE USERS GAMECARDS HERE!!!
             context.SaveChanges();
             games[0].Results = new List<Result>();
             games.ForEach(g => context.Games.Add(g));

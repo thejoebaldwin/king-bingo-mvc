@@ -98,6 +98,9 @@
             this.txtFriend_friend_user_id = new System.Windows.Forms.TextBox();
             this.txtFriend_user_id = new System.Windows.Forms.TextBox();
             this.tabGame = new System.Windows.Forms.TabPage();
+            this.btnCheckWin = new System.Windows.Forms.Button();
+            this.btnDrawNumber = new System.Windows.Forms.Button();
+            this.btnAuto = new System.Windows.Forms.Button();
             this.lblBingoNumber = new System.Windows.Forms.Label();
             this.label45 = new System.Windows.Forms.Label();
             this.label44 = new System.Windows.Forms.Label();
@@ -132,9 +135,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.timerNumbers = new System.Windows.Forms.Timer(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnAuto = new System.Windows.Forms.Button();
-            this.btnDrawNumber = new System.Windows.Forms.Button();
-            this.btnCheckWin = new System.Windows.Forms.Button();
+            this.btnAllFriends = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabBarOperations.SuspendLayout();
@@ -770,6 +771,7 @@
             // 
             // tabFriends
             // 
+            this.tabFriends.Controls.Add(this.btnAllFriends);
             this.tabFriends.Controls.Add(this.btnAddFriend);
             this.tabFriends.Controls.Add(this.label14);
             this.tabFriends.Controls.Add(this.label13);
@@ -870,6 +872,36 @@
             this.tabGame.TabIndex = 3;
             this.tabGame.Text = "GameCard";
             this.tabGame.UseVisualStyleBackColor = true;
+            // 
+            // btnCheckWin
+            // 
+            this.btnCheckWin.Location = new System.Drawing.Point(13, 245);
+            this.btnCheckWin.Name = "btnCheckWin";
+            this.btnCheckWin.Size = new System.Drawing.Size(123, 23);
+            this.btnCheckWin.TabIndex = 32;
+            this.btnCheckWin.Text = "Check Win";
+            this.btnCheckWin.UseVisualStyleBackColor = true;
+            this.btnCheckWin.Click += new System.EventHandler(this.btnCheckWin_Click);
+            // 
+            // btnDrawNumber
+            // 
+            this.btnDrawNumber.Location = new System.Drawing.Point(13, 189);
+            this.btnDrawNumber.Name = "btnDrawNumber";
+            this.btnDrawNumber.Size = new System.Drawing.Size(123, 23);
+            this.btnDrawNumber.TabIndex = 31;
+            this.btnDrawNumber.Text = "Draw Number";
+            this.btnDrawNumber.UseVisualStyleBackColor = true;
+            this.btnDrawNumber.Click += new System.EventHandler(this.btnDrawNumber_Click);
+            // 
+            // btnAuto
+            // 
+            this.btnAuto.Location = new System.Drawing.Point(45, 125);
+            this.btnAuto.Name = "btnAuto";
+            this.btnAuto.Size = new System.Drawing.Size(75, 23);
+            this.btnAuto.TabIndex = 30;
+            this.btnAuto.Text = "Auto Off";
+            this.btnAuto.UseVisualStyleBackColor = true;
+            this.btnAuto.Click += new System.EventHandler(this.btnAuto_Click);
             // 
             // lblBingoNumber
             // 
@@ -1253,35 +1285,15 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // btnAuto
+            // btnAllFriends
             // 
-            this.btnAuto.Location = new System.Drawing.Point(45, 125);
-            this.btnAuto.Name = "btnAuto";
-            this.btnAuto.Size = new System.Drawing.Size(75, 23);
-            this.btnAuto.TabIndex = 30;
-            this.btnAuto.Text = "Auto Off";
-            this.btnAuto.UseVisualStyleBackColor = true;
-            this.btnAuto.Click += new System.EventHandler(this.btnAuto_Click);
-            // 
-            // btnDrawNumber
-            // 
-            this.btnDrawNumber.Location = new System.Drawing.Point(13, 189);
-            this.btnDrawNumber.Name = "btnDrawNumber";
-            this.btnDrawNumber.Size = new System.Drawing.Size(123, 23);
-            this.btnDrawNumber.TabIndex = 31;
-            this.btnDrawNumber.Text = "Draw Number";
-            this.btnDrawNumber.UseVisualStyleBackColor = true;
-            this.btnDrawNumber.Click += new System.EventHandler(this.btnDrawNumber_Click);
-            // 
-            // btnCheckWin
-            // 
-            this.btnCheckWin.Location = new System.Drawing.Point(13, 245);
-            this.btnCheckWin.Name = "btnCheckWin";
-            this.btnCheckWin.Size = new System.Drawing.Size(123, 23);
-            this.btnCheckWin.TabIndex = 32;
-            this.btnCheckWin.Text = "Check Win";
-            this.btnCheckWin.UseVisualStyleBackColor = true;
-            this.btnCheckWin.Click += new System.EventHandler(this.btnCheckWin_Click);
+            this.btnAllFriends.Location = new System.Drawing.Point(397, 230);
+            this.btnAllFriends.Name = "btnAllFriends";
+            this.btnAllFriends.Size = new System.Drawing.Size(75, 23);
+            this.btnAllFriends.TabIndex = 5;
+            this.btnAllFriends.Text = "All Friends";
+            this.btnAllFriends.UseVisualStyleBackColor = true;
+            this.btnAllFriends.Click += new System.EventHandler(this.btnAllFriends_Click);
             // 
             // frmTestJSON
             // 
@@ -1426,6 +1438,7 @@
         private System.Windows.Forms.Button btnAuto;
         private System.Windows.Forms.Button btnDrawNumber;
         private System.Windows.Forms.Button btnCheckWin;
+        private System.Windows.Forms.Button btnAllFriends;
     }
 }
 

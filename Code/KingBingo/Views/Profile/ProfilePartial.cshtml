@@ -22,7 +22,7 @@
             {
             <form  class="friendForm">
                 <input type="hidden" name="user_id" value="@ViewBag.user.UserId" />
-                <input type="hidden" name="friend_id" value="@ViewBag.profileuser.UserId" />
+                <input type="hidden" name="friend_user_id" value="@ViewBag.profileuser.UserId" />
                 <input type="hidden" name="authentication_token" value="@ViewBag.user.AuthenticationToken" />
                   <input type="hidden" name="operation" value="addfriend" />
                 <input class="btn btn-primary" type="submit" value="Add Friend" />
@@ -46,16 +46,16 @@
       @Html.ActionLink("Friends", "Friends",new { controller = "Profile", username = ViewContext.RouteData.Values["username"] }, null)
     </div>
      <div class='col-md-3'>
-      @ViewBag.gameCount
+      @profileuser.GameCount
     </div>
         <div class='col-md-3'>
-      @ViewBag.winCount
+      @profileuser.WinCount
     </div>
         <div class='col-md-3'>
       0
     </div>
         <div class='col-md-3'>
-     @ViewBag.friendCount
+     @profileuser.FriendCount
     </div>
     </div>
   </div>
