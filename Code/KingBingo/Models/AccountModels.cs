@@ -94,6 +94,47 @@ namespace KingBingo.Models
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Result> Results { get; set; }
 
+        private string ToUnixTime(DateTime date)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return Convert.ToInt64((date.ToUniversalTime() - epoch).TotalSeconds).ToString();
+        }
+
+
+        public dynamic ToData(bool includeImages, bool verbose)
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("user_id", this.UserId.ToString());
+            dict.Add("username", this.UserName);
+            dict.Add("name", this.Name);
+            dict.Add("bio", this.Bio);
+            dict.Add("wins", this.WinCount.ToString());
+            dict.Add("rank", this.Rank.ToString());
+            dict.Add("friends", this.FriendCount.ToString());
+            dict.Add("games", this.GameCount.ToString());
+            if (includeImages || verbose)
+            {
+                dict.Add("profile_image", Convert.ToBase64String(this.ProfileImage));
+            }        
+            if (this.Location != null)
+            {
+                dict.Add("location", String.Format(",\"location\": \"{0},{1}\"", this.Location[0], this.Location[1]));
+            }
+            if (verbose)
+            {
+             dict.Add("email", this.Email);
+             dict.Add("created", ToUnixTime((DateTime)this.Created));
+             dict.Add("device_token", this.DeviceToken);
+             dict.Add("zip", this.Zip);
+             dict.Add("birthdate", ToUnixTime((DateTime)this.Birthdate));
+             dict.Add("receive_emails", this.ReceiveEmails.ToString());
+             dict.Add("authentication_token", this.AuthenticationToken);
+             dict.Add("authentication_token_expires", ToUnixTime((DateTime)this.AuthenticationTokenExpires));
+            }
+            return dict;
+        }
+
+
         static public UserProfile FromData(dynamic data)
         {
             var user = new UserProfile();

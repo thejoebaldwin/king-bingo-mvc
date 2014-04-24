@@ -56,34 +56,9 @@
     }
     @if (user != null)
     {
-             @Html.Raw(",\"user\":{")
-             @Html.Raw(String.Format("\"user_id\": \"{0}\",", user.UserId))
-             @Html.Raw(String.Format("\"username\": \"{0}\",", user.UserName))
-             @Html.Raw(String.Format("\"name\": \"{0}\",", user.Name))
-             @Html.Raw(String.Format("\"bio\": \"{0}\",", user.Bio))
-             @Html.Raw(String.Format("\"email\": \"{0}\",", user.Email))
-             @Html.Raw(String.Format("\"created\": \"{0}\",", ToUnixTime(user.Created)))
-             @Html.Raw(String.Format("\"device_token\": \"{0}\",", user.DeviceToken))
-             @Html.Raw(String.Format("\"zip\": \"{0}\",", user.Zip))
-             @Html.Raw(String.Format("\"birthdate\": \"{0}\",", ToUnixTime(user.Birthdate)))
-             @Html.Raw(String.Format("\"receive_emails\": \"{0}\",", user.ReceiveEmails))
-             @Html.Raw(String.Format("\"authentication_token\": \"{0}\",", user.AuthenticationToken))
-             @Html.Raw(String.Format("\"authentication_token_expires\": \"{0}\"", ToUnixTime(user.AuthenticationTokenExpires)))
-             if (user.ProfileImage != null)
-             {
-              @Html.Raw(String.Format(",\"profile_image\": \"{0}\"", Convert.ToBase64String(user.ProfileImage)))
-             } 
-             if (user.Game != null)
-             {
-              @Html.Raw(String.Format(",\"game_id\": \"{0}\"", user.Game.GameID))
-             } 
-             @Html.Raw(String.Format(",\"active\": \"{0}\"", user.Active))
-             @Html.Raw(String.Format(",\"sex\": \"{0}\"", user.Sex))
-             @Html.Raw(String.Format(",\"confirmed\": \"{0}\"", user.Confirmed))
+             @Html.Raw(",\"user\":")
+             @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(user.ToData(ViewBag.includeprofileimages, true)));
           
-                @Html.Raw(String.Format(",\"location\": \"{0}\"", user.Location))
-             
-            @Html.Raw("}")
     }
     @if (friends != null)
     {
@@ -94,14 +69,7 @@
                {
                 @Html.Raw(",")
                }
-               @Html.Raw("{")
-               @Html.Raw(String.Format("\"friend_id\": \"{0}\",", f.FriendID))
-               @Html.Raw(String.Format("\"friend_user_id\": \"{0}\",", f.FriendUser.UserId))
-               @Html.Raw(String.Format("\"username\": \"{0}\",", f.FriendUser.UserName))
-               @Html.Raw(String.Format("\"name\": \"{0}\",", f.FriendUser.Name))
-               @Html.Raw(String.Format("\"status\": \"{0}\",", f.Status))
-               @Html.Raw(String.Format("\"bio\": \"{0}\"", f.FriendUser.Bio))
-               @Html.Raw("}")
+               @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(f.ToData()));
                friendCount++;
          }
          @Html.Raw("]")
@@ -115,25 +83,8 @@
             {
                 @Html.Raw(",")
             }
-            @Html.Raw("{")
-               @Html.Raw(String.Format("\"user_id\": \"{0}\",", u.UserId))
-               @Html.Raw(String.Format("\"username\": \"{0}\",", u.UserName))
-               @Html.Raw(String.Format("\"name\": \"{0}\",", u.Name))
-               @Html.Raw(String.Format("\"bio\": \"{0}\",", u.Bio))
-               @Html.Raw(String.Format("\"wins\": \"{0}\",", u.WinCount))
-               @Html.Raw(String.Format("\"rank\": \"{0}\",", u.Rank))
-               @Html.Raw(String.Format("\"friends\": \"{0}\",", u.FriendCount))
-               @Html.Raw(String.Format("\"games\": \"{0}\"", u.GameCount))
-               if (ViewBag.includeprofileimages != null &&  ViewBag.includeprofileimages == true)
-               {
-                     @Html.Raw(String.Format("\"profile_image\": \"{0}\"", Convert.ToBase64String(u.ProfileImage)))
-               }
-              if (u.Location != null)
-             {
-                @Html.Raw(String.Format(",\"location\": \"{0},{1}\"", u.Location[0], u.Location[1]))
-             }
+            @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(u.ToData(ViewBag.includeprofileimages, false)));
             userCount++;
-            @Html.Raw("}")
         }
          @Html.Raw("]")  
     }
@@ -147,42 +98,16 @@
             }
    @if (games != null)
     {
-          @Html.Raw(",\"games\":[")  
+        @Html.Raw(",\"games\":[")  
         foreach(var g in games) 
         {
             if (gameCount > 0) 
             {
                 @Html.Raw(",")
             }
-            @Html.Raw("{")
-            @Html.Raw(String.Format("\"game_id\": \"{0}\",", g.GameID))
-            @Html.Raw(String.Format("\"name\": \"{0}\",", g.Name))
-            @Html.Raw(String.Format("\"description\": \"{0}\",", g.Description))
-            @Html.Raw(String.Format("\"win_limit\": \"{0}\",", g.WinLimit)  ) 
-            @Html.Raw(String.Format("\"game_speed\": \"{0}\",", g.Speed)  ) 
-            @Html.Raw(String.Format("\"win_count\": \"{0}\",", g.WinCount)  ) 
-            @Html.Raw(String.Format("\"user_limit\": \"{0}\",", g.UserLimit)   )
-            @Html.Raw(String.Format("\"user_count\":\"{0}\",", g.UserCount)   )
-            @Html.Raw(String.Format("\"created\":\"{0}\"", ToUnixTime(g.Created)))
-            if (g.Players != null)
-            {
-                @Html.Raw(",\"players\":\"")
-                var playerCount = 0;
-                foreach(var p in g.Players) 
-                {
-                    if (playerCount > 0) 
-                    {
-                    @Html.Raw(",")
-                    }
-                    @p.UserId
-                    playerCount++;
-                }
-                    @Html.Raw("\"")
-            }
-        
-            @Html.Raw("}")  
+            @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(g.ToData()));
             gameCount++;
         }
-           @Html.Raw("]")  
+        @Html.Raw("]")  
     }
 }

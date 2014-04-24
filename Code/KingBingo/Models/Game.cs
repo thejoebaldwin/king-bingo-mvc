@@ -18,7 +18,7 @@ namespace KingBingo.Models
         public string Description { get; set; }
         public int WinLimit { get; set; }
         public int UserLimit { get; set; }
-        public int Speed { get; set; }
+        public int GameSpeed { get; set; }
         public DateTime Created { get; set; }
         public bool Private { get; set; }
         public int NumbersIndex { get; set; }
@@ -93,12 +93,41 @@ namespace KingBingo.Models
             return dtDateTime;
         }
 
+        private string ToUnixTime(DateTime date)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return Convert.ToInt64((date.ToUniversalTime() - epoch).TotalSeconds).ToString();
+        }
+
+
         public dynamic ToData()
         {
-
-
-
-            return null;
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("game_id", this.GameID.ToString());
+            dict.Add("name", this.Name);
+            dict.Add("description", this.Description);
+            dict.Add("win_limit", this.WinLimit.ToString());
+            dict.Add("user_limit", this.UserLimit.ToString());
+            dict.Add("game_speed", this.GameSpeed.ToString());
+            dict.Add("created", ToUnixTime(this.Created));
+            dict.Add("private", this.Private.ToString());
+            dict.Add("closed", this.Closed.ToString());
+            dict.Add("win_count", this.WinCount.ToString());
+            dict.Add("user_count", this.UserCount.ToString());
+            string players = string.Empty;
+            if (this.Players != null)
+            {
+                foreach (var user in this.Players)
+                {
+                    if (players != string.Empty)
+                    {
+                        players += ",";
+                    }
+                    players += user.UserId;
+                }
+            }
+            dict.Add("players",players);
+            return dict;
         }
 
         public static Game FromData(dynamic data)
@@ -277,7 +306,7 @@ namespace KingBingo.Models
                 if (DateTime.Now > NextNumberTime)
                 {
                     NumbersIndex++;
-                    double delay = 100 - Speed;
+                    double delay = 100 - GameSpeed;
                     NextNumberTime = DateTime.Now.AddSeconds(60 * (delay/100.0));
                 }
                 if (NumbersIndex < 70)

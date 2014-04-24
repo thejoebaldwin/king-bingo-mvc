@@ -30,6 +30,19 @@ namespace KingBingo.Models
             Created = DateTime.Now;
         }
 
+
+        public dynamic ToData()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("friend_id", this.FriendID.ToString());
+            dict.Add("friend_user_id", this.FriendUser.UserId.ToString());
+            dict.Add("username", this.FriendUser.UserName);
+            dict.Add("name", this.FriendUser.Name);
+            dict.Add("status", this.Status.ToString());
+            dict.Add("bio", this.FriendUser.Bio);
+            return dict;
+        }
+
         public static Friend FromData(dynamic data)
         {
             Friend f = new Friend();

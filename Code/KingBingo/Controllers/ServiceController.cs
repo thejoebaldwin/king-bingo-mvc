@@ -181,7 +181,7 @@ namespace KingBingo.Controllers
                                     {
                                         page = data.page;
                                     }
-                                    ViewData["games"] = db.Games.OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
+                                    ViewData["games"] = db.Games.Include("Players").OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allgames";
                                     ViewBag.message = "successfully retrieved list of all games";
                                 }
@@ -663,7 +663,7 @@ namespace KingBingo.Controllers
                     gamecard = db.GameCards.SingleOrDefault(gc => gc.GameCardID == gamecard.GameCardID);
                     ViewData["gamecard"] = gamecard;
                     user.GameCard = gamecard;
-                    ViewBag.gamespeed = game.Speed;
+                    ViewBag.gamespeed = game.GameSpeed;
                     user.Game = game;
                     if (game.Players == null) game.Players = new List<UserProfile>();
                     game.Players.Add(user);
@@ -681,7 +681,7 @@ namespace KingBingo.Controllers
             game.Description = data.description;
             game.WinLimit = data.win_limit;
             game.UserLimit = data.user_limit;
-            game.Speed = data.game_speed;
+            game.GameSpeed = data.game_speed;
             game.Created = DateTime.Now;
             game.Private = data["private"];
             game.NumbersIndex = 0;

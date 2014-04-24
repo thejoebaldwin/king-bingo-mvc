@@ -167,7 +167,7 @@ namespace KingBingo.DAL
             //GAMES
             var games = new List<Game>
             {
-                new Game{Name = "Test Game 1", Description="Test Game Description", WinLimit=1,UserLimit=10,   Speed=99, Created=DateTime.Now, Private=false, Players = players}
+                new Game{Name = "Test Game 1", Description="Test Game Description", WinLimit=1,UserLimit=10,   GameSpeed=99, Created=DateTime.Now, Private=false, Players = players}
             };
             user1.GameCount++;
             user2.GameCount++;
