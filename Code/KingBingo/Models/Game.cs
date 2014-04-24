@@ -84,6 +84,28 @@ namespace KingBingo.Models
             UserCount = 0;
         }
 
+        private static DateTime FromUnixTime(string timestamp)
+        {
+            // Unix timestamp is seconds past epoch
+            double timestampSeconds = Convert.ToDouble(timestamp);
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(timestampSeconds).ToLocalTime();
+            return dtDateTime;
+        }
+
+        public static Game FromData(dynamic data)
+        {
+            Game game = new Game();
+            string numbers = data.numbers;
+            game.Numbers = numbers.Split(',').Select(x => int.Parse(x)).ToArray();
+            game.Name = data.name;
+            game.Description = data.description;
+            game.Created = FromUnixTime(data.created);
+            game.WinCount = data.win_count;
+            game.UserCount = data.user_count;
+            return game;
+        }
+
         public void GenerateGameCards()
         {
             int count = 0;

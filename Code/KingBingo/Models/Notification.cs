@@ -10,7 +10,12 @@ namespace KingBingo.Models
 
     public enum NotificationMethodType
     {
-        Email, Push, Web
+        Email, Push, Web, Default
+    }
+
+    public enum NotificationType
+    {
+        Friend, Game, Result, System
     }
 
     public class Notification
@@ -24,5 +29,14 @@ namespace KingBingo.Models
         public DateTime Expires { get; set; }
         public NotificationMethodType Method { get; set; }
         public virtual UserProfile User { get; set; }
+        
+        //foreign keys to objects that caused the notification
+        //should be objects instead?
+        //should be an enumeration
+        public int UserId { get; set; }
+        public int GameID { get; set; }
+        public int FriendID { get; set; }
+        public int ResultID { get; set; }
+
     }
 }

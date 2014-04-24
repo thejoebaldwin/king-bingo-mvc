@@ -61,6 +61,7 @@ namespace KingBingo.Models
         public string Bio { get; set; }
         public bool? Confirmed { get; set; }
         public string Location { get; set; }
+        public DateTime? LastLogin { get; set; }
 
         public virtual ICollection<Result> Players { get; set; }
         public virtual GameCard GameCard { get; set; }

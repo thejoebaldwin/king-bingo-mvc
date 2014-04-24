@@ -92,6 +92,7 @@
             this.txtGameID = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.tabFriends = new System.Windows.Forms.TabPage();
+            this.btnAllFriends = new System.Windows.Forms.Button();
             this.btnAddFriend = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -135,7 +136,12 @@
             this.label15 = new System.Windows.Forms.Label();
             this.timerNumbers = new System.Windows.Forms.Timer(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnAllFriends = new System.Windows.Forms.Button();
+            this.dgFriends = new System.Windows.Forms.DataGridView();
+            this.tabUsers = new System.Windows.Forms.TabPage();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabBarOperations.SuspendLayout();
@@ -145,6 +151,10 @@
             this.groupBox3.SuspendLayout();
             this.tabFriends.SuspendLayout();
             this.tabGame.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgFriends)).BeginInit();
+            this.tabUsers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGetAllGames
@@ -178,7 +188,7 @@
             // 
             // btnGetUser
             // 
-            this.btnGetUser.Location = new System.Drawing.Point(624, 15);
+            this.btnGetUser.Location = new System.Drawing.Point(598, 9);
             this.btnGetUser.Name = "btnGetUser";
             this.btnGetUser.Size = new System.Drawing.Size(75, 23);
             this.btnGetUser.TabIndex = 3;
@@ -483,6 +493,7 @@
             // tabBarOperations
             // 
             this.tabBarOperations.Controls.Add(this.tabUser);
+            this.tabBarOperations.Controls.Add(this.tabUsers);
             this.tabBarOperations.Controls.Add(this.tabGames);
             this.tabBarOperations.Controls.Add(this.tabFriends);
             this.tabBarOperations.Controls.Add(this.tabGame);
@@ -523,7 +534,7 @@
             this.tabUser.Padding = new System.Windows.Forms.Padding(3);
             this.tabUser.Size = new System.Drawing.Size(794, 466);
             this.tabUser.TabIndex = 0;
-            this.tabUser.Text = "User";
+            this.tabUser.Text = "User Profile";
             this.tabUser.UseVisualStyleBackColor = true;
             // 
             // label22
@@ -709,6 +720,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.dataGridView2);
             this.groupBox3.Controls.Add(this.btnGetNextNumber);
             this.groupBox3.Controls.Add(this.btnQuitGame);
             this.groupBox3.Controls.Add(this.btnJoinGame);
@@ -716,7 +728,7 @@
             this.groupBox3.Controls.Add(this.label12);
             this.groupBox3.Location = new System.Drawing.Point(37, 247);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(720, 205);
+            this.groupBox3.Size = new System.Drawing.Size(720, 213);
             this.groupBox3.TabIndex = 21;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Join Game/Quit Game";
@@ -771,6 +783,7 @@
             // 
             // tabFriends
             // 
+            this.tabFriends.Controls.Add(this.dgFriends);
             this.tabFriends.Controls.Add(this.btnAllFriends);
             this.tabFriends.Controls.Add(this.btnAddFriend);
             this.tabFriends.Controls.Add(this.label14);
@@ -784,9 +797,19 @@
             this.tabFriends.Text = "Friends";
             this.tabFriends.UseVisualStyleBackColor = true;
             // 
+            // btnAllFriends
+            // 
+            this.btnAllFriends.Location = new System.Drawing.Point(151, 141);
+            this.btnAllFriends.Name = "btnAllFriends";
+            this.btnAllFriends.Size = new System.Drawing.Size(75, 23);
+            this.btnAllFriends.TabIndex = 5;
+            this.btnAllFriends.Text = "All Friends";
+            this.btnAllFriends.UseVisualStyleBackColor = true;
+            this.btnAllFriends.Click += new System.EventHandler(this.btnAllFriends_Click);
+            // 
             // btnAddFriend
             // 
-            this.btnAddFriend.Location = new System.Drawing.Point(168, 230);
+            this.btnAddFriend.Location = new System.Drawing.Point(34, 141);
             this.btnAddFriend.Name = "btnAddFriend";
             this.btnAddFriend.Size = new System.Drawing.Size(75, 23);
             this.btnAddFriend.TabIndex = 4;
@@ -797,7 +820,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(58, 159);
+            this.label14.Location = new System.Drawing.Point(17, 95);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(73, 13);
             this.label14.TabIndex = 3;
@@ -806,7 +829,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(58, 98);
+            this.label13.Location = new System.Drawing.Point(17, 34);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(41, 13);
             this.label13.TabIndex = 2;
@@ -814,7 +837,7 @@
             // 
             // txtFriend_friend_user_id
             // 
-            this.txtFriend_friend_user_id.Location = new System.Drawing.Point(153, 152);
+            this.txtFriend_friend_user_id.Location = new System.Drawing.Point(112, 88);
             this.txtFriend_friend_user_id.Name = "txtFriend_friend_user_id";
             this.txtFriend_friend_user_id.Size = new System.Drawing.Size(100, 20);
             this.txtFriend_friend_user_id.TabIndex = 1;
@@ -823,7 +846,7 @@
             // 
             // txtFriend_user_id
             // 
-            this.txtFriend_user_id.Location = new System.Drawing.Point(153, 98);
+            this.txtFriend_user_id.Location = new System.Drawing.Point(112, 34);
             this.txtFriend_user_id.Name = "txtFriend_user_id";
             this.txtFriend_user_id.Size = new System.Drawing.Size(100, 20);
             this.txtFriend_user_id.TabIndex = 0;
@@ -1285,21 +1308,65 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // btnAllFriends
+            // dgFriends
             // 
-            this.btnAllFriends.Location = new System.Drawing.Point(397, 230);
-            this.btnAllFriends.Name = "btnAllFriends";
-            this.btnAllFriends.Size = new System.Drawing.Size(75, 23);
-            this.btnAllFriends.TabIndex = 5;
-            this.btnAllFriends.Text = "All Friends";
-            this.btnAllFriends.UseVisualStyleBackColor = true;
-            this.btnAllFriends.Click += new System.EventHandler(this.btnAllFriends_Click);
+            this.dgFriends.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgFriends.Location = new System.Drawing.Point(269, 20);
+            this.dgFriends.Name = "dgFriends";
+            this.dgFriends.Size = new System.Drawing.Size(489, 150);
+            this.dgFriends.TabIndex = 6;
+            // 
+            // tabUsers
+            // 
+            this.tabUsers.Controls.Add(this.button2);
+            this.tabUsers.Controls.Add(this.button1);
+            this.tabUsers.Controls.Add(this.dataGridView1);
+            this.tabUsers.Location = new System.Drawing.Point(4, 22);
+            this.tabUsers.Name = "tabUsers";
+            this.tabUsers.Size = new System.Drawing.Size(794, 466);
+            this.tabUsers.TabIndex = 4;
+            this.tabUsers.Text = "Users";
+            this.tabUsers.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(32, 36);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(687, 213);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(70, 284);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Add Friend";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(197, 284);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "All Users";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(31, 93);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(662, 114);
+            this.dataGridView2.TabIndex = 19;
             // 
             // frmTestJSON
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(966, 862);
+            this.ClientSize = new System.Drawing.Size(981, 873);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.tabBarOperations);
             this.Controls.Add(this.cbTarget);
@@ -1325,6 +1392,10 @@
             this.tabFriends.PerformLayout();
             this.tabGame.ResumeLayout(false);
             this.tabGame.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgFriends)).EndInit();
+            this.tabUsers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1439,6 +1510,12 @@
         private System.Windows.Forms.Button btnDrawNumber;
         private System.Windows.Forms.Button btnCheckWin;
         private System.Windows.Forms.Button btnAllFriends;
+        private System.Windows.Forms.DataGridView dgFriends;
+        private System.Windows.Forms.TabPage tabUsers;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView2;
     }
 }
 

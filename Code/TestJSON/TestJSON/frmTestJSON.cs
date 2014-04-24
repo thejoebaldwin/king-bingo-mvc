@@ -148,6 +148,10 @@ namespace TestJSON
                     }
 
                 }
+                else if (data.operation == "allgames")
+                {
+
+                }
                 else if (data.operation == "allfriends")
                 {
                     var temp = data.friends;
@@ -157,7 +161,25 @@ namespace TestJSON
                         var friend = Friend.FromData(d);
                         friends.Add(friend);
                     }
-                   
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add(new DataColumn("FriendID", typeof( Int32)));
+                    dt.Columns.Add(new DataColumn("UserName", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Status", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
+
+                  foreach (Friend f in friends)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["FriendID"] = f.FriendID;
+                        dr["UserName"] = f.FriendUser.UserName;
+                        dr["Status"] = f.Status;
+                        dr["Created"] = f.Created;
+                        dt.Rows.Add(dr);
+
+                    }
+
+                    dgFriends.DataSource = dt;
+                  
                 }
                 else if (data.operation == "joingame")
                 {
@@ -211,7 +233,7 @@ namespace TestJSON
             }
             catch (Exception ex)
             {
-
+                //throw ex;
             }
         }
 
