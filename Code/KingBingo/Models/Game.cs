@@ -93,6 +93,14 @@ namespace KingBingo.Models
             return dtDateTime;
         }
 
+        public dynamic ToData()
+        {
+
+
+
+            return null;
+        }
+
         public static Game FromData(dynamic data)
         {
             Game game = new Game();

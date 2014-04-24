@@ -110,6 +110,12 @@ namespace TestJSON
             {
                 dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(response_json);
 
+             
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                dict.Add("username", "test1");
+                dict.Add("auth_token", "abcdef01234567890");
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(dict);
+                
                 if (data.operation == "auth")
                 {
                     //var user = data.user;
@@ -150,8 +156,14 @@ namespace TestJSON
                 }
                 else if (data.operation == "allgames")
                 {
-
+                    List<Game> games = new List<Game>();
+                    foreach (dynamic g in data.games)
+                    {
+                        Game game = Game.FromData(g);
+                        games.Add(game);
+                    }
                 }
+
                 else if (data.operation == "allfriends")
                 {
                     var temp = data.friends;
