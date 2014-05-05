@@ -41,6 +41,8 @@ namespace KingBingo.Controllers
         [Authorize]
         public ActionResult Notifications()
         {
+            var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
+            ViewData["notifications"] = db.Notifications.Where(n => n.User.UserId == user.UserId).OrderBy(g => g.Created).Take(10);
             return View();
         }
 

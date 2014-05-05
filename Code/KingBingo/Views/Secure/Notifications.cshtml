@@ -1,8 +1,23 @@
 ﻿@{
     ViewBag.Title = "Notifications";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var notifications = ViewBag.notifications;
 }
 <ol class="breadcrumb">
   <li>@Html.ActionLink("Home", "Index", "Secure")</li>
   <li class="active">Notifications</li>
 </ol>
+
+
+
+ @if (notifications != null)
+    {
+        
+         foreach(var n in notifications) 
+         {
+               @n.Message<br /> 
+           
+          
+         }
+      
+    }

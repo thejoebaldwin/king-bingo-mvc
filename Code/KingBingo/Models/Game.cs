@@ -133,11 +133,14 @@ namespace KingBingo.Models
         public static Game FromData(dynamic data)
         {
             Game game = new Game();
-            string numbers = data.numbers;
-            game.Numbers = numbers.Split(',').Select(x => int.Parse(x)).ToArray();
+            if (data.numbers != null)
+            {
+                string numbers = data.numbers;
+                game.Numbers = numbers.Split(',').Select(x => int.Parse(x)).ToArray();
+            }
             game.Name = data.name;
             game.Description = data.description;
-            game.Created = FromUnixTime(data.created);
+            game.Created = FromUnixTime((string) data.created);
             game.WinCount = data.win_count;
             game.UserCount = data.user_count;
             return game;

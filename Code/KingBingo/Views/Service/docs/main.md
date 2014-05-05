@@ -18,6 +18,7 @@ Supported Operations
 - [Call Bingo](v0/callbingo "Call Bingo")
 - [Invite Users](v0/inviteusers "Invite Users")
 - [Update User](v0/updateuser "Update User")
+- [All Notifications](v0/allnotifications "All Notifications")
 
 Usage  
 

@@ -162,6 +162,26 @@ namespace KingBingo.DAL
             user2.FriendCount++;
             context.SaveChanges();
 
+
+            Notification n1 = new Notification();
+            n1.User = user1;
+            n1.FriendID = friend2.FriendID;
+            n1.Message = user1.UserName + " Sent you a friend request";
+            n1.Created = DateTime.Now;
+            n1.Expires = n1.Created.AddDays(14);
+            n1.Type = NotificationType.Friend;
+            context.Notifications.Add(n1);
+
+            Notification n2 = new Notification();
+            n2.User = user2;
+            n2.FriendID = friend1.FriendID;
+            n2.Message = user2.UserName + " Accepted your friend request";
+            n2.Created = DateTime.Now;
+            n2.Type = NotificationType.Friend;
+            n2.Expires = n2.Created.AddDays(14);
+            context.Notifications.Add(n2);
+            context.SaveChanges();
+
             UserProfile.GenerateRandomUsers(50);
 
             //GAMES

@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 using System.Collections;
 using KingBingo.Models;
 
-namespace TestJSON
+namespace KingBingo
 {
     public partial class frmTestJSON : Form
     {
@@ -21,6 +21,9 @@ namespace TestJSON
         public int gameSpeed = 0;
         public string profileImage = "";
         public UserProfile user;
+
+        public KingBingo.Client client;
+
         public frmTestJSON()
         {
             InitializeComponent();
@@ -69,21 +72,31 @@ namespace TestJSON
 
         private void btnGetAllGames_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            post_json += ",\"page\":\"0\"}";
-            txtRequest.Text = post_json;
+           
+            Dictionary<string, string> d = new Dictionary<string, string>();
+            d.Add("user_id", user.UserId.ToString());
+            d.Add("authentication_token", user.AuthenticationToken);
+            d.Add("page", "0");
+
+            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
+        
             txtResponse.Text = PostDataWithOperation("allgames", post_json);
         }
 
         private void btnGetAllUsers_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
+            Dictionary<string, string> d = new Dictionary<string, string>();
+            d.Add("user_id", user.UserId.ToString());
+            d.Add("authentication_token", user.AuthenticationToken);
             if (chkIncludeProfileImages.Checked)
             {
-                post_json += ",\"include_profile_images\":\"true\"";
+     
+                d.Add("include_profile_images", "true");
             }
-            post_json += ",\"page\":\"0\"}";
-            txtRequest.Text = post_json;
+            d.Add("page", "0");
+
+            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
+           
             txtResponse.Text = PostDataWithOperation("allusers", post_json); ;
         }
 
@@ -105,13 +118,10 @@ namespace TestJSON
 
         private void processResponse(string response_json)
         {
-
+            //txtRequest.Text = response_json;
             try
             {
                 dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(response_json);
-
-             
-           
                 
                 if (data.operation == "auth")
                 {
@@ -151,6 +161,32 @@ namespace TestJSON
                     }
 
                 }
+                else if (data.operation == "allusers")
+                {
+                    List<UserProfile> users = new List<UserProfile>();
+                    foreach (dynamic u in data.users)
+                    {
+                        UserProfile user = UserProfile.FromData(u);
+                        users.Add(user);
+                    }
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add(new DataColumn("UserId", typeof(Int32)));
+                    dt.Columns.Add(new DataColumn("Name", typeof(string)));
+                    dt.Columns.Add(new DataColumn("UserName", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
+
+                    foreach (UserProfile u in users)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["UserId"] = u.UserId;
+                        dr["Name"] = u.Name;
+                        dr["UserName"] = u.UserName;
+                        dr["Created"] = u.Created;
+                        dt.Rows.Add(dr);
+                    }
+                    dgUsers.DataSource = dt;
+
+                }
                 else if (data.operation == "allgames")
                 {
                     List<Game> games = new List<Game>();
@@ -159,6 +195,24 @@ namespace TestJSON
                         Game game = Game.FromData(g);
                         games.Add(game);
                     }
+
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add(new DataColumn("GameID", typeof(Int32)));
+                    dt.Columns.Add(new DataColumn("Name", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Description", typeof(string)));
+                    dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
+
+                    foreach (Game g in games)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["GameID"] = g.GameID;
+                        dr["Name"] = g.Name;
+                        dr["Description"] = g.Description;
+                        dr["Created"] = g.Created;
+                        dt.Rows.Add(dr);
+                    }
+
+                    dgGames.DataSource = dt;
                 }
 
                 else if (data.operation == "allfriends")
@@ -171,15 +225,19 @@ namespace TestJSON
                         friends.Add(friend);
                     }
                     DataTable dt = new DataTable();
-                    dt.Columns.Add(new DataColumn("FriendID", typeof( Int32)));
+                    dt.Columns.Add(new DataColumn("FriendId", typeof(Int32)));
+                 
+                    dt.Columns.Add(new DataColumn("FriendUserId", typeof(Int32)));
                     dt.Columns.Add(new DataColumn("UserName", typeof(string)));
                     dt.Columns.Add(new DataColumn("Status", typeof(string)));
                     dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
 
-                  foreach (Friend f in friends)
+                    foreach (Friend f in friends)
                     {
                         DataRow dr = dt.NewRow();
                         dr["FriendID"] = f.FriendID;
+                   
+                        dr["FriendUserId"] = f.FriendUser.UserId;
                         dr["UserName"] = f.FriendUser.UserName;
                         dr["Status"] = f.Status;
                         dr["Created"] = f.Created;
@@ -188,7 +246,7 @@ namespace TestJSON
                     }
 
                     dgFriends.DataSource = dt;
-                  
+
                 }
                 else if (data.operation == "joingame")
                 {
@@ -552,19 +610,31 @@ namespace TestJSON
         {
 
             string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\", \"query_user_id\":\"1\"}";
-            txtRequest.Text = post_json;
+          
             txtResponse.Text = PostDataWithOperation("getuser", post_json);
         }
 
         private void btnAuth_Click(object sender, EventArgs e)
         {
 
+
+
             string hash = createAuthHash(txtPassword.Text.Trim());
             string post_json = "{\"username\":\"" + txtUserName.Text.Trim() + "\", \"hash\":\"" + hash + "\"}";
             string response_json = PostDataWithOperation("auth", post_json);
             txtRequest.Text = post_json;
             txtResponse.Text = response_json;
-            processResponse(response_json);
+              processResponse(response_json);
+
+            //client.Authenticate(txtUserName.Text.Trim(), txtPassword.Text.Trim(), AuthenticationComplete);
+           
+
+        }
+
+        private void AuthenticationComplete()
+        {
+           
+
         }
 
         private void btnCreateUser_Click(object sender, EventArgs e)
@@ -607,6 +677,9 @@ namespace TestJSON
 
         private void frmTestJSON_Load(object sender, EventArgs e)
         {
+
+            KingBingo.Client client = new KingBingo.Client(getTargetUrl());
+
             cbTarget.SelectedIndex = 0;
             drawnNumbers = new ArrayList();
 
@@ -642,7 +715,7 @@ namespace TestJSON
             post_json += ",\"player_ids\":\"" + txtPlayers.Text + "\", \"private\":\"" + chkPrivate.Checked.ToString() + "\"";
             post_json += "}";
 
-            txtRequest.Text = post_json;
+
 
             txtResponse.Text = PostDataWithOperation("creategame", post_json);
         }
@@ -667,7 +740,7 @@ namespace TestJSON
         {
             string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
             post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
-            txtRequest.Text = post_json;
+      
             txtResponse.Text = PostDataWithOperation("quitgame", post_json);
         }
 
@@ -675,7 +748,7 @@ namespace TestJSON
         {
             string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
             post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
-            txtRequest.Text = post_json;
+         
             txtResponse.Text = PostDataWithOperation("getnumber", post_json);
         }
 
@@ -685,7 +758,7 @@ namespace TestJSON
             int friend_user_id = Convert.ToInt32(txtFriend_friend_user_id.Text);
             string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
             post_json += ", \"friend_id\":\"" + friend_user_id + "\"}";
-            txtRequest.Text = post_json;
+          
             txtResponse.Text = PostDataWithOperation("addfriend", post_json);
         }
 
@@ -741,7 +814,7 @@ namespace TestJSON
             int friend_user_id = Convert.ToInt32(txtFriend_friend_user_id.Text);
             string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
             post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
-            txtRequest.Text = post_json;
+     
             txtResponse.Text = PostDataWithOperation("getnumber", post_json);
 
         }
@@ -756,7 +829,7 @@ namespace TestJSON
             int user_id = Convert.ToInt32(txtFriend_user_id.Text);
 
             string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"}";
-            txtRequest.Text = post_json;
+         
             txtResponse.Text = PostDataWithOperation("getprofileimage", post_json);
         }
 
@@ -791,21 +864,39 @@ namespace TestJSON
 
         private void btnProfile_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            post_json += " ,\"user\": {";
-            string sub_json = "";
-            if (profileImage != "")
-            {
-                sub_json += " \"profile_image\":\"" + profileImage + "\"";
-            }
+            Dictionary<string, string> d = new Dictionary<string, string>();
+            d.Add("user_id", user.UserId.ToString());
+            d.Add("authentication_token", user.AuthenticationToken);
+
+
+           
+            //string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
+            //post_json += " ,\"user\": {";
+            Dictionary<string, string> u = new Dictionary<string, string>();
+          
+            //string sub_json = "";
+            //if (profileImage != "")
+            //{
+            //    sub_json += " \"profile_image\":\"" + profileImage + "\"";
+            //}
+
+            u.Add("profile_image", profileImage);
             if (txtUpdateUser_Latitude.Text != "" && txtUpdateUser_Longitude.Text != "")
             {
-                if (sub_json != "") sub_json += ",";
-                sub_json += string.Format("\"location\":\"{0},{1}\"", txtUpdateUser_Latitude.Text, txtUpdateUser_Longitude.Text);
+                //if (sub_json != "") sub_json += ",";
+                //sub_json += string.Format("\"location\":\"{0},{1}\"", txtUpdateUser_Latitude.Text, txtUpdateUser_Longitude.Text);
+               u.Add("location", string.Format("{0},{1}", txtUpdateUser_Latitude.Text, txtUpdateUser_Longitude.Text));
             }
            
-            post_json += sub_json + "}}";
+            //post_json += sub_json + "}}";
+            string userJson = Newtonsoft.Json.JsonConvert.SerializeObject(u);
+            d.Add("user", "@@@");
+
+            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
+            post_json = post_json.Replace("\"@@@\"", userJson);
+
             txtRequest.Text = post_json;
+          
             txtResponse.Text = PostDataWithOperation("updateuser", post_json);
         }
 
@@ -847,7 +938,7 @@ namespace TestJSON
 
             string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
             post_json += ",\"game_id\":\"" + game_id + "\", \"winning_numbers\":\"" + bingo + "\", \"game_card\":\"" + gamecard + "\"}";
-            txtRequest.Text = post_json;
+          
             txtResponse.Text = PostDataWithOperation("callbingo", post_json);
 
         }
@@ -859,8 +950,113 @@ namespace TestJSON
 
 
             string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"}";
-             txtRequest.Text = post_json;
+            
             txtResponse.Text = PostDataWithOperation("allfriends", post_json);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
+            //if (chkIncludeProfileImages.Checked)
+            //{
+                post_json += ",\"include_profile_images\":\"false\"";
+            //}
+            post_json += ",\"page\":\"0\"}";
+          
+            txtResponse.Text = PostDataWithOperation("allusers", post_json); ;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //add friend
+            if (dgUsers.SelectedRows != null && dgUsers.SelectedRows.Count > 0)
+            {
+                DataGridViewRow dr = dgUsers.SelectedRows[0];
+                int user_id = user.UserId;
+                int friend_user_id = (int)dr.Cells[0].Value;
+
+                Dictionary<string, string> d = new Dictionary<string, string>();
+                d.Add("user_id", user.UserId.ToString());
+                d.Add("authentication_token", user.AuthenticationToken);
+                d.Add("friend_user_id", friend_user_id.ToString());
+
+                string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
+                txtRequest.Text = post_json;
+            
+                txtResponse.Text = PostDataWithOperation("addfriend", post_json);
+            }
+       
+        }
+
+        private void btnAcceptFriend_Click(object sender, EventArgs e)
+        {
+            //accept friend
+            if (dgFriends.SelectedRows != null && dgFriends.SelectedRows.Count > 0)
+            {
+                DataGridViewRow dr = dgFriends.SelectedRows[0];
+
+                int user_id = user.UserId;
+                int friend_user_id = (int)dr.Cells[1].Value;
+
+                Dictionary<string, string> d = new Dictionary<string, string>();
+                d.Add("user_id", user.UserId.ToString());
+                d.Add("authentication_token", user.AuthenticationToken);
+                d.Add("friend_user_id", friend_user_id.ToString());
+
+
+                if ((string)dr.Cells[3].Value == "Pending")
+                {
+                    string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
+                    txtRequest.Text = post_json;
+                    txtResponse.Text = PostDataWithOperation("acceptfriend", post_json);
+                }
+                else
+                {
+                    txtRequest.Text = string.Empty;
+                    txtResponse.Text = string.Empty;
+                }
+                
+            }
+        }
+
+        private void btnRejectFriend_Click(object sender, EventArgs e)
+        {
+            if (dgFriends.SelectedRows != null && dgFriends.SelectedRows.Count > 0)
+            {
+                DataGridViewRow dr = dgFriends.SelectedRows[0];
+
+                int user_id = user.UserId;
+                int friend_user_id = (int)dr.Cells[1].Value;
+
+                Dictionary<string, string> d = new Dictionary<string, string>();
+                d.Add("user_id", user.UserId.ToString());
+                d.Add("authentication_token", user.AuthenticationToken);
+                d.Add("friend_user_id", friend_user_id.ToString());
+
+
+                if ((string)dr.Cells[3].Value == "Pending")
+                {
+                    string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
+                    txtRequest.Text = post_json;
+                    txtResponse.Text = PostDataWithOperation("rejectfriend", post_json);
+                }
+                else
+                {
+                    txtRequest.Text = string.Empty;
+                    txtResponse.Text = string.Empty;
+                }
+
+            }
+        }
+
+        private void btnNotifications_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, string> d = new Dictionary<string, string>();
+            d.Add("user_id", user.UserId.ToString());
+            d.Add("authentication_token", user.AuthenticationToken);
+            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
+            txtRequest.Text = post_json;
+            txtResponse.Text = PostDataWithOperation("allnotifications", post_json);
         }
     }
 }

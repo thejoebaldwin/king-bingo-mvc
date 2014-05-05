@@ -2,9 +2,11 @@
     Layout = null;
     var games = ViewBag.games;
     var users = ViewBag.users;
+    var notifications = ViewBag.notifications;
     var gameCount = 0;
     var userCount = 0;
     var friendCount = 0;
+    var notificationCount = 0;
     var numbers = ViewBag.numbers;
     var number = ViewBag.number;
     var timestamp = ViewBag.timestamp;
@@ -57,8 +59,22 @@
     @if (user != null)
     {
              @Html.Raw(",\"user\":")
-             @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(user.ToData(ViewBag.includeprofileimages, true)));
+             @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(user.ToData((bool) ViewBag.includeprofileimages, true)));
           
+    }
+    @if (notifications != null)
+    {
+         @Html.Raw(",\"notifications\":[")  
+         foreach(var n in notifications) 
+         {
+           if (notificationCount > 0) 
+           {
+                @Html.Raw(",")
+           }
+           @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(n.ToData()));
+           notificationCount++;
+         }
+        @Html.Raw("]")
     }
     @if (friends != null)
     {

@@ -88,6 +88,7 @@ namespace KingBingo.Controllers
                                 db.SaveChanges();
                                 ViewData["user"] = user;
                                 ViewBag.message = "successfully authenticated";
+                                ViewBag.includeprofileimages =true;
                             }
                             else
                             {
@@ -185,6 +186,18 @@ namespace KingBingo.Controllers
                                     ViewBag.operation = "allgames";
                                     ViewBag.message = "successfully retrieved list of all games";
                                 }
+                                if (operation == "allnotifications")
+                                {
+                                    int resultSize = 25;
+                                    int page = 0;
+                                    if (data.page != null)
+                                    {
+                                        page = data.page;
+                                    }
+                                    ViewData["notifications"] = db.Notifications.Where(n => n.User.UserId == user.UserId).OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
+                                    ViewBag.operation = "allnotifications";
+                                    ViewBag.message = "successfully retrieved list of all notifications";
+                                }
                                 else if (operation == "allusers")
                                 {
                                     int resultSize = 25;
@@ -201,6 +214,14 @@ namespace KingBingo.Controllers
                                         {
                                             ViewBag.includeprofileimages = true;
                                         }
+                                        else
+                                        {
+                                            ViewBag.includeprofileimages = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ViewBag.includeprofileimages = false;
                                     }
                                     ViewBag.message = "successfully retrieved list of all users";
                                 }
@@ -310,6 +331,16 @@ namespace KingBingo.Controllers
                                         var friend2 = new Friend { User = friend_user, FriendUser = user, Status = RequestStatus.Pending };
                                         db.Friends.Add(friend1);
                                         db.Friends.Add(friend2);
+
+                                        Notification n1 = new Notification();
+                                        n1.User = friend_user;
+                                        n1.FriendID = friend2.FriendID;
+                                        n1.Message = user.UserName + " Sent you a friend request";
+                                        n1.Created = DateTime.Now;
+                                        n1.Expires = n1.Created.AddDays(14);
+                                        n1.Type = NotificationType.Friend;
+                                        db.Notifications.Add(n1);
+
                                         db.SaveChanges();
                                         user.Friends.Add(friend1);
                                         friend_user.Friends.Add(friend2);
@@ -334,6 +365,16 @@ namespace KingBingo.Controllers
                                     friendshipB.Status = RequestStatus.Accepted;
                                     friendshipA.User.FriendCount++;
                                     friendshipB.User.FriendCount++;
+
+                                    Notification n1 = new Notification();
+                                    n1.User = friendshipB.User;
+                                    n1.FriendID = friendshipB.FriendID;
+                                    n1.Message = friendshipB.FriendUser.UserName + " accepted your friend request";
+                                    n1.Created = DateTime.Now;
+                                    n1.Expires = n1.Created.AddDays(14);
+                                    n1.Type = NotificationType.Friend;
+                                    db.Notifications.Add(n1);
+
                                     db.SaveChanges();
                                     //send out notifications
 
@@ -347,6 +388,16 @@ namespace KingBingo.Controllers
                                     var friendshipB = db.Friends.Include("User").Where(f => f.User.UserId == friend_user_id && f.FriendUser.UserId == user.UserId).FirstOrDefault();
                                     friendshipA.Status = RequestStatus.Rejected;
                                     friendshipB.Status = RequestStatus.Rejected;
+
+                                    Notification n1 = new Notification();
+                                    n1.User = friendshipB.User;
+                                    n1.FriendID = friendshipB.FriendID;
+                                    n1.Message = friendshipB.FriendUser.UserName + " rejected your friend request";
+                                    n1.Created = DateTime.Now;
+                                    n1.Expires = n1.Created.AddDays(14);
+                                    n1.Type = NotificationType.Friend;
+                                    db.Notifications.Add(n1);
+
                                     db.SaveChanges();
                                     //send out notifications
                                 }
