@@ -92,6 +92,22 @@ namespace KingBingo.Models
             return gc;
         }
 
+
+
+        public dynamic ToData()
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            return data;
+        }
+
+        
+
+        public GameCard FromData(dynamic data)
+        {
+            GameCard gamecard = new GameCard();
+            return gamecard;
+        }
+
         public string Hash()
         {
             return string.Join(",", Numbers);

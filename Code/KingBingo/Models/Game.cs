@@ -100,7 +100,7 @@ namespace KingBingo.Models
         }
 
 
-        public dynamic ToData()
+        public Dictionary<string, string> ToData()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
             dict.Add("game_id", this.GameID.ToString());
@@ -130,19 +130,20 @@ namespace KingBingo.Models
             return dict;
         }
 
-        public static Game FromData(dynamic data)
+        public static Game FromData(Dictionary<string, string> data)
         {
             Game game = new Game();
-            if (data.numbers != null)
+            if (data["numbers"] != null)
             {
-                string numbers = data.numbers;
+                string numbers = data["numbers"];
                 game.Numbers = numbers.Split(',').Select(x => int.Parse(x)).ToArray();
             }
-            game.Name = data.name;
-            game.Description = data.description;
-            game.Created = FromUnixTime((string) data.created);
-            game.WinCount = data.win_count;
-            game.UserCount = data.user_count;
+            game.GameID = System.Convert.ToInt32(data["game_id"]);
+            game.Name = data["name"];
+            game.Description = data["description"];
+            game.Created = FromUnixTime((string) data["created"]);
+            game.WinCount = System.Convert.ToInt32(data["win_count"]);
+            game.UserCount = System.Convert.ToInt32(data["user_count"]);
             return game;
         }
 

@@ -186,7 +186,7 @@ namespace KingBingo.Controllers
                                     ViewBag.operation = "allgames";
                                     ViewBag.message = "successfully retrieved list of all games";
                                 }
-                                if (operation == "allnotifications")
+                                else if (operation == "allnotifications")
                                 {
                                     int resultSize = 25;
                                     int page = 0;
@@ -232,7 +232,7 @@ namespace KingBingo.Controllers
                                     var updateUser = data.user;
                                     if (updateUser != null)
                                     {
-                                        if (updateUser.profile_image != null)
+                                        if (updateUser.profile_image != null && updateUser.profile_image != string.Empty)
                                         {
                                             string profileimage = updateUser.profile_image;
                                             byte[] buffer = Convert.FromBase64String(profileimage);
@@ -254,7 +254,7 @@ namespace KingBingo.Controllers
                                              */
                                             ViewBag.status = "ok";
                                             user.ProfileImage = buffer;
-                                            ViewBag.message = "profile image updated successfully with " + img.Width.ToString() + "x" + img.Height.ToString();
+                                            //ViewBag.message = "profile image updated successfully with " + img.Width.ToString() + "x" + img.Height.ToString() + ",";
                                             // }
                                         }
                                         else
@@ -651,75 +651,83 @@ namespace KingBingo.Controllers
             var user = db.UserProfiles.SingleOrDefault(u => u.UserId == user_id);
             var game = db.Games.SingleOrDefault(g => g.GameID == game_id);
 
-            if (game.Closed)
+            if (game != null)
             {
-                ViewBag.status = "error";
-                if (game.NumbersIndex >= 25)
+                if (game.Closed)
                 {
-                    ViewBag.message = "game closed, all numbers have been drawn";
-                }
-                else if (game.WinCount >= game.WinLimit)
-                {
-                    ViewBag.message = "game closed, win limit has been reached";
-                }
-            }
-            else if (game.Players != null && game.Players.Contains(user))
-            {
-                ViewBag.status = "error";
-                ViewBag.message = "user is already joined to game";
-            }
-            else if (game.Players != null && game.Players.Count == game.UserLimit)
-            {
-                ViewBag.status = "error";
-                ViewBag.message = "game is full, try again shortly";
-            }
-            else
-            {
-                ViewBag.message = "successfully joined game";
-              
-                if (user.Game != null)
-                {
-                    user.Game.Players.Remove(user);
-                    Result r = new Result();
-                    r.Game = user.Game;
-                    r.Outcome = OutcomeType.Quit;
-                    r.Points = 0;
-                    r.User = user;
-                    db.Results.Add(r);
-                    user.Results.Add(r);
-                    r.Game.Results.Add(r);
-                    user.Game.UserCount--;
-                    user.Game = null;
-                    
-                }
-                game.UserCount++;
-                user.GameCount++;
-                Result join = new Result();
-                join.Outcome = OutcomeType.Join;
-                join.Game = game;
-                join.User = user;
-                db.Results.Add(join);
-                game.Results.Add(join);
-                user.Results.Add(join);
-
-                ViewData["game"] = game;
-                GameCard gamecard = game.GetNextGameCard();
-                if (gamecard == null)
-                {
-                    ViewBag.message = "no gamecards left to play";
                     ViewBag.status = "error";
+                    if (game.NumbersIndex >= 25)
+                    {
+                        ViewBag.message = "game closed, all numbers have been drawn";
+                    }
+                    else if (game.WinCount >= game.WinLimit)
+                    {
+                        ViewBag.message = "game closed, win limit has been reached";
+                    }
+                }
+                else if (game.Players != null && game.Players.Contains(user))
+                {
+                    ViewBag.status = "error";
+                    ViewBag.message = "user is already joined to game";
+                }
+                else if (game.Players != null && game.Players.Count == game.UserLimit)
+                {
+                    ViewBag.status = "error";
+                    ViewBag.message = "game is full, try again shortly";
                 }
                 else
                 {
-                    gamecard = db.GameCards.SingleOrDefault(gc => gc.GameCardID == gamecard.GameCardID);
-                    ViewData["gamecard"] = gamecard;
-                    user.GameCard = gamecard;
-                    ViewBag.gamespeed = game.GameSpeed;
-                    user.Game = game;
-                    if (game.Players == null) game.Players = new List<UserProfile>();
-                    game.Players.Add(user);
-                    db.SaveChanges();
+                    ViewBag.message = "successfully joined game";
+
+                    if (user.Game != null)
+                    {
+                        user.Game.Players.Remove(user);
+                        Result r = new Result();
+                        r.Game = user.Game;
+                        r.Outcome = OutcomeType.Quit;
+                        r.Points = 0;
+                        r.User = user;
+                        db.Results.Add(r);
+                        user.Results.Add(r);
+                        r.Game.Results.Add(r);
+                        user.Game.UserCount--;
+                        user.Game = null;
+
+                    }
+                    game.UserCount++;
+                    user.GameCount++;
+                    Result join = new Result();
+                    join.Outcome = OutcomeType.Join;
+                    join.Game = game;
+                    join.User = user;
+                    db.Results.Add(join);
+                    game.Results.Add(join);
+                    user.Results.Add(join);
+
+                    ViewData["game"] = game;
+                    GameCard gamecard = game.GetNextGameCard();
+                    if (gamecard == null)
+                    {
+                        ViewBag.message = "no gamecards left to play";
+                        ViewBag.status = "error";
+                    }
+                    else
+                    {
+                        gamecard = db.GameCards.SingleOrDefault(gc => gc.GameCardID == gamecard.GameCardID);
+                        ViewData["gamecard"] = gamecard;
+                        user.GameCard = gamecard;
+                        ViewBag.gamespeed = game.GameSpeed;
+                        user.Game = game;
+                        if (game.Players == null) game.Players = new List<UserProfile>();
+                        game.Players.Add(user);
+                        db.SaveChanges();
+                    }
                 }
+            }
+            else
+            {
+                ViewBag.message = "no game was found with that id";
+                ViewBag.status = "error";
             }
         }
 
@@ -792,6 +800,12 @@ namespace KingBingo.Controllers
                 
                 //create an invite notification for each player                                        
             }
+
+
+            
+
+
+
             createdByUser.GameCard = game.GetNextGameCard();
           
           

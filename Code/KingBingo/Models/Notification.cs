@@ -64,10 +64,41 @@ namespace KingBingo.Models
             data.Add("user_id", this.User.UserId.ToString());
             data.Add("game_id", this.GameID.ToString());
             data.Add("result_id", this.ResultID.ToString());
-       
-            
-
+            data.Add("friend_id", this.FriendID.ToString());
             return data;
+        }
+
+        public static Notification FromData(dynamic data)
+        {
+            Notification n = new Notification();
+            n.Message = data.message;
+            n.NotificationID = data.notification_id;
+            n.Created = FromUnixTime((string)data.created);
+            if (data.user_id != null)
+            {
+                n.UserId = data.user_id;
+            }
+            if (data.friend_id != null)
+            {
+                n.FriendID = data.friend_id;
+            }
+            if (data.game_id != null)
+            {
+                n.GameID = data.game_id;
+            }
+            if (data.result_id != null)
+            {
+                n.ResultID = data.result_id;
+            }
+            if (data.type != null)
+            {
+                if (data.type == "Friend") n.Type = NotificationType.Friend;
+                else if (data.type == "Result") n.Type = NotificationType.Result;
+                else if (data.type == "System") n.Type = NotificationType.System;
+                else if (data.type == "Game") n.Type = NotificationType.Game;
+            }
+
+            return n;
         }
     }
 }

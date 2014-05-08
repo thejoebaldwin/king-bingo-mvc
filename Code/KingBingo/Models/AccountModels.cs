@@ -101,28 +101,31 @@ namespace KingBingo.Models
         }
 
 
-        public dynamic ToData(bool includeImages, bool verbose)
+        public Dictionary<string, string> ToData(bool includeImages, bool verbose)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
             dict.Add("user_id", this.UserId.ToString());
             dict.Add("username", this.UserName);
             dict.Add("name", this.Name);
             dict.Add("bio", this.Bio);
-            dict.Add("wins", this.WinCount.ToString());
+            dict.Add("win_count", WinCount.ToString());
+            dict.Add("friend_count", FriendCount.ToString());
             dict.Add("rank", this.Rank.ToString());
-            dict.Add("friends", this.FriendCount.ToString());
-            dict.Add("games", this.GameCount.ToString());
+            dict.Add("game_count", GameCount.ToString());
+            
+            
             if (includeImages || verbose)
             {
                 dict.Add("profile_image", Convert.ToBase64String(this.ProfileImage));
             }        
             if (this.Location != null)
             {
-                dict.Add("location", String.Format(",\"location\": \"{0},{1}\"", this.Location[0], this.Location[1]));
+                dict.Add("location", string.Format("{0},{1}", this.Location[0], this.Location[1]));
             }
             if (verbose)
             {
              dict.Add("email", this.Email);
+             dict.Add("confirmed", this.Confirmed.ToString());
              dict.Add("created", ToUnixTime((DateTime)this.Created));
              dict.Add("device_token", this.DeviceToken);
              dict.Add("zip", this.Zip);
@@ -130,29 +133,35 @@ namespace KingBingo.Models
              dict.Add("receive_emails", this.ReceiveEmails.ToString());
              dict.Add("authentication_token", this.AuthenticationToken);
              dict.Add("authentication_token_expires", ToUnixTime((DateTime)this.AuthenticationTokenExpires));
+             dict.Add("birth_date", ToUnixTime((DateTime)this.Birthdate));
             }
             return dict;
         }
 
 
-        static public UserProfile FromData(dynamic data)
+        static public UserProfile FromData(Dictionary<string, string> data, bool verbose)
         {
             var user = new UserProfile();
-            user.Name = data.name;
-            user.UserName = data.username;
-            user.WinCount = data.win_count;
-            user.UserId = data.user_id;
-            user.ProfileImage = data.profile_image;
-            user.Rank = data.rank;
-            user.AuthenticationToken = data.authentication_token;
-            user.AuthenticationTokenExpires = UserProfile.FromUnixTime((string) data.authentication_token_expires);
-            user.Bio = data.bio;
-            user.Birthdate = UserProfile.FromUnixTime((string) data.birth_date);
-            user.Confirmed = data.confirmed;
-            user.Created = UserProfile.FromUnixTime((string)data.created);
-            user.DeviceToken = data.device_token;
-            user.Email = data.email;
-            user.FriendCount = data.friend_count;
+            
+            user.UserId = System.Convert.ToInt32(data["user_id"]);
+            user.UserName = data["username"];
+            user.Name = data["name"];
+            user.WinCount = System.Convert.ToInt32(data["win_count"]);
+            user.Bio = data["bio"];
+            user.Rank = System.Convert.ToInt32(data["rank"]);
+            user.FriendCount = System.Convert.ToInt32(data["friend_count"]);
+            user.FriendCount = System.Convert.ToInt32(data["game_count"]);
+            user.ProfileImage = Convert.FromBase64String(data["profile_image"]);
+            if (verbose)
+            {
+                user.AuthenticationToken = data["authentication_token"];
+                user.AuthenticationTokenExpires = FromUnixTime((string)data["authentication_token_expires"]);
+                user.Birthdate = FromUnixTime((string)data["birth_date"]);
+                user.Confirmed = System.Convert.ToBoolean(data["confirmed"]);
+                user.Created = UserProfile.FromUnixTime((string)data["created"]);
+                user.DeviceToken = data["device_token"];
+                user.Email = data["email"];
+            }
             
             return user;
         }

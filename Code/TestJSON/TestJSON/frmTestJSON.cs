@@ -16,7 +16,7 @@ namespace KingBingo
 {
     public partial class frmTestJSON : Form
     {
-        public string[] gamecardNumbers;
+      
         public ArrayList drawnNumbers;
         public int gameSpeed = 0;
         public string profileImage = "";
@@ -45,59 +45,18 @@ namespace KingBingo
         }
 
 
-        private string PostDataWithOperation(string operation, string JSON)
-        {
-            //build request
-            System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}/{1}", getTargetUrl(), operation));
-            //set http method
-            request.Method = "POST";
-            //content type
-            request.ContentType = "text/html";
-            //build json
-            //encode json
-            byte[] buffer = Encoding.UTF8.GetBytes(JSON);
-            //write to request body
-            Stream PostData = request.GetRequestStream();
-            PostData.Write(buffer, 0, buffer.Length);
-            PostData.Close();
-            //get response
-            Stream response = request.GetResponse().GetResponseStream();
-            //read response body
-            StreamReader response_reader = new StreamReader(response);
-            string response_json = response_reader.ReadToEnd();
-            processResponse(response_json);
-            return response_json;
 
-        }
 
         private void btnGetAllGames_Click(object sender, EventArgs e)
         {
-           
-            Dictionary<string, string> d = new Dictionary<string, string>();
-            d.Add("user_id", user.UserId.ToString());
-            d.Add("authentication_token", user.AuthenticationToken);
-            d.Add("page", "0");
+ 
+            client.GetAllGames(0, GetAllGamesComplete);
 
-            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
-        
-            txtResponse.Text = PostDataWithOperation("allgames", post_json);
         }
 
         private void btnGetAllUsers_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> d = new Dictionary<string, string>();
-            d.Add("user_id", user.UserId.ToString());
-            d.Add("authentication_token", user.AuthenticationToken);
-            if (chkIncludeProfileImages.Checked)
-            {
-     
-                d.Add("include_profile_images", "true");
-            }
-            d.Add("page", "0");
-
-            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
-           
-            txtResponse.Text = PostDataWithOperation("allusers", post_json); ;
+          
         }
 
 
@@ -114,194 +73,6 @@ namespace KingBingo
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(timestampSeconds).ToLocalTime();
             return dtDateTime;
-        }
-
-        private void processResponse(string response_json)
-        {
-            //txtRequest.Text = response_json;
-            try
-            {
-                dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(response_json);
-                
-                if (data.operation == "auth")
-                {
-                    //var user = data.user;
-                    user = UserProfile.FromData(data.user);
-                    if (user != null)
-                    {
-                        byte[] buffer = user.ProfileImage; 
-                        MemoryStream ms = new MemoryStream(buffer);
-                        picProfileImage.Image = Image.FromStream(ms);
-
-                        txtUpdateUser_Bio.Text = user.Bio;
-                        txtUpdateUser_Name.Text = user.Name;
-                        txtUpdateUser_Zip.Text = user.Zip;
-                        if (user.Sex == Sex.Male)
-                        {
-                            rbUpdateUser_Male.Checked = true;
-                            rbUpdateUser_Female.Checked = false;
-                        }
-                        else
-                        {
-                            rbUpdateUser_Male.Checked = false;
-                            rbUpdateUser_Female.Checked = true;
-                        }
-
-                        DateTime birthdate =(DateTime) user.Birthdate;  //FromUnixTime((string) user.birthdate);
-                        dateUpdateUser_Birthdate.Value = birthdate;
-                        string location = user.Location;
-                        if (location != "")
-                        {
-                            string[] splitString = { "," };
-                            double latitude = Convert.ToDouble(location.Split(splitString, StringSplitOptions.None)[0]);
-                            double longitude = Convert.ToDouble(location.Split(splitString, StringSplitOptions.None)[1]);
-                            txtUpdateUser_Latitude.Text = latitude.ToString();
-                            txtUpdateUser_Longitude.Text = longitude.ToString();
-                        }
-                    }
-
-                }
-                else if (data.operation == "allusers")
-                {
-                    List<UserProfile> users = new List<UserProfile>();
-                    foreach (dynamic u in data.users)
-                    {
-                        UserProfile user = UserProfile.FromData(u);
-                        users.Add(user);
-                    }
-                    DataTable dt = new DataTable();
-                    dt.Columns.Add(new DataColumn("UserId", typeof(Int32)));
-                    dt.Columns.Add(new DataColumn("Name", typeof(string)));
-                    dt.Columns.Add(new DataColumn("UserName", typeof(string)));
-                    dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
-
-                    foreach (UserProfile u in users)
-                    {
-                        DataRow dr = dt.NewRow();
-                        dr["UserId"] = u.UserId;
-                        dr["Name"] = u.Name;
-                        dr["UserName"] = u.UserName;
-                        dr["Created"] = u.Created;
-                        dt.Rows.Add(dr);
-                    }
-                    dgUsers.DataSource = dt;
-
-                }
-                else if (data.operation == "allgames")
-                {
-                    List<Game> games = new List<Game>();
-                    foreach (dynamic g in data.games)
-                    {
-                        Game game = Game.FromData(g);
-                        games.Add(game);
-                    }
-
-                    DataTable dt = new DataTable();
-                    dt.Columns.Add(new DataColumn("GameID", typeof(Int32)));
-                    dt.Columns.Add(new DataColumn("Name", typeof(string)));
-                    dt.Columns.Add(new DataColumn("Description", typeof(string)));
-                    dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
-
-                    foreach (Game g in games)
-                    {
-                        DataRow dr = dt.NewRow();
-                        dr["GameID"] = g.GameID;
-                        dr["Name"] = g.Name;
-                        dr["Description"] = g.Description;
-                        dr["Created"] = g.Created;
-                        dt.Rows.Add(dr);
-                    }
-
-                    dgGames.DataSource = dt;
-                }
-
-                else if (data.operation == "allfriends")
-                {
-                    var temp = data.friends;
-                    List<Friend> friends = new List<Friend>();
-                    foreach (dynamic d in temp)
-                    {
-                        var friend = Friend.FromData(d);
-                        friends.Add(friend);
-                    }
-                    DataTable dt = new DataTable();
-                    dt.Columns.Add(new DataColumn("FriendId", typeof(Int32)));
-                 
-                    dt.Columns.Add(new DataColumn("FriendUserId", typeof(Int32)));
-                    dt.Columns.Add(new DataColumn("UserName", typeof(string)));
-                    dt.Columns.Add(new DataColumn("Status", typeof(string)));
-                    dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
-
-                    foreach (Friend f in friends)
-                    {
-                        DataRow dr = dt.NewRow();
-                        dr["FriendID"] = f.FriendID;
-                   
-                        dr["FriendUserId"] = f.FriendUser.UserId;
-                        dr["UserName"] = f.FriendUser.UserName;
-                        dr["Status"] = f.Status;
-                        dr["Created"] = f.Created;
-                        dt.Rows.Add(dr);
-
-                    }
-
-                    dgFriends.DataSource = dt;
-
-                }
-                else if (data.operation == "joingame")
-                {
-                    var gamecard = data.game_card;
-                    var gamespeed = data.game_speed;
-                    string[] splitString = { "," };
-                    gamecardNumbers = ((string)gamecard).Split(splitString, StringSplitOptions.None);
-                    for (int i = 0; i < gamecardNumbers.Length; i++)
-                    {
-                        Label tempLabel = getNumberLabelByNumber(i);
-                        tempLabel.Text = gamecardNumbers[i];
-                    }
-
-                    timerNumbers.Enabled = true;
-                    double delay = ((100 - gamespeed) / 100.0) * 60.0;
-                    timerNumbers.Interval = (int)delay * 1000;
-
-                }
-                else if (data.operation == "getprofileimage")
-                {
-                    string profileimage = data.profile_image;
-                    byte[] buffer = Convert.FromBase64String(profileimage);
-                    MemoryStream ms = new MemoryStream(buffer);
-                    picProfileImage.Image = Image.FromStream(ms);
-                }
-                else if (data.operation == "getnumber")
-                {
-                    string bingoNumber = data.number;
-                    if (bingoNumber != "-1")
-                    {
-                        int number = UnBingofyNumber(bingoNumber);
-                        for (int i = 0; i < 25; i++)
-                        {
-                            drawnNumbers.Add(number);
-                            Label lblTemp = getNumberLabelByNumber(i);
-                            if (lblTemp.Text == number.ToString())
-                            {
-                                lblTemp.BackColor = Color.Yellow;
-                                checkIfWin();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        timerNumbers.Enabled = false;
-                        timerNumbers.Stop();
-                    }
-                    lblBingoNumber.Text = bingoNumber;
-
-                }
-            }
-            catch (Exception ex)
-            {
-                //throw ex;
-            }
         }
 
 
@@ -403,7 +174,7 @@ namespace KingBingo
         string stringifyGameCard()
         {
 
-           return string.Join(",", gamecardNumbers);
+            return string.Join(",", client.GamecardNumbers);
         }
 
         string getWinningNumbers()
@@ -472,7 +243,7 @@ namespace KingBingo
                 timerNumbers.Enabled = false;
                 timerNumbers.Stop();
 
-                if (verifyWin(bingo, string.Join(",", gamecardNumbers)))
+                if (verifyWin(bingo, string.Join(",", client.GamecardNumbers)))
                 {
                     MessageBox.Show("BINGO!\n" + bingo);
                 }
@@ -496,11 +267,11 @@ namespace KingBingo
                 getNumberLabelByNumber(15 + row).BackColor == Color.Yellow &&
                 getNumberLabelByNumber(20 + row).BackColor == Color.Yellow)
             {
-                bingo = gamecardNumbers[0 + row].ToString();
-                bingo += "," + gamecardNumbers[5 + row].ToString();
-                bingo += "," + gamecardNumbers[10 + row].ToString();
-                bingo += "," + gamecardNumbers[15 + row].ToString();
-                bingo += "," + gamecardNumbers[20 + row].ToString();
+                bingo = client.GamecardNumbers[0 + row].ToString();
+                bingo += "," + client.GamecardNumbers[5 + row].ToString();
+                bingo += "," + client.GamecardNumbers[10 + row].ToString();
+                bingo += "," + client.GamecardNumbers[15 + row].ToString();
+                bingo += "," + client.GamecardNumbers[20 + row].ToString();
                
             }
             return bingo;
@@ -518,11 +289,11 @@ namespace KingBingo
                 getNumberLabelByNumber(3 + column).BackColor == Color.Yellow &&
                 getNumberLabelByNumber(4 + column).BackColor == Color.Yellow)
             {
-                 bingo = gamecardNumbers[0 + column].ToString();
-                bingo += "," + gamecardNumbers[1 + column].ToString();
-                bingo += "," + gamecardNumbers[2 + column].ToString();
-                bingo += "," + gamecardNumbers[3 + column].ToString();
-                bingo += "," + gamecardNumbers[4 + column].ToString();
+                 bingo = client.GamecardNumbers[0 + column].ToString();
+                 bingo += "," + client.GamecardNumbers[1 + column].ToString();
+                 bingo += "," + client.GamecardNumbers[2 + column].ToString();
+                 bingo += "," + client.GamecardNumbers[3 + column].ToString();
+                 bingo += "," + client.GamecardNumbers[4 + column].ToString();
                 win = true;
             }
             return bingo;
@@ -538,11 +309,11 @@ namespace KingBingo
                 getNumberLabelByNumber(18).BackColor == Color.Yellow &&
                 getNumberLabelByNumber(24).BackColor == Color.Yellow)
             {
-                 bingo = gamecardNumbers[0].ToString();
-                bingo += "," + gamecardNumbers[6].ToString();
-                bingo += "," + gamecardNumbers[12].ToString();
-                bingo += "," + gamecardNumbers[18].ToString();
-                bingo += "," + gamecardNumbers[24].ToString();
+                bingo = client.GamecardNumbers[0].ToString();
+                 bingo += "," + client.GamecardNumbers[6].ToString();
+                 bingo += "," + client.GamecardNumbers[12].ToString();
+                 bingo += "," + client.GamecardNumbers[18].ToString();
+                 bingo += "," + client.GamecardNumbers[24].ToString();
                 win = true;
             }
             return bingo;
@@ -560,11 +331,11 @@ namespace KingBingo
                 getNumberLabelByNumber(16).BackColor == Color.Yellow &&
                 getNumberLabelByNumber(20).BackColor == Color.Yellow)
             {
-                bingo = gamecardNumbers[4].ToString();
-                bingo += "," + gamecardNumbers[8].ToString();
-                bingo += "," + gamecardNumbers[12].ToString();
-                bingo += "," + gamecardNumbers[16].ToString();
-                bingo += "," + gamecardNumbers[20].ToString();
+                bingo = client.GamecardNumbers[4].ToString();
+                bingo += "," + client.GamecardNumbers[8].ToString();
+                bingo += "," + client.GamecardNumbers[12].ToString();
+                bingo += "," + client.GamecardNumbers[16].ToString();
+                bingo += "," + client.GamecardNumbers[20].ToString();
                 win = true;
             }
             return bingo;
@@ -609,80 +380,287 @@ namespace KingBingo
         private void btnGetUser_Click(object sender, EventArgs e)
         {
 
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\", \"query_user_id\":\"1\"}";
+       
+
+            
           
-            txtResponse.Text = PostDataWithOperation("getuser", post_json);
+          
         }
 
         private void btnAuth_Click(object sender, EventArgs e)
         {
+         
+        }
 
+        private void GetNumberComplete()
+        {
+            lblMessage.Text = client.Message;
+            if (client.Number != -1)
+            {
+     
+                for (int i = 0; i < 25; i++)
+                {
+                    drawnNumbers.Add(client.Number);
+                    Label lblTemp = getNumberLabelByNumber(i);
+                    if (lblTemp.Text == client.Number.ToString())
+                    {
+                        lblTemp.BackColor = Color.Yellow;
+                        checkIfWin();
+                    }
+                }
+            }
+            else
+            {
+                timerNumbers.Enabled = false;
+                timerNumbers.Stop();
+            }
+            lblBingoNumber.Text = BingofyNumber(client.Number.ToString());
+        }
 
+        private void CallBingoComplete()
+        {
+            lblMessage.Text = client.Message;
+        }
 
-            string hash = createAuthHash(txtPassword.Text.Trim());
-            string post_json = "{\"username\":\"" + txtUserName.Text.Trim() + "\", \"hash\":\"" + hash + "\"}";
-            string response_json = PostDataWithOperation("auth", post_json);
-            txtRequest.Text = post_json;
-            txtResponse.Text = response_json;
-              processResponse(response_json);
+        private void RegisterComplete()
+        {
+            lblMessage.Text = client.Message;
+        }
 
-            //client.Authenticate(txtUserName.Text.Trim(), txtPassword.Text.Trim(), AuthenticationComplete);
-           
+        private void CreateGameComplete()
+        {
+            lblMessage.Text = client.Message;
+        }
+
+        public void UpdateUserComplete()
+        {
+
+            lblMessage.Text = client.Message;
+        }
+
+        private void JoinGameComplete()
+        {
+            lblMessage.Text = client.Message;
+            if (client.GamecardNumbers != null)
+            {
+
+                for (int i = 0; i < client.GamecardNumbers.Length; i++)
+                {
+                    Label tempLabel = getNumberLabelByNumber(i);
+                    tempLabel.Text =  client.GamecardNumbers[i];
+                }
+
+                timerNumbers.Enabled = true;
+                double delay = ((100 - client.GameSpeed) / 100.0) * 60.0;
+                timerNumbers.Interval = (int)(delay * 1000);
+            }
+        }
+
+        private void GetUserComplete()
+        {
 
         }
 
-        private void AuthenticationComplete()
+        private void AddFriendComplete()
         {
-           
+            //do nothing?
+            lblMessage.Text = client.Message;
+        }
+
+        private void AcceptFriendComplete()
+        {
+            //do nothing?
+            lblMessage.Text = client.Message;
+        }
+
+        private void RejectFriendComplete()
+        {
+            //do nothing?
+            lblMessage.Text = client.Message;
+        }
+
+        private void GetAllNotificationsComplete()
+        {
+            lblMessage.Text = client.Message;
+            if (client.Notifications != null)
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("NotificationID", typeof(Int32)));
+
+                dt.Columns.Add(new DataColumn("Message", typeof(string)));
+
+                foreach (Notification n in client.Notifications)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["NotificationID"] = n.NotificationID;
+                    dr["Message"] = n.Message;
+        
+                    dt.Rows.Add(dr);
+
+                }
+                dgNotifications.DataSource = dt;
+            }
+        }
+
+        private void GetAllFriendsComplete()
+        {
+            lblMessage.Text = client.Message;
+            if (client.Friends != null)
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("FriendId", typeof(Int32)));
+
+                dt.Columns.Add(new DataColumn("FriendUserId", typeof(Int32)));
+                dt.Columns.Add(new DataColumn("UserName", typeof(string)));
+                dt.Columns.Add(new DataColumn("Status", typeof(string)));
+                dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
+
+                foreach (Friend f in client.Friends)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["FriendID"] = f.FriendID;
+
+                    dr["FriendUserId"] = f.FriendUser.UserId;
+                    dr["UserName"] = f.FriendUser.UserName;
+                    dr["Status"] = f.Status;
+                    dr["Created"] = f.Created;
+                    dt.Rows.Add(dr);
+
+                }
+
+                dgFriends.DataSource = dt;
+            }
+
+        }
+
+        private void GetAllUsersComplete()
+        {
+            lblMessage.Text = client.Message;
+            if (client.Users != null)
+            {
+              
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("UserId", typeof(Int32)));
+                dt.Columns.Add(new DataColumn("Name", typeof(string)));
+                dt.Columns.Add(new DataColumn("UserName", typeof(string)));
+                dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
+
+                foreach (UserProfile u in client.Users)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["UserId"] = u.UserId;
+                    dr["Name"] = u.Name;
+                    dr["UserName"] = u.UserName;
+                    dr["Created"] = u.Created;
+                    dt.Rows.Add(dr);
+                }
+                dgUsers.DataSource = dt;
+            }
+        }
+
+        private void QuitGameComplete()
+        {
+            lblMessage.Text = client.Message;
+            for (int i = 0; i < 25; i++)
+            {
+                Label tempLabel = getNumberLabelByNumber(i);
+                tempLabel.Text = tempLabel.Name;
+            }
+
+            timerNumbers.Enabled = false;
+          
+
+        }
+
+        private void GetAllGamesComplete()
+        {
+            lblMessage.Text = client.Message;
+            if (client.Games != null)
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("GameID", typeof(Int32)));
+                dt.Columns.Add(new DataColumn("Name", typeof(string)));
+                dt.Columns.Add(new DataColumn("Description", typeof(string)));
+                dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
+
+                foreach (Game g in client.Games)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["GameID"] = g.GameID;
+                    dr["Name"] = g.Name;
+                    dr["Description"] = g.Description;
+                    dr["Created"] = g.Created;
+                    dt.Rows.Add(dr);
+                }
+
+                dgGames.DataSource = dt;
+            }
+
+        }
+
+        private void AuthenticateComplete()
+        {
+            lblMessage.Text = client.Message;
+            if (client.User != null)
+            {
+                byte[] buffer = client.User.ProfileImage;
+                MemoryStream ms = new MemoryStream(buffer);
+                picProfileImage.Image = Image.FromStream(ms);
+                profileImage = Convert.ToBase64String(client.User.ProfileImage);
+                txtUpdateUser_Email.Text = client.User.Email;
+                txtUpdateUser_Bio.Text = client.User.Bio;
+                txtUpdateUser_Name.Text = client.User.Name;
+                txtUpdateUser_Zip.Text = client.User.Zip;
+                if (client.User.Sex == Sex.Male)
+                {
+                    rbUpdateUser_Male.Checked = true;
+                    rbUpdateUser_Female.Checked = false;
+                }
+                else
+                {
+                    rbUpdateUser_Male.Checked = false;
+                    rbUpdateUser_Female.Checked = true;
+                }
+
+                DateTime birthdate = (DateTime)client.User.Birthdate;  //FromUnixTime((string) user.birthdate);
+                dateUpdateUser_Birthdate.Value = birthdate;
+                string location = client.User.Location;
+                if (location != null && location != "")
+                {
+                    string[] splitString = { "," };
+                    double latitude = Convert.ToDouble(location.Split(splitString, StringSplitOptions.None)[0]);
+                    double longitude = Convert.ToDouble(location.Split(splitString, StringSplitOptions.None)[1]);
+                    txtUpdateUser_Latitude.Text = latitude.ToString();
+                    txtUpdateUser_Longitude.Text = longitude.ToString();
+                }
+                tabBarOperations.Enabled = true;
+                btnAuth.Text = "Sign Out";
+            }
 
         }
 
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
 
-            string post_json = "{\"username\":\"" + txtUserName.Text.Trim() + "\", \"password\":\"" + txtPassword.Text.Trim() + "\",\"email\":\"" + txtEmail.Text.Trim() + "\"}";
-            txtRequest.Text = post_json;
+            client.Register(txtUserName.Text.Trim(), txtPassword.Text.Trim(), txtEmail.Text.Trim(), RegisterComplete);
 
-            txtResponse.Text = PostDataWithOperation("createuser", post_json);
 
         }
 
-        static private string SHA1(string cleartext)
-        {
-            byte[] p2 = System.Text.Encoding.Unicode.GetBytes(cleartext);
-            System.Security.Cryptography.SHA1 sha = new System.Security.Cryptography.SHA1CryptoServiceProvider();
-            byte[] result = sha.ComputeHash(p2);
-            string encodedText = Convert.ToBase64String(result);
-            return encodedText;
-        }
+   
 
-
-        static public string createAuthHash(string password)
-        {
-            string hash = SHA1(password);
-            hash = hash + DateTime.Today.ToString("yyyy-MM-dd"); //YYYY-MM-dd
-            hash = SHA1(hash);
-            return hash;
-        }
-
-
+    
         private void btnHash_Click(object sender, EventArgs e)
         {
 
-            lblHash.Text = createAuthHash(txtPassword.Text.Trim());
+           // lblHash.Text = createAuthHash(txtPassword.Text.Trim());
         }
-
-
 
 
         private void frmTestJSON_Load(object sender, EventArgs e)
         {
-
-            KingBingo.Client client = new KingBingo.Client(getTargetUrl());
-
             cbTarget.SelectedIndex = 0;
             drawnNumbers = new ArrayList();
-
             foreach (Control c in tabBarOperations.TabPages["tabGame"].Controls)
             {
                 if (c.GetType() == (new Label()).GetType())
@@ -691,12 +669,8 @@ namespace KingBingo
                     {
                         c.Click += new EventHandler(numberLabel_Click);
                     }
-
                 }
-
             }
-
-
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)
@@ -706,60 +680,49 @@ namespace KingBingo
 
         private void btnCreateGame_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-
-            post_json += ",\"win_limit\":\"" + txtWinLimit.Text + "\", \"user_limit\":\"" + txtUserLimit.Text + "\"";
-            post_json += ",\"game_speed\":\"" + txtSpeed.Text + "\", \"name\":\"" + txtName.Text + "\"";
-            post_json += ",\"description\":\"" + txtDescription.Text + "\"";
-
-            post_json += ",\"player_ids\":\"" + txtPlayers.Text + "\", \"private\":\"" + chkPrivate.Checked.ToString() + "\"";
-            post_json += "}";
-
-
-
-            txtResponse.Text = PostDataWithOperation("creategame", post_json);
+            int winLimit = 0;
+            int userLimit = 0;
+            int gameSpeed = 0;
+            Int32.TryParse(txtWinLimit.Text, out winLimit);
+            Int32.TryParse(txtUserLimit.Text, out userLimit);
+            Int32.TryParse(txtSpeed.Text, out gameSpeed);
+            client.CreateGame(winLimit, userLimit, gameSpeed, txtName.Text, txtDescription.Text, "", false, CreateGameComplete);
         }
 
         private void btnJoinGame_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
-            txtRequest.Text = post_json;
-            txtResponse.Text = PostDataWithOperation("joingame", post_json);
-
-
             for (int i = 0; i < 25; i++)
             {
                 Label tempLabel = getNumberLabelByNumber(i);
                 tempLabel.BackColor = Color.Silver;
             }
 
+            if (dgGames.SelectedRows != null && dgGames.SelectedRows.Count > 0)
+            {
+                DataGridViewRow dr = dgGames.SelectedRows[0];
+                int game_id = (int)dr.Cells[0].Value;
+                client.JoinGame(game_id, JoinGameComplete);
+            }
         }
 
         private void btnQuitGame_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
-      
-            txtResponse.Text = PostDataWithOperation("quitgame", post_json);
+            if (dgGames.SelectedRows != null && dgGames.SelectedRows.Count > 0)
+            {
+                DataGridViewRow dr = dgGames.SelectedRows[0];
+                int game_id = (int)dr.Cells[0].Value;
+                client.QuitGame(game_id, QuitGameComplete);
+            }
         }
 
         private void btnGetNextNumber_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
-         
-            txtResponse.Text = PostDataWithOperation("getnumber", post_json);
+            client.GetNewNumber(GetNumberComplete);
         }
 
         private void btnAddFriend_Click(object sender, EventArgs e)
         {
-            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
-            int friend_user_id = Convert.ToInt32(txtFriend_friend_user_id.Text);
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            post_json += ", \"friend_id\":\"" + friend_user_id + "\"}";
           
-            txtResponse.Text = PostDataWithOperation("addfriend", post_json);
         }
 
         public Label getNumberLabel(string letter, int row)
@@ -801,22 +764,12 @@ namespace KingBingo
         {
             Label numberLabel = (Label)sender;
             numberLabel.BackColor = Color.Red;
-
-
-
-
         }
 
 
         private void getNewNumber()
         {
-             int user_id = Convert.ToInt32(txtFriend_user_id.Text);
-            int friend_user_id = Convert.ToInt32(txtFriend_friend_user_id.Text);
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            post_json += ", \"game_id\":\"" + txtGameID.Text + "\"}";
-     
-            txtResponse.Text = PostDataWithOperation("getnumber", post_json);
-
+            client.GetNewNumber(GetNumberComplete);
         }
 
         private void timerNumbers_Tick(object sender, EventArgs e)
@@ -826,11 +779,7 @@ namespace KingBingo
 
         private void btnGetProfileImage_Click(object sender, EventArgs e)
         {
-            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
-
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"}";
-         
-            txtResponse.Text = PostDataWithOperation("getprofileimage", post_json);
+            
         }
 
         private void btnUploadProfileImage_Click(object sender, EventArgs e)
@@ -864,40 +813,16 @@ namespace KingBingo
 
         private void btnProfile_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> d = new Dictionary<string, string>();
-            d.Add("user_id", user.UserId.ToString());
-            d.Add("authentication_token", user.AuthenticationToken);
-
-
-           
-            //string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            //post_json += " ,\"user\": {";
-            Dictionary<string, string> u = new Dictionary<string, string>();
-          
-            //string sub_json = "";
-            //if (profileImage != "")
-            //{
-            //    sub_json += " \"profile_image\":\"" + profileImage + "\"";
-            //}
-
-            u.Add("profile_image", profileImage);
-            if (txtUpdateUser_Latitude.Text != "" && txtUpdateUser_Longitude.Text != "")
-            {
-                //if (sub_json != "") sub_json += ",";
-                //sub_json += string.Format("\"location\":\"{0},{1}\"", txtUpdateUser_Latitude.Text, txtUpdateUser_Longitude.Text);
-               u.Add("location", string.Format("{0},{1}", txtUpdateUser_Latitude.Text, txtUpdateUser_Longitude.Text));
-            }
-           
-            //post_json += sub_json + "}}";
-            string userJson = Newtonsoft.Json.JsonConvert.SerializeObject(u);
-            d.Add("user", "@@@");
-
-            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
-            post_json = post_json.Replace("\"@@@\"", userJson);
-
-            txtRequest.Text = post_json;
-          
-            txtResponse.Text = PostDataWithOperation("updateuser", post_json);
+            string name = txtUpdateUser_Name.Text;
+            string bio = txtUpdateUser_Bio.Text;
+            string email = txtUpdateUser_Email.Text;
+            double latitude = 0;
+            double longitude = 0;
+            string zip = txtUpdateUser_Zip.Text;
+            DateTime birthdate = DateTime.Now;
+            KingBingo.Models.Sex sex = KingBingo.Models.Sex.Male;
+            if (rbUpdateUser_Female.Checked)  sex = KingBingo.Models.Sex.Female;
+            client.UpdateUser(name, bio, email, zip, sex, birthdate, profileImage, latitude, longitude, UpdateUserComplete);
         }
 
         private void btnAuto_Click(object sender, EventArgs e)
@@ -922,48 +847,25 @@ namespace KingBingo
             getNewNumber();
         }
 
-        private void txtSpeed_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+     
 
         private void btnCheckWin_Click(object sender, EventArgs e)
         {
-            //checkIfWin();
-
+    
             string bingo = getWinningNumbers();
-            string game_id = txtGameID.Text;
-            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
-            string gamecard = string.Join(",", gamecardNumbers);
 
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            post_json += ",\"game_id\":\"" + game_id + "\", \"winning_numbers\":\"" + bingo + "\", \"game_card\":\"" + gamecard + "\"}";
-          
-            txtResponse.Text = PostDataWithOperation("callbingo", post_json);
+            client.CallBingo(bingo, CallBingoComplete);
 
         }
 
         private void btnAllFriends_Click(object sender, EventArgs e)
         {
-       
-            int user_id = Convert.ToInt32(txtFriend_user_id.Text);
-
-
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"}";
-            
-            txtResponse.Text = PostDataWithOperation("allfriends", post_json);
+            client.GetAllFriends(0, GetAllFriendsComplete);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string post_json = "{\"user_id\":\"" + user.UserId.ToString() + "\", \"authentication_token\":\"" + user.AuthenticationToken + "\"";
-            //if (chkIncludeProfileImages.Checked)
-            //{
-                post_json += ",\"include_profile_images\":\"false\"";
-            //}
-            post_json += ",\"page\":\"0\"}";
-          
-            txtResponse.Text = PostDataWithOperation("allusers", post_json); ;
+            client.GetAllUsers(0, chkIncludeProfileImages.Checked, GetAllUsersComplete);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -972,18 +874,8 @@ namespace KingBingo
             if (dgUsers.SelectedRows != null && dgUsers.SelectedRows.Count > 0)
             {
                 DataGridViewRow dr = dgUsers.SelectedRows[0];
-                int user_id = user.UserId;
                 int friend_user_id = (int)dr.Cells[0].Value;
-
-                Dictionary<string, string> d = new Dictionary<string, string>();
-                d.Add("user_id", user.UserId.ToString());
-                d.Add("authentication_token", user.AuthenticationToken);
-                d.Add("friend_user_id", friend_user_id.ToString());
-
-                string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
-                txtRequest.Text = post_json;
-            
-                txtResponse.Text = PostDataWithOperation("addfriend", post_json);
+                client.AddFriend(friend_user_id, AddFriendComplete);
             }
        
         }
@@ -994,29 +886,13 @@ namespace KingBingo
             if (dgFriends.SelectedRows != null && dgFriends.SelectedRows.Count > 0)
             {
                 DataGridViewRow dr = dgFriends.SelectedRows[0];
-
-                int user_id = user.UserId;
                 int friend_user_id = (int)dr.Cells[1].Value;
-
-                Dictionary<string, string> d = new Dictionary<string, string>();
-                d.Add("user_id", user.UserId.ToString());
-                d.Add("authentication_token", user.AuthenticationToken);
-                d.Add("friend_user_id", friend_user_id.ToString());
-
-
+                client.AcceptFriend(friend_user_id, AcceptFriendComplete);
                 if ((string)dr.Cells[3].Value == "Pending")
                 {
-                    string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
-                    txtRequest.Text = post_json;
-                    txtResponse.Text = PostDataWithOperation("acceptfriend", post_json);
+                  client.AcceptFriend(friend_user_id, AcceptFriendComplete);
                 }
-                else
-                {
-                    txtRequest.Text = string.Empty;
-                    txtResponse.Text = string.Empty;
-                }
-                
-            }
+             }
         }
 
         private void btnRejectFriend_Click(object sender, EventArgs e)
@@ -1024,39 +900,60 @@ namespace KingBingo
             if (dgFriends.SelectedRows != null && dgFriends.SelectedRows.Count > 0)
             {
                 DataGridViewRow dr = dgFriends.SelectedRows[0];
-
-                int user_id = user.UserId;
                 int friend_user_id = (int)dr.Cells[1].Value;
-
-                Dictionary<string, string> d = new Dictionary<string, string>();
-                d.Add("user_id", user.UserId.ToString());
-                d.Add("authentication_token", user.AuthenticationToken);
-                d.Add("friend_user_id", friend_user_id.ToString());
-
-
                 if ((string)dr.Cells[3].Value == "Pending")
                 {
-                    string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
-                    txtRequest.Text = post_json;
-                    txtResponse.Text = PostDataWithOperation("rejectfriend", post_json);
+                    client.RejectFriend(friend_user_id, RejectFriendComplete);
                 }
-                else
-                {
-                    txtRequest.Text = string.Empty;
-                    txtResponse.Text = string.Empty;
-                }
-
+ 
             }
         }
 
         private void btnNotifications_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> d = new Dictionary<string, string>();
-            d.Add("user_id", user.UserId.ToString());
-            d.Add("authentication_token", user.AuthenticationToken);
-            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
-            txtRequest.Text = post_json;
-            txtResponse.Text = PostDataWithOperation("allnotifications", post_json);
+            client.GetAllNotifications(0, GetAllNotificationsComplete);
+        }
+
+        private void tabUser_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void picProfileImage_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGetUser_Click_1(object sender, EventArgs e)
+        {
+            if (dgUsers.SelectedRows != null && dgUsers.SelectedRows.Count > 0)
+            {
+                DataGridViewRow dr = dgUsers.SelectedRows[0];
+                int user_id = (int)dr.Cells[0].Value;
+                client.GetUser(user_id, GetUserComplete);
+            }
+        }
+
+        private void btnAuth_Click_1(object sender, EventArgs e)
+        {
+            if (btnAuth.Text == "Sign In")
+            {
+                string url = getTargetUrl();
+                client = new KingBingo.Client(url);
+                client.Authenticate(txtUserName.Text.Trim(), txtPassword.Text.Trim(), AuthenticateComplete);
+            }
+            else
+            {
+                tabBarOperations.Enabled = false;
+                dgFriends.Rows.Clear();
+                dgUsers.Rows.Clear();
+                dgGames.Rows.Clear();
+                picProfileImage.Image = null;
+                txtUpdateUser_Name.Text = string.Empty;
+                txtUpdateUser_Bio.Text = string.Empty;
+                txtUpdateUser_Email.Text = string.Empty;
+                btnAuth.Text = "Sign In";
+            }
         }
     }
 }
