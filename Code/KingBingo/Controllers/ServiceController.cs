@@ -77,7 +77,7 @@ namespace KingBingo.Controllers
                     {
                         string username = data.username;
                         string hash = data.hash;
-                        var user = db.UserProfiles.SingleOrDefault(u => u.UserName == username);
+                        var user = db.UserProfiles.Include("Game").Include("GameCard").SingleOrDefault(u => u.UserName == username);
                         if (user != null)
                         {
                             ViewBag.operation = "auth";
@@ -86,6 +86,21 @@ namespace KingBingo.Controllers
                             {
                                 user.GenerateAuthenticationToken();
                                 db.SaveChanges();
+
+                                if (user.Game != null)
+                                {
+                                    var game = db.Games.Where(g => g.GameID == user.Game.GameID).FirstOrDefault();
+                                    List<Game> games = new List<Game>();
+                                    games.Add(game);
+                                    ViewData["games"] = games;
+                                    ViewBag.gamespeed = user.Game.GameSpeed;
+                                    if (user.GameCard != null)
+                                    {
+                                        ViewData["gamecard"] = user.GameCard;
+                                    }
+                                }
+                              
+                          
                                 ViewData["user"] = user;
                                 ViewBag.message = "successfully authenticated";
                                 ViewBag.includeprofileimages =true;
@@ -182,7 +197,7 @@ namespace KingBingo.Controllers
                                     {
                                         page = data.page;
                                     }
-                                    ViewData["games"] = db.Games.Include("Players").OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
+                                    ViewData["games"] = db.Games.Include("Players").Where(g => g.Closed == false).OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allgames";
                                     ViewBag.message = "successfully retrieved list of all games";
                                 }
@@ -681,6 +696,7 @@ namespace KingBingo.Controllers
 
                     if (user.Game != null)
                     {
+                        user.Game.UserCount--;
                         user.Game.Players.Remove(user);
                         Result r = new Result();
                         r.Game = user.Game;
@@ -690,7 +706,7 @@ namespace KingBingo.Controllers
                         db.Results.Add(r);
                         user.Results.Add(r);
                         r.Game.Results.Add(r);
-                        user.Game.UserCount--;
+                       
                         user.Game = null;
 
                     }
@@ -790,15 +806,21 @@ namespace KingBingo.Controllers
 
             string[] splitString = { "," };
             string temp = data.player_ids;
-            string[] playerIDs = temp.Split(splitString, StringSplitOptions.RemoveEmptyEntries);
-            //loop through request users
-            foreach (string player_id in playerIDs)
+            if (temp != null)
             {
-                int tempUser_id = System.Convert.ToInt32(player_id);
-                var playerUser = db.UserProfiles.SingleOrDefault(u => u.UserId == tempUser_id);
-              
-                
-                //create an invite notification for each player                                        
+                string[] playerIDs = temp.Split(splitString, StringSplitOptions.RemoveEmptyEntries);
+                //loop through request users
+                if (playerIDs != null)
+                {
+                    foreach (string player_id in playerIDs)
+                    {
+                        int tempUser_id = System.Convert.ToInt32(player_id);
+                        var playerUser = db.UserProfiles.SingleOrDefault(u => u.UserId == tempUser_id);
+
+
+                        //create an invite notification for each player                                        
+                    }
+                }
             }
 
 

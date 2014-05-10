@@ -26,6 +26,7 @@ namespace KingBingo.Models
         public bool Closed { get; set; }
         public int WinCount { get; set; }
         public int UserCount { get; set; }
+        public bool ManualEntry { get; set; }
 
 
         public string InternalData { get; set; }
@@ -133,7 +134,7 @@ namespace KingBingo.Models
         public static Game FromData(Dictionary<string, string> data)
         {
             Game game = new Game();
-            if (data["numbers"] != null)
+            if (data.ContainsKey("numbers") && data["numbers"] != null)
             {
                 string numbers = data["numbers"];
                 game.Numbers = numbers.Split(',').Select(x => int.Parse(x)).ToArray();

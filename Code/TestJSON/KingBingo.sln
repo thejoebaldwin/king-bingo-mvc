@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestJSON", "TestJSON\TestJS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KingBingo.Client", "KingBingo.Client\KingBingo.Client.csproj", "{CBECCB31-4497-4555-BD22-BCBAAF59E4EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot", "Bot\Bot.csproj", "{38533E94-DF04-479C-B550-C99CE4AF2D54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{CBECCB31-4497-4555-BD22-BCBAAF59E4EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBECCB31-4497-4555-BD22-BCBAAF59E4EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBECCB31-4497-4555-BD22-BCBAAF59E4EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38533E94-DF04-479C-B550-C99CE4AF2D54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38533E94-DF04-479C-B550-C99CE4AF2D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38533E94-DF04-479C-B550-C99CE4AF2D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38533E94-DF04-479C-B550-C99CE4AF2D54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

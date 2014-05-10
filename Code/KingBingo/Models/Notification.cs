@@ -68,34 +68,34 @@ namespace KingBingo.Models
             return data;
         }
 
-        public static Notification FromData(dynamic data)
+        public static Notification FromData(Dictionary<string, string> data)
         {
             Notification n = new Notification();
-            n.Message = data.message;
-            n.NotificationID = data.notification_id;
-            n.Created = FromUnixTime((string)data.created);
-            if (data.user_id != null)
+            n.Message = (string) data["message"];
+            n.NotificationID = System.Convert.ToInt32(data["notification_id"]);
+            n.Created = FromUnixTime((string)data["created"]);
+            if (data["user_id"] != null)
             {
-                n.UserId = data.user_id;
+                n.UserId = System.Convert.ToInt32(data["user_id"]);
             }
-            if (data.friend_id != null)
+            if (data["friend_id"] != null)
             {
-                n.FriendID = data.friend_id;
+                n.FriendID = System.Convert.ToInt32(data["friend_id"]);
             }
-            if (data.game_id != null)
+            if (data["game_id"] != null)
             {
-                n.GameID = data.game_id;
+                n.GameID =  System.Convert.ToInt32(data["game_id"]);
             }
-            if (data.result_id != null)
+            if (data["result_id"] != null)
             {
-                n.ResultID = data.result_id;
+                n.ResultID =  System.Convert.ToInt32(data["result_id"]);
             }
-            if (data.type != null)
+            if (data["type"] != null)
             {
-                if (data.type == "Friend") n.Type = NotificationType.Friend;
-                else if (data.type == "Result") n.Type = NotificationType.Result;
-                else if (data.type == "System") n.Type = NotificationType.System;
-                else if (data.type == "Game") n.Type = NotificationType.Game;
+                if (data["type"] == "Friend") n.Type = NotificationType.Friend;
+                else if (data["type"] == "Result") n.Type = NotificationType.Result;
+                else if (data["type"] == "System") n.Type = NotificationType.System;
+                else if (data["type"] == "Game") n.Type = NotificationType.Game;
             }
 
             return n;

@@ -43,29 +43,29 @@ namespace KingBingo.Models
             return dict;
         }
 
-        public static Friend FromData(dynamic data)
+        public static Friend FromData(Dictionary<string, string> data)
         {
             Friend f = new Friend();
             UserProfile friendUser = new UserProfile();
-            friendUser.UserName = data.username;
-            friendUser.Name = data.name;
-            friendUser.Bio = data.bio;
-            friendUser.UserId = data.friend_user_id;
+            friendUser.UserName = data["username"];
+            friendUser.Name = data["name"];
+            friendUser.Bio = data["bio"];
+            friendUser.UserId = System.Convert.ToInt32( data["friend_user_id"]);
             f.FriendUser = friendUser;
-            f.FriendID = data.friend_id;
-            if (data.status == "Accepted")
+            f.FriendID = System.Convert.ToInt32( data["friend_id"]);
+            if (data["status"] == "Accepted")
             {
                 f.Status = RequestStatus.Accepted;                                  
             }
-            else if (data.status == "Pending")
+            else if (data["status"] == "Pending")
             {
                 f.Status = RequestStatus.Pending;
             }
-            else if (data.status == "Requested")
+            else if (data["status"] == "Requested")
             {
                 f.Status = RequestStatus.Requested;
             }
-            else if (data.status == "Rejected")
+            else if (data["status"] == "Rejected")
             {
                 f.Status = RequestStatus.Rejected;
             }

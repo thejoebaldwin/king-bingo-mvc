@@ -69,6 +69,8 @@
             this.btnUploadProfileImage = new System.Windows.Forms.Button();
             this.picProfileImage = new System.Windows.Forms.PictureBox();
             this.tabUsers = new System.Windows.Forms.TabPage();
+            this.chkIncludeProfileImages = new System.Windows.Forms.CheckBox();
+            this.btnGetUser = new System.Windows.Forms.Button();
             this.btnAllUsers = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.dgUsers = new System.Windows.Forms.DataGridView();
@@ -126,8 +128,6 @@
             this.timerNumbers = new System.Windows.Forms.Timer(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.lblMessage = new System.Windows.Forms.Label();
-            this.btnGetUser = new System.Windows.Forms.Button();
-            this.chkIncludeProfileImages = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
@@ -137,6 +137,9 @@
             this.btnCreateUser = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.btnAuth = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.signOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2.SuspendLayout();
             this.tabBarOperations.SuspendLayout();
             this.tabUser.SuspendLayout();
@@ -152,6 +155,7 @@
             this.tabNotifications.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgNotifications)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGetAllGames
@@ -170,7 +174,7 @@
             this.cbTarget.Items.AddRange(new object[] {
             "Development",
             "Production"});
-            this.cbTarget.Location = new System.Drawing.Point(94, 7);
+            this.cbTarget.Location = new System.Drawing.Point(94, 19);
             this.cbTarget.Name = "cbTarget";
             this.cbTarget.Size = new System.Drawing.Size(121, 21);
             this.cbTarget.TabIndex = 19;
@@ -197,7 +201,6 @@
             this.groupBox2.TabIndex = 20;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Create Game";
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // label11
             // 
@@ -563,7 +566,6 @@
             this.picProfileImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picProfileImage.TabIndex = 20;
             this.picProfileImage.TabStop = false;
-            this.picProfileImage.Click += new System.EventHandler(this.picProfileImage_Click);
             // 
             // tabUsers
             // 
@@ -579,23 +581,45 @@
             this.tabUsers.Text = "Users";
             this.tabUsers.UseVisualStyleBackColor = true;
             // 
+            // chkIncludeProfileImages
+            // 
+            this.chkIncludeProfileImages.AutoSize = true;
+            this.chkIncludeProfileImages.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkIncludeProfileImages.Location = new System.Drawing.Point(518, 29);
+            this.chkIncludeProfileImages.Name = "chkIncludeProfileImages";
+            this.chkIncludeProfileImages.Size = new System.Drawing.Size(214, 28);
+            this.chkIncludeProfileImages.TabIndex = 23;
+            this.chkIncludeProfileImages.Text = "Include Profile Images";
+            this.chkIncludeProfileImages.UseVisualStyleBackColor = true;
+            // 
+            // btnGetUser
+            // 
+            this.btnGetUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGetUser.Location = new System.Drawing.Point(357, 23);
+            this.btnGetUser.Name = "btnGetUser";
+            this.btnGetUser.Size = new System.Drawing.Size(132, 37);
+            this.btnGetUser.TabIndex = 7;
+            this.btnGetUser.Text = "Get User";
+            this.btnGetUser.UseVisualStyleBackColor = true;
+            this.btnGetUser.Click += new System.EventHandler(this.btnGetUser_Click_1);
+            // 
             // btnAllUsers
             // 
             this.btnAllUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAllUsers.Location = new System.Drawing.Point(168, 23);
+            this.btnAllUsers.Location = new System.Drawing.Point(195, 23);
             this.btnAllUsers.Name = "btnAllUsers";
             this.btnAllUsers.Size = new System.Drawing.Size(148, 37);
             this.btnAllUsers.TabIndex = 6;
             this.btnAllUsers.Text = "Get All Users";
             this.btnAllUsers.UseVisualStyleBackColor = true;
-            this.btnAllUsers.Click += new System.EventHandler(this.button2_Click);
+            this.btnAllUsers.Click += new System.EventHandler(this.btnGetAllUsers_Click);
             // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(44, 23);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(93, 37);
+            this.button1.Size = new System.Drawing.Size(141, 37);
             this.button1.TabIndex = 5;
             this.button1.Text = "Add Friend";
             this.button1.UseVisualStyleBackColor = true;
@@ -1203,7 +1227,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(23, 10);
+            this.label15.Location = new System.Drawing.Point(23, 22);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(29, 13);
             this.label15.TabIndex = 23;
@@ -1220,33 +1244,11 @@
             // lblMessage
             // 
             this.lblMessage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblMessage.Location = new System.Drawing.Point(575, 10);
+            this.lblMessage.Location = new System.Drawing.Point(575, 22);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(319, 22);
             this.lblMessage.TabIndex = 24;
             this.lblMessage.Text = "<lblMessage>";
-            // 
-            // btnGetUser
-            // 
-            this.btnGetUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGetUser.Location = new System.Drawing.Point(357, 23);
-            this.btnGetUser.Name = "btnGetUser";
-            this.btnGetUser.Size = new System.Drawing.Size(132, 37);
-            this.btnGetUser.TabIndex = 7;
-            this.btnGetUser.Text = "Get User";
-            this.btnGetUser.UseVisualStyleBackColor = true;
-            this.btnGetUser.Click += new System.EventHandler(this.btnGetUser_Click_1);
-            // 
-            // chkIncludeProfileImages
-            // 
-            this.chkIncludeProfileImages.AutoSize = true;
-            this.chkIncludeProfileImages.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkIncludeProfileImages.Location = new System.Drawing.Point(518, 29);
-            this.chkIncludeProfileImages.Name = "chkIncludeProfileImages";
-            this.chkIncludeProfileImages.Size = new System.Drawing.Size(214, 28);
-            this.chkIncludeProfileImages.TabIndex = 23;
-            this.chkIncludeProfileImages.Text = "Include Profile Images";
-            this.chkIncludeProfileImages.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -1335,6 +1337,30 @@
             this.btnAuth.UseVisualStyleBackColor = true;
             this.btnAuth.Click += new System.EventHandler(this.btnAuth_Click_1);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.signOutToolStripMenuItem,
+            this.debugToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(906, 24);
+            this.menuStrip1.TabIndex = 42;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // signOutToolStripMenuItem
+            // 
+            this.signOutToolStripMenuItem.Name = "signOutToolStripMenuItem";
+            this.signOutToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.signOutToolStripMenuItem.Text = "Sign Out";
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.debugToolStripMenuItem.Text = "Debug";
+            this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
+            // 
             // frmTestJSON
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1345,6 +1371,8 @@
             this.Controls.Add(this.label15);
             this.Controls.Add(this.tabBarOperations);
             this.Controls.Add(this.cbTarget);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmTestJSON";
             this.Text = "King Bingo JSON Tester";
             this.Load += new System.EventHandler(this.frmTestJSON_Load);
@@ -1369,6 +1397,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgNotifications)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1484,6 +1514,9 @@
         private System.Windows.Forms.Button btnCreateUser;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnAuth;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem signOutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
     }
 }
 

@@ -139,7 +139,7 @@ namespace KingBingo.Models
         }
 
 
-        static public UserProfile FromData(Dictionary<string, string> data, bool verbose)
+        static public UserProfile FromData(Dictionary<string, string> data, bool verbose, bool includeProfileImages)
         {
             var user = new UserProfile();
             
@@ -151,7 +151,10 @@ namespace KingBingo.Models
             user.Rank = System.Convert.ToInt32(data["rank"]);
             user.FriendCount = System.Convert.ToInt32(data["friend_count"]);
             user.FriendCount = System.Convert.ToInt32(data["game_count"]);
-            user.ProfileImage = Convert.FromBase64String(data["profile_image"]);
+            if (includeProfileImages)
+            {
+                user.ProfileImage = Convert.FromBase64String(data["profile_image"]);
+            }
             if (verbose)
             {
                 user.AuthenticationToken = data["authentication_token"];

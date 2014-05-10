@@ -24,23 +24,30 @@ namespace KingBingo
         public List<Friend> Friends;
         public List<Game> Games;
         public List<Notification> Notifications;
+        public GameCard Card;
+
+        public string Request;
+        public string Response;
+        public string Status;
         public int Number;
         public string Message;
         private int _GameID;
         private System.Net.HttpWebRequest _request;
 
-        public string[] GamecardNumbers;
+        //public string[] GamecardNumbers;
         public bool[] _GameCard;
         
         Action _Completion;
         string _TargetURL;
         public int GameSpeed;
+        
 
         public Client(string url)
         {
             _TargetURL = url;
             _GameCard = new bool[25];
         }
+
 
 
         private void EndResponse(IAsyncResult result)
@@ -57,6 +64,7 @@ namespace KingBingo
         private void PostDataWithOperation(string operation, string JSON)
         {
             //build request
+ 
             //System.Net.HttpWebRequest
             _request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(string.Format("{0}/{1}", _TargetURL, operation));
             //set http method
@@ -73,8 +81,12 @@ namespace KingBingo
             //get response
             Stream response = _request.GetResponse().GetResponseStream();
 
+            Request = JSON;
+
             _request.BeginGetResponse(EndResponse, _request);
-            
+
+
+           
 
             //read response body
             //StreamReader response_reader = new StreamReader(response);
@@ -253,16 +265,15 @@ namespace KingBingo
 
         public void CallBingo(string winningNumbers, Action completion)
         {
+            _Completion = completion;
             Dictionary<string, string> d = new Dictionary<string, string>();
             d.Add("user_id", User.UserId.ToString());
             d.Add("authentication_token", User.AuthenticationToken);
             d.Add("winning_numbers", winningNumbers);
-            d.Add("game_card", string.Join(",", GamecardNumbers));
+            d.Add("game_card", Card.ToString());
             d.Add("game_id", _GameID.ToString());
             string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
             PostDataWithOperation("callbingo", post_json);
-          
-
         }
 
         public void QuitGame(int gameID, Action completion)
@@ -337,87 +348,11 @@ namespace KingBingo
             return number;
         }
 
-        string RowWin(int row)
-        {
-            string bingo = string.Empty;
-
-            if (_GameCard[0 + row] &&
-                _GameCard[5 + row] &&
-                _GameCard[10 + row] &&
-                _GameCard[15 + row] &&
-                _GameCard[20 + row])
-            {
-                bingo = GamecardNumbers[0 + row].ToString();
-                bingo += "," + GamecardNumbers[5 + row].ToString();
-                bingo += "," + GamecardNumbers[10 + row].ToString();
-                bingo += "," + GamecardNumbers[15 + row].ToString();
-                bingo += "," + GamecardNumbers[20 + row].ToString();
-            }
-            return bingo;
-        }
-
-        string ColumnWin(int column)
-        {
-            string bingo = string.Empty;
-            column = column * 5;
-            if (_GameCard[0 + column]&&
-                _GameCard[1 + column] &&
-                _GameCard[2 + column]  &&
-                _GameCard[3 + column] &&
-                _GameCard[4 + column])
-            {
-                bingo = GamecardNumbers[0 + column].ToString();
-                bingo += "," + GamecardNumbers[1 + column].ToString();
-                bingo += "," + GamecardNumbers[2 + column].ToString();
-                bingo += "," + GamecardNumbers[3 + column].ToString();
-                bingo += "," + GamecardNumbers[4 + column].ToString();
-            }
-            return bingo;
-        }
-
-        string forwardDiagonalWin()
-        {
-            //0, 6, 12, 18, 24
-            string bingo = string.Empty;
-            if (_GameCard[0] &&
-                _GameCard[6] &&
-                _GameCard[12] &&
-                _GameCard[18] &&
-                _GameCard[24])
-            {
-                bingo = GamecardNumbers[0].ToString();
-                bingo += "," + GamecardNumbers[6].ToString();
-                bingo += "," + GamecardNumbers[12].ToString();
-                bingo += "," + GamecardNumbers[18].ToString();
-                bingo += "," + GamecardNumbers[24].ToString();
-            }
-            return bingo;
-
-        }
-        string backwardDiagonalWin()
-        {
-            string bingo = string.Empty;
-            if (_GameCard[4] &&
-                _GameCard[8] &&
-                _GameCard[12] &&
-                _GameCard[16] &&
-                _GameCard[20])
-            {
-                bingo = GamecardNumbers[4].ToString();
-                bingo += "," + GamecardNumbers[8].ToString();
-                bingo += "," + GamecardNumbers[12].ToString();
-                bingo += "," + GamecardNumbers[16].ToString();
-                bingo += "," + GamecardNumbers[20].ToString();
-             }
-            return bingo;
-        }
-
         private void processResponse(string response_json)
         {
       
             try
             {
-              //   Dictionary<string, string> data = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(response_json);
                  Dictionary<string, object> data = JsonConvert.DeserializeObject<Dictionary<string, object>>(
                  response_json,
                  new JsonSerializerSettings
@@ -427,108 +362,129 @@ namespace KingBingo
                  }
                 );
 
-               
-
-                //System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
-                //Dictionary<string, string> data = js.Deserialize<Dictionary<string, string>>(response_json);   
-
                 Message = (string) data["message"];
-                if ((string) data["operation"] == "auth")
+                Status = (string)data["status"];
+                if ((string)data["status"] == "ok")
                 {
-                    JObject user =    (JObject) data["user"];
-                    Dictionary<string, string> userDictionary = user.ToObject<Dictionary<string, string>>();
-                    User = UserProfile.FromData(userDictionary, true);
-                }
-                else if ((string) data["operation"] == "allusers")
-                {
-                   Users = new List<UserProfile>();
-                   JArray users = (JArray) data["users"];
-                   foreach (JObject u in users)
-                   {
-                       Dictionary<string, string> userDictionary = u.ToObject<Dictionary<string, string>>();
-                       UserProfile user = UserProfile.FromData(userDictionary, false);
-                       Users.Add(user);
-                   }
-                }
-                else if ((string) data["operation"] == "allnotifications")
-                {
-                    Notifications = new List<Notification>();
-                    /*
-                    foreach (dynamic n in data["notifications"])
+                    if ((string)data["operation"] == "auth")
                     {
-                        Notification notification = Notification.FromData(n);
-                        Notifications.Add(notification);
-                    }*/
-                }
-                else if ((string) data["operation"] == "allgames")
-                {
-                    Games = new List<Game>();
-                    /*
-                    foreach (dynamic g in data["games"])
-                    {
-                        Game game = Game.FromData(g);
-                        Games.Add(game);
-                    }
-                     */
-                }
-
-                else if ((string) data["operation"] == "allfriends")
-                {
-                    var temp = data["friends"];
-                    Friends = new List<Friend>();
-                     /*
-                    foreach (dynamic d in temp)
-                    {
-                        var friend = Friend.FromData(d);
-                        Friends.Add(friend);
-                    }
-                     * */
-
-                }
-                else if ((string)data["operation"] == "addfriend" || (string)data["operation"] == "acceptfriend" || (string) data["operation"] == "rejectfriend")
-                {
-                    //should refresh all friends data here
-                }
-                else if ((string) data["operation"] == "joingame")
-                {
-                    var gamecard = data["game_card"];
-                    GameSpeed = System.Convert.ToInt32(data["game_speed"]);
-                    string[] splitString = { "," };
-                    GamecardNumbers = ((string)gamecard).Split(',');
-                }
-                else if ((string) data["operation"] == "quitgame")
-                {
-                    GamecardNumbers = null;
-                    GameSpeed = -1;
-                }
-                else if ((string) data["operation"] == "getprofileimage")
-                {
-                    string profileimage = (string) data["profile_image"];
-                    byte[] buffer = Convert.FromBase64String(profileimage);
-                    MemoryStream ms = new MemoryStream(buffer);
-                    User.ProfileImage = buffer;
-                }
-                else if ((string) data["operation"] == "callbingo")
-                {
-                   //?
-                }
-                else if ((string) data["operation"] == "getnumber")
-                {
-                    string bingoNumber = (string) data["number"];
-                    Number = -1;
-                    if (bingoNumber != "-1")
-                    {
-                        Number = UnBingofyNumber(bingoNumber);
-                        for (int i = 0; i < GamecardNumbers.Length; i++ )
+                        JObject user = (JObject)data["user"];
+                        Dictionary<string, string> userDictionary = user.ToObject<Dictionary<string, string>>();
+                        User = UserProfile.FromData(userDictionary, true, true);
+                        Games = new List<Game>();
+                        if (data.ContainsKey("games"))
                         {
-                            if (Number.ToString() == GamecardNumbers[i])
+                            JArray games = (JArray)data["games"];
+                            foreach (JObject g in games)
                             {
-                                _GameCard[i] = true;
-                                break;
+                                Game game = Game.FromData(g.ToObject<Dictionary<string, string>>());
+                                Games.Add(game);
                             }
+                        }
+                        if (data.ContainsKey("game_card"))
+                        {
+                                   var gamecard = data["game_card"];
+                        GameSpeed = System.Convert.ToInt32(data["game_speed"]);
+                        Card = new GameCard((string)data["game_card"]);
+                        }
+                        /*
+                 
+                        */
+                    }
+                    else if ((string)data["operation"] == "allusers")
+                    {
+                        Users = new List<UserProfile>();
+                        JArray users = (JArray)data["users"];
+                        foreach (JObject u in users)
+                        {
+                            UserProfile user = UserProfile.FromData(u.ToObject<Dictionary<string, string>>(), false, false);
+                            Users.Add(user);
+                        }
+                    }
+                    else if ((string)data["operation"] == "allnotifications")
+                    {
+                        Notifications = new List<Notification>();
+                        JArray notifications = (JArray)data["notifications"];
+                        foreach (JObject n in notifications)
+                        {
+                            Notification notification = Notification.FromData(n.ToObject<Dictionary<string, string>>());
+                            Notifications.Add(notification);
+                        }
+                    }
+                    else if ((string)data["operation"] == "allgames")
+                    {
+                        Games = new List<Game>();
+                        JArray games = (JArray)data["games"];
+                        foreach (JObject g in games)
+                        {
+                            Game game = Game.FromData(g.ToObject<Dictionary<string, string>>());
+                            Games.Add(game);
+                        }
+
+                    }
+                    else if ((string)data["operation"] == "creategame")
+                    {
+                        Games = new List<Game>();
+                        JArray games = (JArray)data["games"];
+                        Game game = Game.FromData(games[0].ToObject<Dictionary<string, string>>());
+                        User.Game = game;
+                        Card = new GameCard((string)data["game_card"]);
+                    }
+
+                    else if ((string)data["operation"] == "allfriends")
+                    {
+                        var temp = data["friends"];
+                        Friends = new List<Friend>();
+                        JArray friends = (JArray)data["friends"];
+                        foreach (JObject f in friends)
+                        {
+                            Friend friend = Friend.FromData(f.ToObject<Dictionary<string, string>>());
+                            Friends.Add(friend);
+                        }
+                    }
+                    else if ((string)data["operation"] == "addfriend" || (string)data["operation"] == "acceptfriend" || (string)data["operation"] == "rejectfriend")
+                    {
+                        //should refresh all friends data here
+                    }
+                    else if ((string)data["operation"] == "joingame")
+                    {
+                        var gamecard = data["game_card"];
+                        GameSpeed = System.Convert.ToInt32(data["game_speed"]);
+                        Card = new GameCard((string)data["game_card"]);
+                        //GamecardNumbers = ((string)gamecard).Split(',');
+                    }
+                    else if ((string)data["operation"] == "quitgame")
+                    {
+                        Card = null;
+                        GameSpeed = -1;
+                    }
+                    else if ((string)data["operation"] == "getprofileimage")
+                    {
+                        string profileimage = (string)data["profile_image"];
+                        byte[] buffer = Convert.FromBase64String(profileimage);
+                        MemoryStream ms = new MemoryStream(buffer);
+                        User.ProfileImage = buffer;
+                    }
+                    else if ((string)data["operation"] == "callbingo")
+                    {
+                        //?
+                    }
+                    else if ((string)data["operation"] == "getnumber")
+                    {
+                        string bingoNumber = (string)data["number"];
+                        Number = -1;
+                        if (bingoNumber != "-1")
+                        {
+                            Number = UnBingofyNumber(bingoNumber);
+                            Card.PlayNumber(Number);
                         }
                     }
                 }
+                else
+                {
+
+                }
+                Response = response_json;
             }
             catch (Exception ex)
             {

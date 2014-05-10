@@ -16,11 +16,12 @@ namespace KingBingo
 {
     public partial class frmTestJSON : Form
     {
-      
+        public TestJSON.frmDebug debugForm;
         public ArrayList drawnNumbers;
         public int gameSpeed = 0;
         public string profileImage = "";
         public UserProfile user;
+        public bool debugOn = false;
 
         public KingBingo.Client client;
 
@@ -44,302 +45,24 @@ namespace KingBingo
             return targetURL;
         }
 
-
-
-
         private void btnGetAllGames_Click(object sender, EventArgs e)
         {
- 
             client.GetAllGames(0, GetAllGamesComplete);
-
-        }
-
-        private void btnGetAllUsers_Click(object sender, EventArgs e)
-        {
-          
-        }
-
-
-        public string ToUnixTime(DateTime date)
-        {
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return Convert.ToInt64((date.ToUniversalTime() - epoch).TotalSeconds).ToString();
-        }
-
-        public DateTime FromUnixTime(string timestamp)
-        {
-            // Unix timestamp is seconds past epoch
-            double timestampSeconds = Convert.ToDouble(timestamp);
-            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(timestampSeconds).ToLocalTime();
-            return dtDateTime;
-        }
-
-
-
-        bool verifyWin(string bingo, string gamecard)
-        {
-            string[] splitString = { "," };
-            string[] bingoNumbers = bingo.Split(splitString, StringSplitOptions.None);
-            string[] userGameCard = gamecard.Split(splitString, StringSplitOptions.None);
-            bool win = true;
-            //first check that these numbers were drawn
-            foreach (string number in bingoNumbers)
-            {
-                int n = System.Convert.ToInt32(number);
-                if (!drawnNumbers.Contains(n))
-                {
-                    win = false;
-                    break;
-                }
-                else
-                {
-                    for (int i = 0; i < userGameCard.Length; i++)
-                    {
-                        if (userGameCard[i] == number)
-                        {
-                            userGameCard[i] = "x";
-                        }
-                    }
-                }
-            }
-            //if all the claimed winning numbers have been drawn, check for each winning scenario
-            if (win)
-            {
-                win = false;
-                for (int row = 0; row < 5; row++)
-                {
-                    //check all rows
-                    if (userGameCard[0 + row] == "x" &&
-                       userGameCard[5 + row] == "x" &&
-                       userGameCard[10 + row] == "x" &&
-                       userGameCard[15 + row] == "x" &&
-                       userGameCard[20 + row] == "x")
-                    {
-                        win = true;
-                        break;
-                    }
-                }
-                if (!win)
-                {
-                    //check all columns
-                    for (int column = 0; column < 5; column++)
-                    {
-                        int offsetColumn = column * 5;
-                        if (
-                          userGameCard[0 + offsetColumn] == "x" &&
-                          userGameCard[1 + offsetColumn] == "x" &&
-                          userGameCard[2 + offsetColumn] == "x" &&
-                          userGameCard[3 + offsetColumn] == "x" &&
-                          userGameCard[4 + offsetColumn] == "x")
-                        {
-                            win = true;
-                            break;
-                        }
-                    }
-                }
-                if (!win)
-                {
-                    //backwards diagonal
-                    if (
-                        userGameCard[0] == "x" &&
-                        userGameCard[6] == "x" &&
-                        userGameCard[12] == "x" &&
-                        userGameCard[18] == "x" &&
-                        userGameCard[24] == "x")
-                        {
-                        win = true;
-                        }
-                }
-                if (!win)
-                {
-                    //forwards diagonal
-                    if (
-                        userGameCard[4] == "x" &&
-                        userGameCard[8] == "x" &&
-                        userGameCard[12] == "x" &&
-                        userGameCard[16] == "x" &&
-                        userGameCard[20] == "x")
-                        {
-                            win = true;
-                        }
-                }
-            }
-
-    
-
-            return win;
-        }
-
-        string stringifyGameCard()
-        {
-
-            return string.Join(",", client.GamecardNumbers);
-        }
-
-        string getWinningNumbers()
-        {
-            //check columns
-            //check rows
-            //check diagonals
-
-            bool win = false;
-            string bingo = string.Empty;
-            for (int i = 0; i < 5; i++)
-            {
-                bingo = rowWin(i);
-                if (bingo != string.Empty) break;
-            }
-            if (bingo == string.Empty)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    bingo = columnWin(i);
-                    if (bingo != string.Empty) break;
-                }
-            }
-            if (bingo == string.Empty)
-            {
-                bingo = forwardDiagonalWin();
-            }
-            if (bingo == string.Empty)
-            {
-                bingo = backwardDiagonalWin();
-            }
-            return bingo;
         }
 
         void checkIfWin()
         {
-            //check columns
-            //check rows
-            //check diagonals
+            string bingo = client.Card.GetBingo();
 
-            bool win = false;
-            string bingo = string.Empty;
-            for (int i = 0; i < 5; i++)
-            {
-                bingo = rowWin(i);
-                if (bingo != string.Empty) break;
-            }
-            if (bingo == string.Empty)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    bingo = columnWin(i);
-                    if (bingo != string.Empty) break;
-                }
-            }
-            if (bingo == string.Empty)
-            {
-                bingo = forwardDiagonalWin();
-            }
-            if (bingo == string.Empty)
-            {
-                bingo = backwardDiagonalWin();
-            }
             if (bingo != string.Empty)
             {
                 timerNumbers.Enabled = false;
                 timerNumbers.Stop();
-
-                if (verifyWin(bingo, string.Join(",", client.GamecardNumbers)))
-                {
-                    MessageBox.Show("BINGO!\n" + bingo);
-                }
-                else
-                {
-                    MessageBox.Show("false claim bingo\n" + bingo);
-                }
-
+                MessageBox.Show("BINGO!\n" + bingo);
             }
 
         }
 
-
-        string rowWin(int row)
-        {
-            string bingo = string.Empty;
-          
-            if (getNumberLabelByNumber(0 + row).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(5 + row).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(10 + row).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(15 + row).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(20 + row).BackColor == Color.Yellow)
-            {
-                bingo = client.GamecardNumbers[0 + row].ToString();
-                bingo += "," + client.GamecardNumbers[5 + row].ToString();
-                bingo += "," + client.GamecardNumbers[10 + row].ToString();
-                bingo += "," + client.GamecardNumbers[15 + row].ToString();
-                bingo += "," + client.GamecardNumbers[20 + row].ToString();
-               
-            }
-            return bingo;
-
-        }
-
-        string columnWin(int column)
-        {
-            string bingo = string.Empty;
-            column = column * 5;
-            bool win = false;
-            if (getNumberLabelByNumber(0 + column).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(1 + column).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(2 + column).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(3 + column).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(4 + column).BackColor == Color.Yellow)
-            {
-                 bingo = client.GamecardNumbers[0 + column].ToString();
-                 bingo += "," + client.GamecardNumbers[1 + column].ToString();
-                 bingo += "," + client.GamecardNumbers[2 + column].ToString();
-                 bingo += "," + client.GamecardNumbers[3 + column].ToString();
-                 bingo += "," + client.GamecardNumbers[4 + column].ToString();
-                win = true;
-            }
-            return bingo;
-        }
-        string forwardDiagonalWin()
-        {
-            //0, 6, 12, 18, 24
-            string bingo = string.Empty;
-            bool win = false;
-            if (getNumberLabelByNumber(0).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(6).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(12).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(18).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(24).BackColor == Color.Yellow)
-            {
-                bingo = client.GamecardNumbers[0].ToString();
-                 bingo += "," + client.GamecardNumbers[6].ToString();
-                 bingo += "," + client.GamecardNumbers[12].ToString();
-                 bingo += "," + client.GamecardNumbers[18].ToString();
-                 bingo += "," + client.GamecardNumbers[24].ToString();
-                win = true;
-            }
-            return bingo;
-
-        }
-        string backwardDiagonalWin()
-        {
-            //4,8, 12, 16, 20
-
-            string bingo = string.Empty;
-            bool win = false;
-            if (getNumberLabelByNumber(4).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(8).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(12).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(16).BackColor == Color.Yellow &&
-                getNumberLabelByNumber(20).BackColor == Color.Yellow)
-            {
-                bingo = client.GamecardNumbers[4].ToString();
-                bingo += "," + client.GamecardNumbers[8].ToString();
-                bingo += "," + client.GamecardNumbers[12].ToString();
-                bingo += "," + client.GamecardNumbers[16].ToString();
-                bingo += "," + client.GamecardNumbers[20].ToString();
-                win = true;
-            }
-            return bingo;
-        }
 
         private int UnBingofyNumber(string bingoNumber)
         {
@@ -377,27 +100,18 @@ namespace KingBingo
             return bingoNumber;
         }
 
-        private void btnGetUser_Click(object sender, EventArgs e)
+        public void UpdateDebug()
         {
-
-       
-
-            
-          
-          
-        }
-
-        private void btnAuth_Click(object sender, EventArgs e)
-        {
-         
+            debugForm.txtRequest.Text = client.Request;
+            debugForm.txtResponse.Text = client.Response;
         }
 
         private void GetNumberComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
             if (client.Number != -1)
             {
-     
                 for (int i = 0; i < 25; i++)
                 {
                     drawnNumbers.Add(client.Number);
@@ -419,35 +133,39 @@ namespace KingBingo
 
         private void CallBingoComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
         }
 
         private void RegisterComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
         }
 
         private void CreateGameComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
         }
 
         public void UpdateUserComplete()
         {
-
+            UpdateDebug();
             lblMessage.Text = client.Message;
         }
 
         private void JoinGameComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
-            if (client.GamecardNumbers != null)
+            if (client.Card != null)
             {
 
-                for (int i = 0; i < client.GamecardNumbers.Length; i++)
+                for (int i = 0; i < 25; i++)
                 {
                     Label tempLabel = getNumberLabelByNumber(i);
-                    tempLabel.Text =  client.GamecardNumbers[i];
+                    tempLabel.Text =  client.Card.Numbers.ElementAt(i).ToString();
                 }
 
                 timerNumbers.Enabled = true;
@@ -458,29 +176,34 @@ namespace KingBingo
 
         private void GetUserComplete()
         {
-
+            UpdateDebug();
+            lblMessage.Text = client.Message;
         }
 
         private void AddFriendComplete()
         {
             //do nothing?
+            UpdateDebug();
             lblMessage.Text = client.Message;
         }
 
         private void AcceptFriendComplete()
         {
             //do nothing?
+            UpdateDebug();
             lblMessage.Text = client.Message;
         }
 
         private void RejectFriendComplete()
         {
             //do nothing?
+            UpdateDebug();
             lblMessage.Text = client.Message;
         }
 
         private void GetAllNotificationsComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
             if (client.Notifications != null)
             {
@@ -504,6 +227,7 @@ namespace KingBingo
 
         private void GetAllFriendsComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
             if (client.Friends != null)
             {
@@ -535,6 +259,7 @@ namespace KingBingo
 
         private void GetAllUsersComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
             if (client.Users != null)
             {
@@ -543,7 +268,7 @@ namespace KingBingo
                 dt.Columns.Add(new DataColumn("UserId", typeof(Int32)));
                 dt.Columns.Add(new DataColumn("Name", typeof(string)));
                 dt.Columns.Add(new DataColumn("UserName", typeof(string)));
-                dt.Columns.Add(new DataColumn("Created", typeof(DateTime)));
+
 
                 foreach (UserProfile u in client.Users)
                 {
@@ -551,7 +276,7 @@ namespace KingBingo
                     dr["UserId"] = u.UserId;
                     dr["Name"] = u.Name;
                     dr["UserName"] = u.UserName;
-                    dr["Created"] = u.Created;
+
                     dt.Rows.Add(dr);
                 }
                 dgUsers.DataSource = dt;
@@ -560,20 +285,19 @@ namespace KingBingo
 
         private void QuitGameComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
             for (int i = 0; i < 25; i++)
             {
                 Label tempLabel = getNumberLabelByNumber(i);
                 tempLabel.Text = tempLabel.Name;
             }
-
             timerNumbers.Enabled = false;
-          
-
         }
 
         private void GetAllGamesComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
             if (client.Games != null)
             {
@@ -600,6 +324,7 @@ namespace KingBingo
 
         private void AuthenticateComplete()
         {
+            UpdateDebug();
             lblMessage.Text = client.Message;
             if (client.User != null)
             {
@@ -639,28 +364,22 @@ namespace KingBingo
 
         }
 
+
+
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-
             client.Register(txtUserName.Text.Trim(), txtPassword.Text.Trim(), txtEmail.Text.Trim(), RegisterComplete);
-
-
         }
 
    
-
-    
-        private void btnHash_Click(object sender, EventArgs e)
-        {
-
-           // lblHash.Text = createAuthHash(txtPassword.Text.Trim());
-        }
-
 
         private void frmTestJSON_Load(object sender, EventArgs e)
         {
             cbTarget.SelectedIndex = 0;
             drawnNumbers = new ArrayList();
+
+            debugForm = new TestJSON.frmDebug();
+
             foreach (Control c in tabBarOperations.TabPages["tabGame"].Controls)
             {
                 if (c.GetType() == (new Label()).GetType())
@@ -673,10 +392,7 @@ namespace KingBingo
             }
         }
 
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
+    
 
         private void btnCreateGame_Click(object sender, EventArgs e)
         {
@@ -720,10 +436,7 @@ namespace KingBingo
             client.GetNewNumber(GetNumberComplete);
         }
 
-        private void btnAddFriend_Click(object sender, EventArgs e)
-        {
-          
-        }
+    
 
         public Label getNumberLabel(string letter, int row)
         {
@@ -777,10 +490,7 @@ namespace KingBingo
             getNewNumber();
         }
 
-        private void btnGetProfileImage_Click(object sender, EventArgs e)
-        {
-            
-        }
+
 
         private void btnUploadProfileImage_Click(object sender, EventArgs e)
         {
@@ -847,15 +557,10 @@ namespace KingBingo
             getNewNumber();
         }
 
-     
-
         private void btnCheckWin_Click(object sender, EventArgs e)
         {
-    
-            string bingo = getWinningNumbers();
-
+            string bingo = client.Card.GetBingo();
             client.CallBingo(bingo, CallBingoComplete);
-
         }
 
         private void btnAllFriends_Click(object sender, EventArgs e)
@@ -863,7 +568,9 @@ namespace KingBingo
             client.GetAllFriends(0, GetAllFriendsComplete);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+  
+
+        private void btnGetAllUsers_Click(object sender, EventArgs e)
         {
             client.GetAllUsers(0, chkIncludeProfileImages.Checked, GetAllUsersComplete);
         }
@@ -919,10 +626,6 @@ namespace KingBingo
 
         }
 
-        private void picProfileImage_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnGetUser_Click_1(object sender, EventArgs e)
         {
@@ -954,6 +657,11 @@ namespace KingBingo
                 txtUpdateUser_Email.Text = string.Empty;
                 btnAuth.Text = "Sign In";
             }
+        }
+
+        private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            debugForm.Show();
         }
     }
 }

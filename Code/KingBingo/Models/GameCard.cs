@@ -13,14 +13,29 @@ namespace KingBingo.Models
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int GameCardID { get; set; }
-
+        public virtual bool[] Played { get; set; }
         public string InternalData { get; set; }
 
-        public ICollection<int> Numbers
+        public List<int> Numbers
         {
             get
             {
-                return Array.ConvertAll(InternalData.Split(','), Int32.Parse);
+                if (InternalData != null && InternalData != string.Empty)
+                {
+                    int[] temp = Array.ConvertAll(InternalData.Split(','), Int32.Parse);
+
+                    List<int> numbers = new List<int>();
+                    for (int i = 0; i < 25; i++)
+                    {
+                        numbers.Add(temp[i]);
+                    }
+                    return numbers;
+                }
+                else
+                {
+                    return new List<int>();
+                }
+               
             }
             set
             {
@@ -28,7 +43,25 @@ namespace KingBingo.Models
             }
         }
 
-      
+
+        public GameCard()
+        {
+            Played = new bool[25];
+            Numbers = new List<int>();
+        }
+
+        public GameCard(string gamecard)
+        {
+            Played = new bool[25];
+            string[] temp = gamecard.Split(',');
+            List<int> numbers = new List<int>();
+            for (int i = 0; i < 25; i++)
+            {
+                numbers.Add(System.Convert.ToInt32(temp[i]));
+            }
+            Numbers = numbers;
+        }
+
 
         static public GameCard GenerateGameCard()
         {
@@ -108,10 +141,147 @@ namespace KingBingo.Models
             return gamecard;
         }
 
+        public string ToString()
+        {
+            return string.Join(",", Numbers);
+        }
+
         public string Hash()
         {
             return string.Join(",", Numbers);
         }
+
+        public bool PlayNumber(int number)
+        {
+            bool found = false;
+            List<int> numbers = (List<int>) this.Numbers;
+            for (int i = 0; i < 25; i++)
+            {
+                if (numbers.ElementAt(i) == number)
+                {
+                    found = true;
+                    Played[i] = true;
+                    break;
+                }
+            }
+            return found;
+        }
+
+        public void Clear()
+        {
+            Played = new bool[25];
+        }
+
+        string RowWin(int row)
+        {
+            string bingo = string.Empty;
+
+            if (Played[0 + row] &&
+                Played[5 + row] &&
+                Played[10 + row] &&
+                Played[15 + row] &&
+                Played[20 + row])
+            {
+                List<int> numbers = (List<int>) this.Numbers;
+                bingo = numbers[0 + row].ToString();
+                bingo += "," + numbers[5 + row].ToString();
+                bingo += "," + numbers[10 + row].ToString();
+                bingo += "," + numbers[15 + row].ToString();
+                bingo += "," + numbers[20 + row].ToString();
+            }
+            return bingo;
+        }
+
+        string ColumnWin(int column)
+        {
+            string bingo = string.Empty;
+            column = column * 5;
+            if (Played[0 + column] &&
+                Played[1 + column] &&
+                Played[2 + column] &&
+                Played[3 + column] &&
+                Played[4 + column])
+            {
+                List<int> numbers = (List<int>)this.Numbers;
+                bingo = numbers[0 + column].ToString();
+                bingo += "," + numbers[1 + column].ToString();
+                bingo += "," + numbers[2 + column].ToString();
+                bingo += "," + numbers[3 + column].ToString();
+                bingo += "," + numbers[4 + column].ToString();
+            }
+            return bingo;
+        }
+
+        public string GetBingo()
+        {
+            //check columns
+            //check rows
+            //check diagonals
+            string bingo = string.Empty;
+            for (int i = 0; i < 5; i++)
+            {
+                bingo = RowWin(i);
+                if (bingo != string.Empty) break;
+            }
+            if (bingo == string.Empty)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    bingo = ColumnWin(i);
+                    if (bingo != string.Empty) break;
+                }
+            }
+            if (bingo == string.Empty)
+            {
+                bingo = ForwardDiagonalWin();
+            }
+            if (bingo == string.Empty)
+            {
+                bingo = BackwardDiagonalWin();
+            }
+            return bingo;
+        }
+
+        string ForwardDiagonalWin()
+        {
+            //0, 6, 12, 18, 24
+            string bingo = string.Empty;
+            if (Played[0] &&
+                Played[6] &&
+                Played[12] &&
+                Played[18] &&
+                Played[24])
+            {
+                List<int> numbers = (List<int>)this.Numbers;
+                bingo = numbers[0].ToString();
+                bingo += "," + numbers[6].ToString();
+                bingo += "," + numbers[12].ToString();
+                bingo += "," + numbers[18].ToString();
+                bingo += "," + numbers[24].ToString();
+            }
+            return bingo;
+        }
+
+        string BackwardDiagonalWin()
+        {
+            string bingo = string.Empty;
+            if (Played[4] &&
+                Played[8] &&
+                Played[12] &&
+                Played[16] &&
+                Played[20])
+            {
+                List<int> numbers = (List<int>)this.Numbers;
+                bingo = numbers[4].ToString();
+                bingo += "," + numbers[8].ToString();
+                bingo += "," + numbers[12].ToString();
+                bingo += "," + numbers[16].ToString();
+                bingo += "," + numbers[20].ToString();
+            }
+            return bingo;
+        }
+
+
 
     }
 }
