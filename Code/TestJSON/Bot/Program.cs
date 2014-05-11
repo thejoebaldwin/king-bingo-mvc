@@ -14,6 +14,7 @@ namespace Bot
         static Mode _mode;
         static string username = "";
         static string password = "";
+        static string url = "";
 
         enum Mode
         {
@@ -33,6 +34,7 @@ namespace Bot
         {
             username = args[0];
             password = args[1];
+            url = args[2];
             _mode = Mode.Auth;
             Control();
         }
@@ -131,7 +133,7 @@ namespace Bot
             switch (_mode)
                 {
                 case Mode.Auth:
-                        client = new Client(production);
+                        client = new Client(url);
                       client.Authenticate(username,password, AuthenticationComplete);
                       _mode = Mode.AllGames;
                       break;

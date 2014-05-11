@@ -140,6 +140,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.signOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabResults = new System.Windows.Forms.TabPage();
+            this.btnAllResults = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.tabBarOperations.SuspendLayout();
             this.tabUser.SuspendLayout();
@@ -156,6 +158,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgNotifications)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.tabResults.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGetAllGames
@@ -335,6 +338,7 @@
             this.tabBarOperations.Controls.Add(this.tabFriends);
             this.tabBarOperations.Controls.Add(this.tabGame);
             this.tabBarOperations.Controls.Add(this.tabNotifications);
+            this.tabBarOperations.Controls.Add(this.tabResults);
             this.tabBarOperations.Enabled = false;
             this.tabBarOperations.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabBarOperations.Location = new System.Drawing.Point(26, 132);
@@ -1361,6 +1365,26 @@
             this.debugToolStripMenuItem.Text = "Debug";
             this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
+            // tabResults
+            // 
+            this.tabResults.Controls.Add(this.btnAllResults);
+            this.tabResults.Location = new System.Drawing.Point(4, 33);
+            this.tabResults.Name = "tabResults";
+            this.tabResults.Size = new System.Drawing.Size(838, 458);
+            this.tabResults.TabIndex = 6;
+            this.tabResults.Text = "Results";
+            this.tabResults.UseVisualStyleBackColor = true;
+            // 
+            // btnAllResults
+            // 
+            this.btnAllResults.Location = new System.Drawing.Point(151, 130);
+            this.btnAllResults.Name = "btnAllResults";
+            this.btnAllResults.Size = new System.Drawing.Size(182, 43);
+            this.btnAllResults.TabIndex = 0;
+            this.btnAllResults.Text = "All Results";
+            this.btnAllResults.UseVisualStyleBackColor = true;
+            this.btnAllResults.Click += new System.EventHandler(this.btnAllResults_Click);
+            // 
             // frmTestJSON
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1399,6 +1423,7 @@
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabResults.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1517,6 +1542,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem signOutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabResults;
+        private System.Windows.Forms.Button btnAllResults;
     }
 }
 

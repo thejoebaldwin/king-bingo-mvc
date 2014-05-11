@@ -49,8 +49,12 @@ namespace KingBingo.Controllers
         [Authorize]
         public ActionResult Games()
         {
-            DbSet<Game> games = db.Games;
-            ViewData["Games"] = games;
+           // DbSet<Game> games = db.Games;
+            int page = 0;
+            int resultSize = 10;
+            ViewData["Games"] = db.Games.Include("Players").Where(g => g.Closed == false).OrderByDescending(g => g.Created).Skip(page * resultSize).Take(resultSize);
+
+            //ViewData["Games"] = games;
             var user = db.UserProfiles.SingleOrDefault(u => u.UserName == this.User.Identity.Name);
             ViewData["user"] = user;
             return View();

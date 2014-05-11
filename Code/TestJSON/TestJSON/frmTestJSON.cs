@@ -180,6 +180,13 @@ namespace KingBingo
             lblMessage.Text = client.Message;
         }
 
+
+        private void GetAllResultsComplete()
+        {
+            UpdateDebug();
+            lblMessage.Text = client.Message;
+        }
+
         private void AddFriendComplete()
         {
             //do nothing?
@@ -662,6 +669,11 @@ namespace KingBingo
         private void debugToolStripMenuItem_Click(object sender, EventArgs e)
         {
             debugForm.Show();
+        }
+
+        private void btnAllResults_Click(object sender, EventArgs e)
+        {
+            client.GetAllResults(0, GetAllResultsComplete);
         }
     }
 }

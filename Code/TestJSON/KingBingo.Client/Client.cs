@@ -299,6 +299,16 @@ namespace KingBingo
         
         }
 
+
+        public void GetAllResults(int page, Action completion)
+        {
+            _Completion = completion;
+            Dictionary<string, string> d = new Dictionary<string, string>();
+            d.Add("page", page.ToString());
+            string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
+            PostDataWithOperation("allresults", post_json);
+        }
+
         public void GetAllGames(int page, Action completion)
         {
             _Completion = completion;
@@ -400,6 +410,11 @@ namespace KingBingo
                             UserProfile user = UserProfile.FromData(u.ToObject<Dictionary<string, string>>(), false, false);
                             Users.Add(user);
                         }
+                    }
+                    else if ((string)data["operation"] == "allresults")
+                    {
+
+
                     }
                     else if ((string)data["operation"] == "allnotifications")
                     {

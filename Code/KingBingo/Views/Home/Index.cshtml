@@ -4,6 +4,46 @@
 
 
 @section featured {
+
+    <style>
+  #feedback { font-size: 1.4em; }
+  #selectable .ui-selecting { background: #FECA40; }
+
+  
+#selectable .ui-selected { background: #F39814; color: white; }
+  #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+  #selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 50px; }
+  .data { font-weight:bold; }
+
+  #selectable .even { border:3px solid black; background-color:#EEEEEE; }
+  #selectable .odd {  border:3px solid #999999;background-color:#FFFFFF; }
+
+
+#selectable .ui-selected { background: #F39814; }
+
+  .ui-widget-content:hover { background-color: white;}
+
+
+  .even:hover { background-color: #FFFFFF;}
+
+  .odd:hover { background-color: #EEEEEE;}
+
+
+.label
+{
+width:200px;
+text-align:right;
+display:inline-block;
+}
+
+        .timeago {
+            font-size:small;
+            color:#DDDDDD;
+        }
+
+  </style>
+
+
     <section class="featured">
         <div class="content-wrapper">
             <hgroup class="title">
@@ -11,8 +51,14 @@
             </hgroup>
              <div class="row">
                        <div class='col-md-7'>
-                             <h3> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad mini</h3>
-                       </div>
+                             
+                                  <h4>
+                                   This site was developed as a MVC 4 example for the IT Project Delivery class at <a href="http://www.fvtc.edu">FVTC</a>.
+                                Code, Wireframes and Class Diagrams can all be found on <a href="https://github.com/thejoebaldwin/king-bingo-mvc">Github</a>.
+                               Documentation of using the JSON Web API can be found by clicking on the API link in the site footer.
+</h4>
+                            </div>
+                     
                        <div class='col-md-4'>
                            <img  src="~/images/crown-icon-large.png" />
                        </div>
@@ -23,16 +69,87 @@
                        <div class='col-md-12'>
                            <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <h4>
-                                This site was developed as a MVC 4 example for the IT Project Delivery class at <a href="http://www.fvtc.edu">FVTC</a>.
-                                Code, Wireframes and Class Diagrams can all be found on <a href="https://github.com/thejoebaldwin/king-bingo-mvc">Github</a>.
-                               Documentation of using the JSON Web API can be found by clicking on the API link in the site footer.
-                                    </h4>
+                                    <h3>Happening Now</h3>
+                                    <ol id="selectable">
+                                    </ol>
                             </div>
                      </div>
                 </div>
+                  
+
            </div>
         </div>
     </section>
+
+ 
 }
+
+    @section scripts {
+
+<script type="text/javascript">
+
+    $("#selectable").selectable();
+
+    var last = 0;
+    var counter = 0;
+
+    function update() {
+        $.getJSON("/service/v0/allresults", function (data) {
+            $.each(data.results, function (i, result) {
+
+                if (result.created > last || counter < 10) {
+                    var m = "<li class='btn btn-lg";
+                    if (counter >= 10) {
+                        if (counter % 2 == 0) {
+                            m += ' btn-primary ';
+                        }
+                        else {
+                            m += ' btn-success ';
+                        }
+                    }
+                    else {
+                        if (counter % 2 == 0) {
+                            m += ' btn-success ';
+                        }
+                        else {
+                            m += ' btn-primary ';
+                        }
+
+                    }
+                    m += "' style='opacity:0;width:100%;text-align:left;' id='result" + counter + "' ";
+                    m += ">" + result.message + "<span class='timeago' style='padding-left:20px;' title='" + result.created + "'>" + result.created + "</li>";
+
+                    if (counter >= 10) {
+                        $("#selectable").prepend(m);
+                        $("#result" + counter).fadeTo(2000, 1.0, function () {
+                            // Animation complete.
+                        });
+
+                        counter++;
+                    }
+                    else {
+                        $("#selectable").append(m);
+                        $("#result" + counter).fadeTo(250, 1.0, function () {
+                            // Animation complete.
+                        });
+                        counter++;
+
+                    }
+                    if (result.created > last) {
+                        last = result.created;
+
+                    }
+
+                }
+
+            });
+            jQuery(".timeago").timeago();
+            setTimeout("update()", 5000);
+        });
+
+    }
+    setTimeout("update()", 1000);
+  
+        </script>
+         }
 

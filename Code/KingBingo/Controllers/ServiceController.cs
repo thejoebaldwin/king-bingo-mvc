@@ -117,6 +117,10 @@ namespace KingBingo.Controllers
                             ViewBag.message = "password hash did not match with given username";
                         }
                     }
+                    else if (operation == "allresults")
+                    {
+                        AllResults();
+                    }
                     else if (operation == "createuser")
                     {
                         ViewBag.operation = "createuser";
@@ -197,7 +201,7 @@ namespace KingBingo.Controllers
                                     {
                                         page = data.page;
                                     }
-                                    ViewData["games"] = db.Games.Include("Players").Where(g => g.Closed == false).OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
+                                    ViewData["games"] = db.Games.Include("Players").Where(g => g.Closed == false).OrderByDescending(g => g.Created).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allgames";
                                     ViewBag.message = "successfully retrieved list of all games";
                                 }
@@ -209,7 +213,7 @@ namespace KingBingo.Controllers
                                     {
                                         page = data.page;
                                     }
-                                    ViewData["notifications"] = db.Notifications.Where(n => n.User.UserId == user.UserId).OrderBy(g => g.Created).Skip(page * resultSize).Take(resultSize);
+                                    ViewData["notifications"] = db.Notifications.Where(n => n.User.UserId == user.UserId).OrderByDescending(g => g.Created).Skip(page * resultSize).Take(resultSize);
                                     ViewBag.operation = "allnotifications";
                                     ViewBag.message = "successfully retrieved list of all notifications";
                                 }
@@ -523,9 +527,17 @@ namespace KingBingo.Controllers
             }
             else
             {
-                ViewBag.markdown = MarkdownForOperation(operation);
-                ViewBag.title = operation;
-                return View("Help");
+                if (operation == "allresults")
+                {
+                    AllResults();
+                    return View();
+                }
+                else
+                {
+                    ViewBag.markdown = MarkdownForOperation(operation);
+                    ViewBag.title = operation;
+                    return View("Help");
+                }
             }
         }
 
@@ -843,6 +855,12 @@ namespace KingBingo.Controllers
             ViewData["games"] = games;
         }
 
+        public void AllResults()
+        {
+            ViewBag.operation = "allresults";
+            ViewData["results"] = db.Results.OrderByDescending(g => g.Created).Take(10);
+            ViewBag.message = "successfully retrieved list of results";
+        }
 
         string MarkdownForOperation(string operation)
         {

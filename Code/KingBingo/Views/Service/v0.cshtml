@@ -5,6 +5,8 @@
     var notifications = ViewBag.notifications;
     var gameCount = 0;
     var userCount = 0;
+    var resultCount = 0;
+    var results = ViewBag.results;
     var friendCount = 0;
     var notificationCount = 0;
     var numbers = ViewBag.numbers;
@@ -87,6 +89,20 @@
                }
                @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(f.ToData()));
                friendCount++;
+         }
+         @Html.Raw("]")
+    }
+    @if (results != null)
+    {
+         @Html.Raw(",\"results\":[")  
+         foreach(var r in results) 
+         {
+               if (resultCount > 0) 
+               {
+                @Html.Raw(",")
+               }
+               @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(r.ToData()));
+               resultCount++;
          }
          @Html.Raw("]")
     }
