@@ -9,7 +9,7 @@ Badges<br />
 @foreach (var b in profileuser.Badges)
 {
     
-    
+  
     @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( b.Image) + "\" alt=\"" + b.Name + "\"  />")
     
 }

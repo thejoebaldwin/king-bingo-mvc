@@ -572,7 +572,7 @@ namespace KingBingo
 
         private void btnAllFriends_Click(object sender, EventArgs e)
         {
-            client.GetAllFriends(0, GetAllFriendsComplete);
+            client.GetAllFriends(0, RequestStatus.Accepted, GetAllFriendsComplete);
         }
 
   

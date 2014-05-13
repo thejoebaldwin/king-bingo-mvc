@@ -1,13 +1,17 @@
 ﻿@{
     var profileuser = @ViewBag.profileuser;
     var hash = ViewBag.friendhash;
+var temp = profileuser.ProfileImage;
 }
 
 <div class="panel panel-default">
 <div class="panel-body">
 <div  class='row'>
     <div class='col-md-3'>
-        @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( profileuser.ProfileImage) + "\" />")
+        @if (profileuser.ProfileImage != null && profileuser.ProfileImage.Length > 0)
+        {
+            @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( profileuser.ProfileImage) + "\" />")
+        }
     </div>
     <div class='col-md-6'>
            <h3>@profileuser.Name </h3>

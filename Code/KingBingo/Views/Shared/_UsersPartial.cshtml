@@ -11,22 +11,14 @@
        username = user.UserName;   
        
    }
-   }
+}
   
-
-
-
-
 @foreach (var u in users)
 {
-
-
-
-
-    if (username != u.UserName)
+    if (username != u.UserName && u.Name  != null)
          {
         <div  class='row'>
-   <div class='col-md-3'>
+               <div class='col-md-3'>
        @if (u.ProfileImage != null)
        {
         @Html.Raw("<img width=\"100px\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( u.ProfileImage) + "\" />")
@@ -66,7 +58,6 @@
                       <input class="btn btn-success" type="submit" value="Add Friend" />
                       <input type="hidden" name="operation" value="addfriend" />
                 }
-               
             </form>
         }
      </div>

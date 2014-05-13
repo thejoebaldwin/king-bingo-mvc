@@ -329,25 +329,31 @@ namespace KingBingo
             d.Add("authentication_token", User.AuthenticationToken);
             d.Add("page", page.ToString());
             d.Add("include_profile_images", includeProfileImages.ToString());
-
+            d.Add("verbose", false.ToString());
             string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
-          PostDataWithOperation("allusers", post_json);
+            PostDataWithOperation("allusers", post_json);
           
 
         }
 
-        public void GetAllFriends(int page, Action completion)
+        
+
+        public void GetAllFriends(int page, Models.RequestStatus status, Action completion)
         {
             _Completion = completion;
             Dictionary<string, string> d = new Dictionary<string, string>();
             d.Add("user_id", User.UserId.ToString());
             d.Add("authentication_token", User.AuthenticationToken);
             d.Add("page", page.ToString());
-
+            if (status != null)
+            {
+                if (status == RequestStatus.Pending)
+                {
+                    d.Add("request_status", "pending");
+                }
+            }
             string post_json = Newtonsoft.Json.JsonConvert.SerializeObject(d);
             PostDataWithOperation("allfriends", post_json);
-     
-
         }
 
         private int UnBingofyNumber(string bingoNumber)
@@ -360,9 +366,10 @@ namespace KingBingo
 
         private void processResponse(string response_json)
         {
-      
+            string operation = "";
             try
             {
+                 Response = response_json;
                  Dictionary<string, object> data = JsonConvert.DeserializeObject<Dictionary<string, object>>(
                  response_json,
                  new JsonSerializerSettings
@@ -371,7 +378,7 @@ namespace KingBingo
                        TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
                  }
                 );
-
+                 operation = (string)data["operation"];
                 Message = (string) data["message"];
                 Status = (string)data["status"];
                 if ((string)data["status"] == "ok")
@@ -497,9 +504,16 @@ namespace KingBingo
                 }
                 else
                 {
+                    if ((string)data["operation"] == "auth")
+                    {
 
+                    }
+                    else if ((string)data["operation"] == "addfriend")
+                    {
+
+                    }
                 }
-                Response = response_json;
+       
             }
             catch (Exception ex)
             {

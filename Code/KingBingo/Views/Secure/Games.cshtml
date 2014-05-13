@@ -74,7 +74,10 @@
                         <li class="ui-widget-content" data-user_id="@f.FriendUser.UserId" >
                              <span class="glyphicon glyphicon-plus"></span>
                              <span class="glyphicon glyphicon-ok" style="display:none;"></span>
-                             @Html.Raw("<img width=\"50px\" style=\"margin-left:5px;\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( f.FriendUser.ProfileImage) + "\" />")  
+                             @if ( f.FriendUser.ProfileImage != null &&  f.FriendUser.ProfileImage.Length > 0)
+                             {
+                                @Html.Raw("<img width=\"50px\" style=\"margin-left:5px;\" src=\"data:image/jpeg;base64," + Convert.ToBase64String( f.FriendUser.ProfileImage) + "\" />")  
+                             }
                              @f.FriendUser.Name 
                         </li>
                 }

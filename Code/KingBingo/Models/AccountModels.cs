@@ -99,7 +99,20 @@ namespace KingBingo.Models
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return Convert.ToInt64((date.ToUniversalTime() - epoch).TotalSeconds).ToString();
         }
-
+        
+        public bool HasFriend(int userId)
+        {
+            bool contains = false;
+            for (int i = 0; i < Friends.Count; i++)
+            {
+                if (Friends.ElementAt(i).FriendUser.UserId == userId)
+                {
+                    contains = true;
+                    break;
+                }
+            }
+            return contains;
+        }
 
         public Dictionary<string, string> ToData(bool includeImages, bool verbose)
         {
@@ -126,14 +139,26 @@ namespace KingBingo.Models
             {
              dict.Add("email", this.Email);
              dict.Add("confirmed", this.Confirmed.ToString());
-             dict.Add("created", ToUnixTime((DateTime)this.Created));
+             if (this.Created != null)
+             {
+                 dict.Add("created", ToUnixTime((DateTime)this.Created));
+             }
              dict.Add("device_token", this.DeviceToken);
              dict.Add("zip", this.Zip);
-             dict.Add("birthdate", ToUnixTime((DateTime)this.Birthdate));
+             if (this.Birthdate != null)
+             {
+                 dict.Add("birthdate", ToUnixTime((DateTime)this.Birthdate));
+             }
              dict.Add("receive_emails", this.ReceiveEmails.ToString());
              dict.Add("authentication_token", this.AuthenticationToken);
-             dict.Add("authentication_token_expires", ToUnixTime((DateTime)this.AuthenticationTokenExpires));
-             dict.Add("birth_date", ToUnixTime((DateTime)this.Birthdate));
+             if (this.AuthenticationTokenExpires != null)
+             {
+                 dict.Add("authentication_token_expires", ToUnixTime((DateTime)this.AuthenticationTokenExpires));
+             }
+             if (this.Birthdate != null)
+             {
+                 dict.Add("birth_date", ToUnixTime((DateTime)this.Birthdate));
+             }
             }
             return dict;
         }
@@ -145,12 +170,31 @@ namespace KingBingo.Models
             
             user.UserId = System.Convert.ToInt32(data["user_id"]);
             user.UserName = data["username"];
-            user.Name = data["name"];
-            user.WinCount = System.Convert.ToInt32(data["win_count"]);
-            user.Bio = data["bio"];
-            user.Rank = System.Convert.ToInt32(data["rank"]);
-            user.FriendCount = System.Convert.ToInt32(data["friend_count"]);
-            user.FriendCount = System.Convert.ToInt32(data["game_count"]);
+            if (data["name"] != null)
+            {
+                user.Name = data["name"];
+            }
+            if (data["win_count"] != "")
+            {
+                user.WinCount = System.Convert.ToInt32(data["win_count"]);
+            }
+
+            if (data["bio"] != null)
+            {
+                user.Bio = data["bio"];
+            }
+            if (data["rank"] != "")
+            {
+                user.Rank = System.Convert.ToInt32(data["rank"]);
+            }
+            if (data["friend_count"] != "")
+            {
+                user.FriendCount = System.Convert.ToInt32(data["friend_count"]);
+            }
+            if (data["game_count"] != "")
+            {
+                user.FriendCount = System.Convert.ToInt32(data["game_count"]);
+            }
             if (includeProfileImages)
             {
                 user.ProfileImage = Convert.FromBase64String(data["profile_image"]);
@@ -158,10 +202,19 @@ namespace KingBingo.Models
             if (verbose)
             {
                 user.AuthenticationToken = data["authentication_token"];
-                user.AuthenticationTokenExpires = FromUnixTime((string)data["authentication_token_expires"]);
+                if (data.ContainsKey("authentication_token_expires"))
+                {
+                    user.AuthenticationTokenExpires = FromUnixTime((string)data["authentication_token_expires"]);
+                }
+                if (data.ContainsKey("birth_date"))
+                {
                 user.Birthdate = FromUnixTime((string)data["birth_date"]);
+                }
                 user.Confirmed = System.Convert.ToBoolean(data["confirmed"]);
-                user.Created = UserProfile.FromUnixTime((string)data["created"]);
+                if (data.ContainsKey("created"))
+                {
+                    user.Created = UserProfile.FromUnixTime((string)data["created"]);
+                }
                 user.DeviceToken = data["device_token"];
                 user.Email = data["email"];
             }

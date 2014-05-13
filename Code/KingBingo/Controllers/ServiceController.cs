@@ -495,8 +495,23 @@ namespace KingBingo.Controllers
                                 {
                                     ViewBag.operation = "allfriends";
                                     ViewBag.message = "successfully retrieved list of friends";
-                                    //get all friendship requests
-                                    var friends = db.Friends.Where(f => f.User.UserName == user.UserName).ToList<Friend>();
+                                    List<Friend> friends;
+
+                                    if (data.request_status != null && data.request_status == "pending")
+                                    {
+                                        //status of pending
+                                        friends = db.Friends.Where(f => f.User.UserName == user.UserName && f.Status == RequestStatus.Pending).ToList<Friend>();
+                                    }
+                                    else if (data.request_status != null && data.request_status == "accepted")
+                                    {
+                                        friends = db.Friends.Where(f => f.User.UserName == user.UserName && f.Status == RequestStatus.Accepted).ToList<Friend>();
+                                    }
+                                    else
+                                    {
+                                        //get all friendship requests
+                                        //filter on status!!!!!
+                                        friends = db.Friends.Where(f => f.User.UserName == user.UserName).ToList<Friend>();
+                                    }
                                     ViewData["friends"] = friends;
                                 }
                                 else

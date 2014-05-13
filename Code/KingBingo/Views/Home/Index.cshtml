@@ -94,7 +94,7 @@ display:inline-block;
     var counter = 0;
 
     function update() {
-        $.getJSON("/service/v0/allresults", function (data) {
+        $.getJSON("service/v0/allresults", function (data) {
             $.each(data.results, function (i, result) {
 
                 if (result.created > last || counter < 10) {
